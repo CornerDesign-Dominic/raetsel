@@ -4,6 +4,10 @@ Inveni bedeutet für dieses Projekt „Ich habe die Lösung gefunden“. Inveni 
 
 Die einzelnen Rätselarten und das Angebot an täglichen, wöchentlichen oder anderen Rätseln werden später festgelegt.
 
+## Musterfeld
+
+In jeder Schwierigkeitsstufe wird das Musterfeld zeilenweise von links nach rechts gelesen. Jede Zeile hat drei Felder. Die ersten beiden Zahlen ergeben nach derselben Regel die dritte, und das Fragezeichen steht rechts in der letzten Zeile. Die Schwierigkeit steigt über die Rechenregel.
+
 ## Lokal starten
 
 Im Projektordner mit Python 3 ausführen:

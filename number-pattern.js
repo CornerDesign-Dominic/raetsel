@@ -2,28 +2,25 @@ import { showHint } from './puzzle-hint.js';
 import { games, levels, markSolved } from './puzzle-levels.js';
 
 const gameId = 'musterfeld';
-const rowRule = 'In jeder Zeile ergeben die ersten beiden Zahlen nach derselben Rechenregel die dritte. Welche Zahl fehlt?';
+const rowRule = 'Lies jede Zeile von links nach rechts. Die ersten beiden Zahlen ergeben nach derselben Rechenregel die dritte. Welche Zahl fehlt?';
 const puzzles = {
   leicht: {
-    rule: rowRule,
     rows: [[2, 3, 5], [4, 5, 9], [3, 8, 11], [5, 7, null]],
     answer: 12,
     hint: 'Was ist 2 plus 3? Prüfe anschließend die zweite Zeile.',
     explanation: 'Die dritte Zahl ist die Summe der ersten beiden. In der letzten Zeile ergibt 5 + 7 die 12.',
   },
   mittel: {
-    rule: rowRule,
     rows: [[2, 5, 9], [3, 4, 10], [1, 8, 10], [4, 6, null]],
     answer: 14,
     hint: 'Zieh in jeder fertigen Zeile die mittlere von der rechten Zahl ab. Was fällt dir am Ergebnis auf?',
     explanation: 'Verdopple die erste Zahl und addiere die zweite. In der letzten Zeile ergibt das 2 × 4 + 6 = 14.',
   },
   schwer: {
-    rule: 'Lies das Raster von oben nach unten. In jeder Spalte entsteht die dritte Zahl nach einer gemeinsamen Regel und die vierte nach einer zweiten. Der Strich verdeckt einen Zwischenschritt. Welche Zahl gehört zum Fragezeichen?',
-    rows: [[2, 3, 5, 4], [7, 4, 6, 8], [9, 7, 11, '—'], [18, 21, 55, null]],
-    answer: 48,
-    hint: 'Wie entsteht aus 2 und 7 die 9? Welche zwei Zahlen aus derselben Spalte ergeben zusammen als Produkt die 18?',
-    explanation: 'Addiere oben 4 + 8 = 12 für den verdeckten Zwischenschritt. Multipliziere ihn mit der obersten Zahl: 4 × 12 = 48.',
+    rows: [[6, 2, 32], [7, 3, 40], [5, 4, 9], [8, 3, null]],
+    answer: 55,
+    hint: 'Bilde aus den ersten beiden Zahlen jeweils ihre Summe und ihre Differenz. Wie kommst du damit auf die dritte Zahl?',
+    explanation: 'Multipliziere die Summe der ersten beiden Zahlen mit ihrer Differenz. In der letzten Zeile ergibt das (8 + 3) × (8 − 3) = 55.',
   },
 };
 
@@ -42,7 +39,7 @@ function load(level) {
   currentLevel = level;
   puzzle = puzzles[level];
   document.querySelector('#pattern-level').textContent = levels[level];
-  document.querySelector('#pattern-rule').textContent = puzzle.rule;
+  document.querySelector('#pattern-rule').textContent = rowRule;
   body.replaceChildren();
   for (const [rowIndex, values] of puzzle.rows.entries()) {
     const row = body.insertRow();
@@ -59,10 +56,6 @@ function load(level) {
         cell.append(answerInput);
       } else {
         cell.textContent = value;
-        if (value === '—') {
-          cell.className = 'pattern-intermediate';
-          cell.setAttribute('aria-label', 'Verdeckter Zwischenschritt');
-        }
       }
     }
   }

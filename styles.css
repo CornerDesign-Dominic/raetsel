@@ -289,4 +289,3 @@ summary { width: fit-content; }
 .logic-grid caption { text-align: start; color: var(--petrol); font-weight: 700; margin-block: .4rem; }
 .logic-grid th { overflow-wrap: anywhere; }
 .logic-grid button { min-width: 0; }
-.pattern-grid .pattern-intermediate { background: #efddbf; }
