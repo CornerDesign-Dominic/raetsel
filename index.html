@@ -9,6 +9,9 @@
   <link rel="icon" href="./icons/icon-192.png">
   <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
   <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./busfahrt.css">
+  <link rel="stylesheet" href="./pfeilfolge.css">
+  <link rel="stylesheet" href="./wo-wohne-ich.css">
   <script type="module" src="./app.js"></script>
   <title>Inveni</title>
 </head>
@@ -46,6 +49,11 @@
           <span><strong>Zahlen &amp; Muster</strong><small>Rechenregeln und Zusammenhänge erkennen.</small></span>
           <span aria-hidden="true">›</span>
         </a>
+        <a class="game-card" href="#gedaechtnis">
+          <span class="game-symbol" aria-hidden="true">↔</span>
+          <span><strong>Gedächtnis</strong><small>Merk dir Folgen und gib sie wieder.</small></span>
+          <span aria-hidden="true">›</span>
+        </a>
       </div>
     </section>
 
@@ -56,6 +64,11 @@
         <a class="game-card" href="#logikgitter">
           <span class="game-symbol" aria-hidden="true">▦</span>
           <span><strong>Logikgitter</strong><small>Bringe Hinweise zusammen und finde die richtige Zuordnung.</small></span>
+          <span aria-hidden="true">›</span>
+        </a>
+        <a class="game-card" href="#wo-wohne-ich">
+          <span class="game-symbol" aria-hidden="true">⌂</span>
+          <span><strong>Wo wohne ich?</strong><small>Verfolge den Weg rückwärts bis zum richtigen Haus.</small></span>
           <span aria-hidden="true">›</span>
         </a>
       </div>
@@ -158,6 +171,11 @@
           <span><strong>Musterfeld</strong><small>Entdecke die Regel und ergänze die fehlende Zahl.</small></span>
           <span aria-hidden="true">›</span>
         </a>
+        <a class="game-card" href="#busfahrt">
+          <span class="game-symbol" aria-hidden="true">▰</span>
+          <span><strong>Busfahrt</strong><small>Zähle mit, während Fahrgäste ein- und aussteigen.</small></span>
+          <span aria-hidden="true">›</span>
+        </a>
       </div>
     </section>
 
@@ -188,6 +206,44 @@
           <button id="pattern-result-close" autofocus>Weiter rätseln</button>
         </form>
       </dialog>
+    </section>
+
+    <section class="board" data-view="gedaechtnis" aria-labelledby="memory-title" hidden>
+      <a class="back-link" href="#start">← Rätselbereiche</a>
+      <h2 id="memory-title" tabindex="-1">Gedächtnis</h2>
+      <div class="game-list">
+        <a class="game-card" href="#pfeilfolge">
+          <span class="game-symbol" aria-hidden="true">↗</span>
+          <span><strong>Pfeilfolge</strong><small>Merke dir die Pfeile und wiederhole sie in derselben Reihenfolge.</small></span>
+          <span aria-hidden="true">›</span>
+        </a>
+      </div>
+    </section>
+
+    <section data-view="busfahrt" aria-labelledby="bus-game-title" hidden>
+      <a class="back-link" href="#zahlen-und-muster">← Zahlen &amp; Muster</a>
+      <header class="puzzle-header">
+        <h2 id="bus-game-title" tabindex="-1">Busfahrt</h2>
+      </header>
+      <div id="bus-game"></div>
+    </section>
+
+    <section data-view="pfeilfolge" aria-labelledby="arrow-game-title" hidden>
+      <a class="back-link" href="#gedaechtnis">← Gedächtnis</a>
+      <header class="puzzle-header">
+        <p id="arrow-level"></p>
+        <h2 id="arrow-game-title" tabindex="-1">Pfeilfolge</h2>
+      </header>
+      <div id="arrow-game"></div>
+    </section>
+
+    <section data-view="wo-wohne-ich" aria-labelledby="map-game-title" hidden>
+      <a class="back-link" href="#logik">← Logik</a>
+      <header class="puzzle-header">
+        <p id="map-level"></p>
+        <h2 id="map-game-title" tabindex="-1">Wo wohne ich?</h2>
+      </header>
+      <div id="map-game"></div>
     </section>
 
     <dialog class="result-dialog hint-dialog" id="puzzle-hint" aria-labelledby="puzzle-hint-title" aria-describedby="puzzle-hint-text">

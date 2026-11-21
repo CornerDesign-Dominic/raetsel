@@ -1,0 +1,215 @@
+.where-layout .where-story,
+.where-layout .where-board {
+  position: relative;
+  min-width: 0;
+}
+
+.where-clues {
+  display: grid;
+  gap: .45rem;
+  padding-inline-start: 1.35rem;
+  line-height: 1.5;
+}
+
+.where-story #where-instructions {
+  font-size: .9rem;
+}
+
+.where-map-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: .5rem;
+  margin-block-end: .65rem;
+}
+
+.where-compass {
+  border-radius: 2rem;
+  padding: .22rem .55rem;
+  background: var(--petrol);
+  color: var(--paper);
+  font-weight: 700;
+  font-size: .85rem;
+}
+
+.where-map {
+  position: relative;
+  display: grid;
+  max-width: 34rem;
+  grid-template-columns: repeat(var(--where-size, 4), minmax(0, 1fr));
+  gap: clamp(.2rem, .8vw, .42rem);
+  padding: clamp(.28rem, 1.1vw, .6rem);
+  margin-inline: auto;
+  border: 1px solid #b49a72;
+  border-radius: .85rem;
+  background: #cbb28c;
+}
+
+.where-map .where-tile {
+  --where-roof: #a85540;
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  min-width: 0;
+  min-block-size: 0;
+  border: 1px solid #ac9470;
+  border-radius: .42rem;
+  padding: 0;
+  background: #fbefd9;
+  color: var(--petrol);
+}
+
+.where-tile[data-roof="amber"] { --where-roof: #d6a936; }
+.where-tile[data-roof="slate"] { --where-roof: #537381; }
+.where-tile[data-roof="moss"] { --where-roof: #5b714a; }
+.where-map button.where-tile:hover { border-color: var(--petrol); }
+.where-map button.where-tile[aria-pressed="true"] {
+  z-index: 1;
+  outline: 3px solid var(--petrol);
+  outline-offset: -2px;
+  background: #e4eadb;
+}
+.where-map button.where-tile:focus-visible { z-index: 2; }
+.where-map button.where-tile[aria-pressed="true"]:focus-visible {
+  outline-offset: 1px;
+  box-shadow: inset 0 0 0 2px var(--petrol);
+}
+
+.where-piece {
+  --where-icon-size: clamp(.9rem, 4vw, 2rem);
+  position: relative;
+  display: inline-block;
+  flex: 0 0 auto;
+  width: var(--where-icon-size);
+  height: var(--where-icon-size);
+}
+
+.where-piece::before, .where-piece::after {
+  content: "";
+  position: absolute;
+}
+
+.where-piece[data-piece="house"]::before {
+  inset: 37% 18% 10%;
+  border: 1px solid #624939;
+  border-radius: 0 0 .12rem .12rem;
+  background: linear-gradient(90deg, transparent 38%, #765440 38% 60%, transparent 60%) center bottom / 100% 55% no-repeat,
+    #e0b77f;
+}
+
+.where-piece[data-piece="house"]::after {
+  inset: 8% 6% 52%;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  background: var(--where-roof);
+}
+
+.where-door {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: .85rem;
+  height: .85rem;
+  border-radius: 50%;
+  background: #fbefd9;
+  color: #2c3d36;
+  font: 700 .7rem/1 system-ui, sans-serif;
+}
+
+.where-tile[data-door="N"] .where-door { inset: 0 auto auto 50%; transform: translateX(-50%); }
+.where-tile[data-door="S"] .where-door { inset: auto auto 0 50%; transform: translateX(-50%); }
+.where-tile[data-door="W"] .where-door { inset: 50% auto auto 0; transform: translateY(-50%); }
+.where-tile[data-door="E"] .where-door { inset: 50% 0 auto auto; transform: translateY(-50%); }
+
+.where-tile[data-feature="church"] {
+  background: #f5e4b3;
+  border-color: #a88146;
+}
+
+.where-piece[data-piece="church"]::before {
+  inset: 5% 5% 9% 11%;
+  clip-path: polygon(0 44%, 26% 21%, 26% 10%, 39% 0, 50% 10%, 50% 39%, 74% 28%, 100% 46%, 100% 100%, 0 100%);
+  background: #69523e;
+}
+
+.where-piece[data-piece="church"]::after {
+  inset: 57% 17% 13% 22%;
+  background: linear-gradient(90deg, transparent 15%, #e5c798 15% 27%, transparent 27% 52%, #e5c798 52% 64%, transparent 64%);
+}
+
+.where-piece[data-piece="blueCar"] { --where-car: #2d6fa1; }
+.where-piece[data-piece="redCar"] { --where-car: #a3453b; }
+
+.where-piece[data-piece$="Car"]::before {
+  inset: 32% 9% 23%;
+  border: 1px solid #2e343b;
+  border-radius: .35rem .35rem .23rem .23rem;
+  background: linear-gradient(90deg, transparent 23%, #edf7fa 23% 37%, transparent 37% 55%, #edf7fa 55% 72%, transparent 72%),
+    var(--where-car);
+}
+
+.where-piece[data-piece$="Car"]::after {
+  inset: 72% 15% 14%;
+  border-radius: .1rem;
+  background: linear-gradient(90deg, #2e343b 22%, transparent 22% 78%, #2e343b 78%);
+}
+
+.where-piece[data-piece="fountain"]::before {
+  inset: 47% 7% 15%;
+  border: 2px solid #516d71;
+  border-radius: 50%;
+  background: #8cbec6;
+}
+
+.where-piece[data-piece="fountain"]::after {
+  inset: 14% 40% 33%;
+  border-radius: 50% 50% .2rem .2rem;
+  background: #4d8899;
+}
+
+.where-piece[data-piece="park"]::before {
+  inset: 9% 13% 18%;
+  border-radius: 52% 48% 45% 45%;
+  background: #60854d;
+  box-shadow: inset .22rem 0 #496936;
+}
+
+.where-piece[data-piece="park"]::after {
+  inset: 69% 44% 8%;
+  background: #775640;
+}
+
+.where-goal {
+  position: absolute;
+  inset: auto 0 0;
+  text-align: center;
+  border-radius: 0 0 .34rem .34rem;
+  background: var(--petrol);
+  color: var(--paper);
+  font: 700 .64rem/1.25 system-ui, sans-serif;
+}
+.where-tile:has(.where-goal) .where-piece { transform: translateY(-.25rem); }
+
+.where-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .25rem .7rem;
+  margin: .7rem 0 .5rem;
+  padding: 0;
+  list-style: none;
+  font-size: .8rem;
+}
+
+.where-legend li {
+  display: flex;
+  align-items: center;
+  gap: .17rem;
+}
+
+.where-legend .where-piece { --where-icon-size: 1rem; }
+.where-selection { min-height: 1.4rem; font-size: .86rem; }
+.where-actions { margin-block-start: .65rem; }
+
+@media (min-width: 45rem) {
+  .where-layout { grid-template-columns: minmax(0, .9fr) minmax(0, 1.45fr); }
+}
