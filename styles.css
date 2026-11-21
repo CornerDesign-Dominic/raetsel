@@ -230,3 +230,38 @@ summary { width: fit-content; }
 @media (min-width: 48rem) {
   .word-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
+
+.game-symbol.numbers-symbol { font-size: 1rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.pattern-board { width: min(100%, 31rem); margin-inline: auto; padding: clamp(1rem, 4vw, 2rem); }
+.pattern-grid {
+  width: calc(100% + .8rem);
+  table-layout: fixed;
+  margin: 0 -.4rem .75rem;
+  border-spacing: .4rem;
+  text-align: center;
+  color: var(--petrol);
+  font: 700 clamp(1.25rem, 4vw, 1.7rem)/1.1 system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+.pattern-grid td {
+  height: 3rem;
+  padding: .35rem;
+  border: 1px solid #b89973;
+  border-radius: .65rem;
+  background: #fbefd9;
+}
+.pattern-grid td:last-child { background: #f8e2b7; }
+.pattern-grid .pattern-missing { padding: 0; border: 0; }
+.pattern-missing input {
+  width: 100%;
+  min-height: 3rem;
+  padding: .35rem;
+  border: 2px solid var(--terracotta);
+  border-radius: .65rem;
+  background: var(--paper);
+  color: var(--petrol);
+  text-align: center;
+  font: inherit;
+}
+.pattern-missing input::placeholder { color: var(--terracotta); opacity: 1; }
+.pattern-hint { position: relative; font-weight: 600; }

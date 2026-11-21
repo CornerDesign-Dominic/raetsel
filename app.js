@@ -1,5 +1,6 @@
 import './logic-grid.js';
 import './word-connection.js';
+import './number-pattern.js';
 
 const installSection = document.querySelector('#install');
 const installButton = document.querySelector('#install-button');

@@ -1,6 +1,6 @@
 // Increase this version when the precached app files change.
 const cachePrefix = 'inveni-shell-';
-const cacheName = cachePrefix + 'v5';
+const cacheName = cachePrefix + 'v6';
 const scope = self.registration.scope;
 const shell = [
   './index.html',
@@ -8,6 +8,7 @@ const shell = [
   './app.js',
   './logic-grid.js',
   './word-connection.js',
+  './number-pattern.js',
   './images/sonnenzeit/kompass.webp',
   './images/sonnenzeit/sextant.webp',
   './images/sonnenzeit/sonnenuhr.webp',
