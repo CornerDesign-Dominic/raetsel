@@ -119,7 +119,8 @@
 
 .bus-pavement {
   display: grid;
-  min-block-size: 6.6rem;
+  min-block-size: 7.45rem;
+  padding: .55rem;
   align-items: center;
   justify-content: center;
   background: #f4e8cd;
@@ -128,7 +129,7 @@
 .bus-people {
   display: grid;
   grid-template-columns: repeat(5, auto);
-  gap: .27rem .48rem;
+  gap: .37rem .68rem;
   align-content: center;
   justify-content: center;
   color: var(--petrol);
@@ -138,8 +139,8 @@
   --person: #173a3b;
   position: relative;
   display: inline-block;
-  inline-size: 1.2rem;
-  block-size: 1.74rem;
+  inline-size: 1.38rem;
+  block-size: 1.84rem;
   background: linear-gradient(to right, transparent 16%, var(--person) 17% 87%, transparent 88%) center 52% / 100% .47rem no-repeat;
 }
 
@@ -159,27 +160,33 @@
 
 .bus-passenger::after {
   position: absolute;
-  inset: .53rem .28rem auto;
+  inset: .53rem .32rem auto;
   block-size: 1.16rem;
   border-radius: .24rem .24rem .1rem .1rem;
   background: linear-gradient(to right, var(--person) 0 41%, transparent 42% 58%, var(--person) 59%), linear-gradient(var(--person), var(--person)) top / 100% 53% no-repeat;
   content: "";
 }
 
-.bus-scene[data-motion="boarding"] .bus-door,
-.bus-scene[data-motion="alighting"] .bus-door { background: #52392b; }
+.bus-scene[data-motion="boarding"] .bus-door { background: #244d44; border-color: #bde0aa; }
+.bus-scene[data-motion="alighting"] .bus-door { background: #663c31; border-color: #efb98a; }
+.bus-scene[data-motion="boarding"] .bus-door::after,
+.bus-scene[data-motion="alighting"] .bus-door::after { display: none; }
 
 .bus-scene[data-motion="alighting"] .bus-passenger { --person: #91553e; }
 .bus-scene[data-motion="driving"] .bus-vehicle { animation: bus-roll .8s ease-in-out infinite alternate; }
-.bus-scene[data-motion="alighting"] .bus-passenger { animation: bus-leave .42s ease-out both; animation-delay: var(--bus-delay); }
-.bus-scene[data-motion="boarding"] .bus-passenger { animation: bus-board calc(var(--bus-flow-duration) - var(--bus-delay)) ease-out both; animation-delay: var(--bus-delay); }
+.bus-scene[data-motion="alighting"] .bus-passenger { animation: bus-leave .42s ease-out both var(--bus-delay); }
+.bus-scene[data-motion="boarding"] .bus-passenger { animation: bus-board .42s ease-in forwards var(--bus-delay); }
 
 @keyframes bus-roll { to { transform: translateX(.85rem); } }
-@keyframes bus-leave { from { opacity: 0; transform: translate(3.15rem, -1.6rem); } }
+@keyframes bus-leave {
+  from { opacity: 0; transform: translate(var(--bus-door-x), var(--bus-door-y)) scale(.55); }
+  24% { opacity: 1; }
+  to { opacity: 1; transform: translate(0) scale(1); }
+}
 @keyframes bus-board {
-  from { opacity: 0; transform: translate(-.65rem, .4rem); }
-  26%, 82% { opacity: 1; transform: translate(0); }
-  to { opacity: 0; transform: translate(3.15rem, -2.2rem); }
+  from { opacity: 1; transform: translate(0) scale(1); }
+  78% { opacity: 1; }
+  to { opacity: 0; transform: translate(var(--bus-door-x), var(--bus-door-y)) scale(.55); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -201,6 +208,9 @@
   color: var(--petrol);
   font-weight: 700;
 }
+
+.bus-scene[data-motion="boarding"] + .bus-cue { color: #245349; }
+.bus-scene[data-motion="alighting"] + .bus-cue { color: #85412d; }
 
 .bus-actions, .bus-answer { margin-block-start: .55rem; }
 .bus-answer label { display: block; margin-block-end: .45rem; color: var(--petrol); font-weight: 700; }

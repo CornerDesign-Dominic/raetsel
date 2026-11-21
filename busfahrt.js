@@ -2,6 +2,8 @@ import { games, levels, markSolved } from './puzzle-levels.js';
 
 const game = 'busfahrt';
 const firstStopCount = 3;
+const passengerInterval = 115;
+const passengerTravel = 420;
 const settings = {
   leicht: { capacity: 10, boarding: [2, 6], maxAlighting: 3 },
   mittel: { capacity: 20, boarding: [3, 10], maxAlighting: 5 },
@@ -52,6 +54,7 @@ const levelDisplay = stage.querySelector('#bus-level');
 const stopDisplay = stage.querySelector('#bus-stop-display');
 const scene = stage.querySelector('#bus-scene');
 const people = stage.querySelector('#bus-people');
+const door = stage.querySelector('.bus-door');
 const cue = stage.querySelector('#bus-cue');
 const status = stage.querySelector('#bus-status');
 const readyActions = stage.querySelector('#bus-ready');
@@ -106,16 +109,24 @@ function showPhase(nextPhase) {
   nextActions.hidden = phase !== 'result';
 }
 
-function drawPeople(count, direction) {
-  scene.dataset.motion = direction;
-  const group = document.createDocumentFragment();
-  for (let index = 0; index < count; index++) {
+function drawPeople(count, direction, previewTime) {
+  scene.dataset.motion = 'parked';
+  const passengers = Array.from({ length: count }, (_, index) => {
     const passenger = document.createElement('span');
     passenger.className = 'bus-passenger';
-    passenger.style.setProperty('--bus-delay', index * 24 + 'ms');
-    group.append(passenger);
+    passenger.style.setProperty('--bus-delay', previewTime + index * passengerInterval + 'ms');
+    return passenger;
+  });
+  people.replaceChildren(...passengers);
+
+  const doorway = door.getBoundingClientRect();
+  const positions = passengers.map((passenger) => passenger.getBoundingClientRect());
+  for (const [index, passenger] of passengers.entries()) {
+    const position = positions[index];
+    passenger.style.setProperty('--bus-door-x', doorway.left + (doorway.width - position.width) / 2 - position.left + 'px');
+    passenger.style.setProperty('--bus-door-y', doorway.bottom - position.bottom + 'px');
   }
-  people.replaceChildren(group);
+  scene.dataset.motion = direction;
 }
 
 function showFlow(count, direction, after) {
@@ -124,16 +135,17 @@ function showFlow(count, direction, after) {
     return;
   }
 
-  const verb = direction === 'boarding' ? 'ein' : 'aus';
+  const boarding = direction === 'boarding';
+  const verb = boarding ? 'ein' : 'aus';
   describe(
-    'Fahrgäste steigen ' + verb + '.',
+    boarding ? '↑ Einsteigen' : '↓ Aussteigen',
     'Haltestelle ' + (stopIndex + 1) + ': ' + count +
       (count === 1 ? ' Fahrgast steigt ' : ' Fahrgäste steigen ') + verb + '.',
   );
-  const movementTime = 1050 + count * 75;
-  scene.style.setProperty('--bus-flow-duration', movementTime + 'ms');
-  drawPeople(count, direction);
-  wait(after, movementTime);
+
+  const countTime = 850 + count * 55;
+  drawPeople(count, direction, boarding ? countTime : 0);
+  wait(after, countTime + (count - 1) * passengerInterval + passengerTravel + 160);
 }
 
 function askForAnswer() {
