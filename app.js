@@ -1,3 +1,5 @@
+import './logic-grid.js';
+
 const installSection = document.querySelector('#install');
 const installButton = document.querySelector('#install-button');
 const installHelp = document.querySelector('#install-help');
@@ -43,3 +45,26 @@ if ('serviceWorker' in navigator) {
     console.warn('Offline-Modus konnte nicht aktiviert werden.', error);
   });
 }
+
+
+const views = [...document.querySelectorAll('[data-view]')];
+
+function showView(moveFocus = false) {
+  const route = window.location.hash.slice(1);
+  const currentView = views.find((view) => view.dataset.view === route);
+  const activeRoute = currentView?.dataset.view ?? '';
+
+  for (const view of views) {
+    view.hidden = view.dataset.view !== activeRoute;
+  }
+
+  if (moveFocus) {
+    const heading = currentView?.querySelector('h2') ?? document.querySelector('#puzzles-title');
+    heading.setAttribute('tabindex', '-1');
+    heading.focus({ preventScroll: true });
+    window.scrollTo(0, 0);
+  }
+}
+
+window.addEventListener('hashchange', () => showView(true));
+showView();

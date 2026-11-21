@@ -14,15 +14,59 @@
 </head>
 <body>
   <main class="home">
-    <header class="cover">
+    <header class="cover" data-view="">
       <img class="compass" src="./icons/icon-192.png" alt="" width="84" height="84">
       <h1>Inveni</h1>
       <p>Ich habe die Lösung gefunden.</p>
     </header>
 
-    <section class="board" aria-labelledby="puzzles-title">
-      <h2 id="puzzles-title">Rätsel</h2>
-      <p>Hier findest du bald die ersten Rätsel.</p>
+    <section class="board" data-view="" aria-labelledby="puzzles-title">
+      <h2 id="puzzles-title">Rätselbereiche</h2>
+      <div class="game-list">
+        <a class="game-card" href="#logik">
+          <span class="game-symbol" aria-hidden="true">◇</span>
+          <span><strong>Logik</strong><small>Kombinieren, ausschließen und Schlüsse ziehen.</small></span>
+          <span aria-hidden="true">›</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="board" data-view="logik" aria-labelledby="logic-title" hidden>
+      <a class="back-link" href="#start">← Rätselbereiche</a>
+      <h2 id="logic-title" tabindex="-1">Logik</h2>
+      <div class="game-list">
+        <a class="game-card" href="#logikgitter">
+          <span class="game-symbol" aria-hidden="true">▦</span>
+          <span><strong>Logikgitter</strong><small>Bringe Hinweise zusammen und finde die richtige Zuordnung.</small></span>
+          <span aria-hidden="true">›</span>
+        </a>
+      </div>
+    </section>
+
+    <section data-view="logikgitter" aria-labelledby="grid-title" hidden>
+      <a class="back-link" href="#logik">← Logik</a>
+      <header class="puzzle-header">
+        <p>Logikgitter · Einstieg</p>
+        <h2 id="grid-title" tabindex="-1">Besuch im Observatorium</h2>
+        <p>Mia, Nora und Leo besuchen das Observatorium zu drei verschiedenen Zeiten. Wer kommt wann?</p>
+      </header>
+      <div class="puzzle-layout">
+        <section class="board" aria-labelledby="clue-title">
+          <h3 id="clue-title">Hinweise</h3>
+          <ol id="grid-clues"></ol>
+        </section>
+        <section class="board" aria-labelledby="assignment-title">
+          <h3 id="assignment-title">Zuordnung</h3>
+          <p id="grid-instructions">Tippe auf ein Feld, um zwischen offen (·), ausgeschlossen (×) und zugeordnet (✓) zu wechseln. Jede Uhrzeit gehört genau einer Person.</p>
+          <table class="logic-grid" aria-label="Personen und Besuchszeiten" aria-describedby="grid-instructions"></table>
+          <div class="puzzle-actions">
+            <button id="check-grid" type="button">Lösung prüfen</button>
+            <button id="hint-grid" type="button">Tipp</button>
+            <button id="undo-grid" type="button">Rückgängig</button>
+          </div>
+          <p id="grid-feedback" class="grid-feedback" role="status"></p>
+        </section>
+      </div>
     </section>
 
     <section id="install" class="install" aria-label="App installieren" hidden>
