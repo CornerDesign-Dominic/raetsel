@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#173a3b">
+  <meta name="description" content="Inveni ist eine Rätsel-App für neugierige Köpfe.">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon-192.png">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.js"></script>
+  <title>Inveni</title>
+</head>
+<body>
+  <main class="home">
+    <header class="cover">
+      <img class="compass" src="./icons/icon-192.png" alt="" width="84" height="84">
+      <h1>Inveni</h1>
+      <p>Ich habe die Lösung gefunden.</p>
+    </header>
+
+    <section class="board" aria-labelledby="puzzles-title">
+      <h2 id="puzzles-title">Rätsel</h2>
+      <p>Hier findest du bald die ersten Rätsel.</p>
+    </section>
+
+    <section id="install" class="install" aria-label="App installieren" hidden>
+      <button id="install-button" type="button">Inveni installieren</button>
+      <details id="install-help">
+        <summary>Inveni installieren</summary>
+        <p><strong>iPhone und iPad:</strong> Öffne Inveni in Safari. Wähle im Teilen-Menü „Zum Home-Bildschirm“. Aktiviere „Als Web-App öffnen“, falls diese Option erscheint.</p>
+        <p><strong>Android:</strong> Wähle in Chrome im Menü „App installieren“ oder „Zum Startbildschirm hinzufügen“.</p>
+      </details>
+    </section>
+  </main>
+</body>
+</html>

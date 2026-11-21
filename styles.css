@@ -1,0 +1,96 @@
+:root {
+  color-scheme: light;
+  --petrol: #173a3b;
+  --paper: #f6e9d3;
+  --sand: #f0dcb7;
+  --gold: #e9ad59;
+  --terracotta: #a9543d;
+  --ink: #52392b;
+  font-family: system-ui, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; }
+
+.home {
+  width: min(100%, 58rem);
+  margin-inline: auto;
+  padding: max(1rem, env(safe-area-inset-top))
+    max(1rem, env(safe-area-inset-right))
+    max(1.5rem, env(safe-area-inset-bottom))
+    max(1rem, env(safe-area-inset-left));
+}
+
+.cover {
+  padding: clamp(1.5rem, 6vw, 3.5rem);
+  min-block-size: clamp(15rem, 34vw, 22rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  align-items: start;
+  gap: .5rem;
+  border-radius: 1.5rem;
+  background-color: var(--petrol);
+  background-image: repeating-radial-gradient(ellipse at 105% -10%,
+    transparent 0 22px, #315551 23px, transparent 24px 38px);
+  color: var(--paper);
+}
+
+.compass { margin: 0 0 .5rem -.5rem; }
+h1, h2 { margin: 0; font-family: Georgia, serif; }
+h1 { font-size: clamp(3.5rem, 10vw, 6rem); line-height: 1; }
+h2 { font-size: clamp(1.65rem, 4vw, 2.15rem); color: var(--petrol); }
+p { margin: 0; line-height: 1.5; }
+.cover p { color: var(--gold); }
+
+.board {
+  position: relative;
+  margin-block: 1rem;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid #b89973;
+  border-radius: 1.25rem;
+  background: var(--sand);
+  box-shadow: 0 3px #d8be99;
+}
+
+.board::before {
+  position: absolute;
+  inset: .45rem;
+  border: 1px solid #d1b78e;
+  border-radius: .85rem;
+  pointer-events: none;
+  content: "";
+}
+
+.board h2::before {
+  display: inline-block;
+  width: .46em;
+  height: .12em;
+  margin-inline-end: .35em;
+  vertical-align: .25em;
+  background: var(--terracotta);
+  content: "";
+}
+
+.board p { margin-block-start: .5rem; }
+.install p { margin: .6rem .85rem; }
+button, summary {
+  min-block-size: 2.75rem;
+  padding: .65rem .85rem;
+  border: 1px solid var(--terracotta);
+  border-radius: .7rem;
+  color: var(--petrol);
+  font: 600 1rem/1.4 system-ui, sans-serif;
+  cursor: pointer;
+}
+button { background: var(--gold); }
+summary { width: fit-content; }
+:focus-visible { outline: 3px solid var(--petrol); outline-offset: 4px; }
+
+@media (min-width: 45rem) {
+  .home { padding-block-start: max(2rem, env(safe-area-inset-top)); }
+  .board { margin-block-start: 1.5rem; }
+}
