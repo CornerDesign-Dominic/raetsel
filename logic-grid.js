@@ -19,46 +19,45 @@ const puzzles = {
       'Für Nora fallen 10 und 11 Uhr weg. Welche Zeit bleibt ihr?',
       'Für Leo und Mia bleiben 10 und 11 Uhr. Was sagt Hinweis 3 über Leo?',
     ],
-    answers: [[1, 0, 2]],
+    answer: [1, 0, 2],
     explanation: 'Nora kommt um 9 Uhr: Sie kommt vor Leo und nicht um 10 Uhr. Leo kommt um 11 Uhr, weil 10 Uhr für ihn ausscheidet. Mia bleibt 10 Uhr.',
   },
   mittel: {
-    id: 'sternwarte-2',
+    id: 'sternwarte-zeiten',
     title: 'Termine in der Sternwarte',
-    intro: 'Ava, Ben und Cem haben je einen Termin. Ordne jeder Person Uhrzeit und Ort zu.',
-    people: ['Ava', 'Ben', 'Cem'],
-    times: ['9 Uhr', '10 Uhr', '11 Uhr'],
-    places: ['Turm', 'Hof', 'Saal'],
+    intro: 'Ava, Ben, Cem und Doro haben je einen Termin in der Sternwarte. Wer kommt wann?',
+    people: ['Ava', 'Ben', 'Cem', 'Doro'],
+    times: ['9 Uhr', '10 Uhr', '11 Uhr', '12 Uhr'],
     clues: [
-      'Der Termin im Turm findet direkt vor dem im Hof statt.',
-      'Der Termin im Hof findet vor dem im Saal statt.',
-      'Ben hat seinen Termin weder im Turm noch im Saal.',
-      'Ava hat vor Cem ihren Termin.',
+      'Doro hat ihren Termin direkt nach Ava.',
+      'Ava kommt vor Ben. Zwischen ihren Terminen liegt genau ein weiterer Termin.',
+      'Cem kommt nach Ben.',
     ],
-    hints: ['Bringe zuerst die drei Orte in eine Reihenfolge.', 'Welcher Ort und welche Zeit bleiben Ben?'],
-    answers: [[0, 1, 2], [0, 1, 2]],
-    explanation: 'Die Reihenfolge der Orte ist Turm, Hof, Saal. Ben ist um 10 Uhr im Hof. Ava kommt vor Cem und ist deshalb um 9 Uhr im Turm. Cem kommt um 11 Uhr in den Saal.',
+    hints: [
+      'Ordne zuerst Ava, Ben und Cem. Welche Reihenfolge geben Hinweise 2 und 3 vor?',
+      'Wo muss Doro stehen, damit sie direkt nach Ava kommt und noch vor Ben dran ist?',
+    ],
+    answer: [0, 2, 3, 1],
+    explanation: 'Doro kommt direkt nach Ava und füllt die Lücke vor Ben. Cem kommt danach. Die Reihenfolge ist also Ava (9 Uhr), Doro (10 Uhr), Ben (11 Uhr), Cem (12 Uhr).',
   },
   schwer: {
-    id: 'nacht-der-sterne',
+    id: 'nacht-der-sterne-zeiten',
     title: 'Die Nacht der Sterne',
-    intro: 'Vier Personen, vier Termine, vier Orte. Wer ist wann wo?',
-    people: ['Ada', 'Ben', 'Cem', 'Dana'],
-    times: ['9 Uhr', '10 Uhr', '11 Uhr', '12 Uhr'],
-    places: ['Hof', 'Saal', 'Turm', 'Zelt'],
+    intro: 'Ada, Ben, Cem, Dana und Eli haben je einen Termin am Teleskop. Wer kommt wann?',
+    people: ['Ada', 'Ben', 'Cem', 'Dana', 'Eli'],
+    times: ['9 Uhr', '10 Uhr', '11 Uhr', '12 Uhr', '13 Uhr'],
     clues: [
-      'Der Termin im Turm findet direkt vor dem im Saal statt.',
-      'Der Termin im Hof findet vor dem im Turm statt.',
-      'Der Termin im Zelt findet nicht um 12 Uhr statt.',
-      'Der Termin im Hof findet nicht um 10 Uhr statt.',
-      'Ada hat ihren Termin im Turm oder im Hof.',
-      'Ben hat seinen Termin direkt nach Dana.',
-      'Cem hat seinen Termin weder im Hof noch im Turm.',
-      'Dana hat ihren Termin vor Ada.',
+      'Mehr Personen kommen vor Eli als nach Eli. Eli hat aber nicht den letzten Termin.',
+      'Adas und Elis Termine liegen genau zwei Stunden auseinander.',
+      'Ben kommt vor Cem. Zwischen ihren Terminen liegt genau ein weiterer Termin.',
+      'Vor Dana kommen doppelt so viele Personen wie vor Cem.',
     ],
-    hints: ['Kann der Saal um 11 Uhr an der Reihe sein? Welche Uhrzeit bliebe dann für das Zelt?', 'Dana ist vor Ada dran. Kann Ada dann im Hof sein?'],
-    answers: [[2, 1, 3, 0], [2, 3, 1, 0]],
-    explanation: 'Die Orte folgen in der Reihenfolge Hof, Zelt, Turm, Saal. Ada muss um 11 Uhr in den Turm, weil Dana vor ihr kommt. Dana ist um 9 Uhr im Hof, Ben um 10 Uhr im Zelt und Cem um 12 Uhr im Saal.',
+    hints: [
+      'Zähle für jeden möglichen Termin von Eli, wie viele Personen davor und danach kommen.',
+      'Sobald Eli und Ada feststehen, bleiben für Ben und Cem zwei mögliche Paare. Prüfe für beide den Hinweis zu Dana.',
+    ],
+    answer: [1, 0, 2, 4, 3],
+    explanation: 'Eli muss der vierte sein, Ada zwei Stunden früher. Ben und Cem könnten den ersten und dritten oder den dritten und fünften Termin haben. Nur beim ersten Paar passt Dana an die fünfte Stelle: Vor ihr kommen vier Personen, vor Cem zwei.',
   },
 };
 
@@ -117,15 +116,15 @@ function createCell(tag, content) {
   return cell;
 }
 
-function createGrid(values, answer, caption) {
+function createGrid() {
   const grid = document.createElement('table');
   grid.className = 'logic-grid';
   grid.setAttribute('aria-describedby', 'grid-rules');
-  grid.createCaption().textContent = caption;
+  grid.createCaption().textContent = 'Person und Uhrzeit';
   const headings = grid.createTHead().insertRow();
   headings.append(createCell('td', ''));
-  for (const value of values) {
-    const label = createCell('th', value);
+  for (const time of puzzle.times) {
+    const label = createCell('th', time);
     label.scope = 'col';
     headings.append(label);
   }
@@ -136,10 +135,10 @@ function createGrid(values, answer, caption) {
     const label = createCell('th', person);
     label.scope = 'row';
     row.append(label);
-    for (const [valueIndex, value] of values.entries()) {
+    for (const [timeIndex, time] of puzzle.times.entries()) {
       const button = document.createElement('button');
       button.type = 'button';
-      button.setAttribute('aria-label', person + ', ' + value);
+      button.setAttribute('aria-label', person + ', ' + time);
       const index = cells.length;
       button.addEventListener('click', () => {
         history.push([...marks]);
@@ -148,7 +147,7 @@ function createGrid(values, answer, caption) {
         saveMarks();
       });
       row.insertCell().append(button);
-      cells.push({ button, correct: answer[personIndex] === valueIndex });
+      cells.push({ button, correct: puzzle.answer[personIndex] === timeIndex });
     }
   }
   return grid;
@@ -167,13 +166,11 @@ function load(level) {
   clueList.replaceChildren(...puzzle.clues.map((clue) => createCell('li', clue)));
   ruleList.replaceChildren(
     createCell('li', 'Jede Person kommt genau einmal.'),
-    createCell('li', puzzle.places ? 'Jede Uhrzeit und jeder Ort gehören genau einer Person.' : 'Jede Uhrzeit gehört genau einer Person.'),
+    createCell('li', 'Jede Uhrzeit gehört genau einer Person.'),
     createCell('li', 'Tippe auf ein Feld, um einen Haken zu setzen oder zu entfernen.'),
   );
 
-  const grids = [createGrid(puzzle.times, puzzle.answers[0], 'Person und Uhrzeit')];
-  if (puzzle.places) grids.push(createGrid(puzzle.places, puzzle.answers[1], 'Person und Ort'));
-  tableContainer.replaceChildren(...grids);
+  tableContainer.replaceChildren(createGrid());
   marks = readMarks(cells.length);
   renderMarks();
 }
@@ -183,7 +180,7 @@ games.set(game, { title: 'Logikgitter', category: 'logik', load });
 checkButton.addEventListener('click', () => {
   const selected = marks.flatMap((mark, index) => mark === checkedMark ? [cells[index]] : []);
   const hasContradiction = selected.some((cell) => !cell.correct);
-  const solved = !hasContradiction && selected.length === puzzle.people.length * puzzle.answers.length;
+  const solved = !hasContradiction && selected.length === puzzle.people.length;
 
   resultTitle.textContent = solved ? 'Hurra, geschafft!' : 'Oh nein!';
   resultClose.textContent = solved ? 'Schließen' : 'Weiter rätseln';
@@ -193,7 +190,7 @@ checkButton.addEventListener('click', () => {
   } else if (hasContradiction) {
     resultMessage.textContent = 'Mindestens ein Haken passt nicht zu den Hinweisen. Schau dir deine Zuordnungen noch einmal an.';
   } else {
-    resultMessage.textContent = 'Deine Lösung ist noch offen. Setze für jede Person in jedem Gitter einen Haken.';
+    resultMessage.textContent = 'Deine Lösung ist noch offen. Setze für jede Person einen Haken.';
   }
   resultDialog.showModal();
 });
