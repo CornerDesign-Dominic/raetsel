@@ -1,7 +1,8 @@
+import { showHint } from './puzzle-hint.js';
+
 const game = document.querySelector('#pattern-game');
 const answerInput = document.querySelector('#pattern-answer');
 const hintButton = document.querySelector('#hint-pattern');
-const hint = document.querySelector('#pattern-hint');
 const dialog = document.querySelector('#pattern-result');
 const title = document.querySelector('#pattern-result-title');
 const message = document.querySelector('#pattern-result-message');
@@ -26,11 +27,7 @@ game.addEventListener('submit', (event) => {
   dialog.showModal();
 });
 
-hintButton.addEventListener('click', () => {
-  const visible = hintButton.getAttribute('aria-expanded') === 'true';
-  hintButton.setAttribute('aria-expanded', String(!visible));
-  hint.textContent = visible ? '' : 'Zieh in jeder fertigen Zeile die mittlere von der rechten Zahl ab. Was fällt dir am Ergebnis auf?';
-});
+hintButton.addEventListener('click', () => showHint('Zieh in jeder fertigen Zeile die mittlere von der rechten Zahl ab. Was fällt dir am Ergebnis auf?'));
 
 window.addEventListener('hashchange', () => {
   if (dialog.open) dialog.close();

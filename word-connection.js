@@ -1,6 +1,7 @@
+import { showHint } from './puzzle-hint.js';
+
 const game = document.querySelector('#word-game');
 const hintButton = document.querySelector('#hint-word');
-const hint = document.querySelector('#word-hint');
 const dialog = document.querySelector('#word-result');
 const title = document.querySelector('#word-result-title');
 const message = document.querySelector('#word-result-message');
@@ -24,11 +25,7 @@ game.addEventListener('submit', (event) => {
   dialog.showModal();
 });
 
-hintButton.addEventListener('click', () => {
-  const visible = hintButton.getAttribute('aria-expanded') === 'true';
-  hintButton.setAttribute('aria-expanded', String(!visible));
-  hint.textContent = visible ? '' : 'Nachts bleibt sie stehen.';
-});
+hintButton.addEventListener('click', () => showHint('Nachts bleibt sie stehen.'));
 
 window.addEventListener('hashchange', () => {
   if (dialog.open) dialog.close();

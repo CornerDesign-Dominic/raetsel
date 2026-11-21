@@ -85,15 +85,14 @@
           <h3 id="assignment-title">Zuordnung</h3>
           <table class="logic-grid" aria-label="Personen und Besuchszeiten" aria-describedby="grid-rules"></table>
           <div class="puzzle-actions">
-            <button id="check-grid" type="button">Lösung prüfen</button>
-            <button class="icon-button" id="hint-grid" type="button" aria-label="Tipp anzeigen" title="Tipp anzeigen">
+            <button id="check-grid" type="button">Lösen</button>
+            <button class="icon-button" id="hint-grid" type="button" aria-label="Tipp anzeigen" title="Tipp anzeigen" aria-haspopup="dialog" aria-controls="puzzle-hint">
               <svg aria-hidden="true"><use href="#icon-lightbulb"></use></svg>
             </button>
             <button class="icon-button" id="undo-grid" type="button" aria-label="Letzten Zug rückgängig machen" title="Letzten Zug rückgängig machen">
               <svg aria-hidden="true"><use href="#icon-undo-circle"></use></svg>
             </button>
           </div>
-          <p id="grid-feedback" class="grid-feedback" role="status"></p>
           <dialog class="result-dialog" id="grid-result" aria-labelledby="grid-result-title" aria-describedby="grid-result-message">
             <h2 id="grid-result-title"></h2>
             <p id="grid-result-message"></p>
@@ -122,12 +121,16 @@
       <header class="puzzle-header">
         <h2 id="word-title" tabindex="-1">Wortverbindung</h2>
         <p>Welches Bild passt zu allen drei Begriffen?</p>
-        <ul class="word-clues" aria-label="Hinweise">
+      </header>
+
+      <section class="board word-clue-card" aria-labelledby="word-clue-title">
+        <h3 id="word-clue-title">Begriffe</h3>
+        <ul class="word-clues">
           <li>Ortszeit</li>
           <li>Teilstriche</li>
           <li>Schatten</li>
         </ul>
-      </header>
+      </section>
 
       <form id="word-game" class="board word-board">
         <fieldset class="word-options">
@@ -152,12 +155,11 @@
           </div>
         </fieldset>
         <div class="puzzle-actions">
-          <button type="submit">Lösung prüfen</button>
-          <button class="icon-button" id="hint-word" type="button" aria-label="Tipp anzeigen" title="Tipp anzeigen" aria-controls="word-hint" aria-expanded="false">
+          <button type="submit">Lösen</button>
+          <button class="icon-button" id="hint-word" type="button" aria-label="Tipp anzeigen" title="Tipp anzeigen" aria-haspopup="dialog" aria-controls="puzzle-hint">
             <svg aria-hidden="true"><use href="#icon-lightbulb"></use></svg>
           </button>
         </div>
-        <p id="word-hint" class="word-hint" role="status"></p>
       </form>
 
       <dialog class="result-dialog" id="word-result" aria-labelledby="word-result-title" aria-describedby="word-result-message">
@@ -204,12 +206,11 @@
           </tbody>
         </table>
         <div class="puzzle-actions">
-          <button type="submit">Lösung prüfen</button>
-          <button class="icon-button" id="hint-pattern" type="button" aria-label="Tipp anzeigen" title="Tipp anzeigen" aria-controls="pattern-hint" aria-expanded="false">
+          <button type="submit">Lösen</button>
+          <button class="icon-button" id="hint-pattern" type="button" aria-label="Tipp anzeigen" title="Tipp anzeigen" aria-haspopup="dialog" aria-controls="puzzle-hint">
             <svg aria-hidden="true"><use href="#icon-lightbulb"></use></svg>
           </button>
         </div>
-        <p id="pattern-hint" class="pattern-hint" role="status"></p>
       </form>
 
       <dialog class="result-dialog" id="pattern-result" aria-labelledby="pattern-result-title" aria-describedby="pattern-result-message">
@@ -220,6 +221,16 @@
         </form>
       </dialog>
     </section>
+
+    <dialog class="result-dialog hint-dialog" id="puzzle-hint" aria-labelledby="puzzle-hint-title" aria-describedby="puzzle-hint-text">
+      <form method="dialog">
+        <button class="icon-button hint-close" type="submit" aria-label="Hinweis schließen" autofocus>
+          <span aria-hidden="true">×</span>
+        </button>
+      </form>
+      <h2 id="puzzle-hint-title">Hinweis</h2>
+      <p id="puzzle-hint-text"></p>
+    </dialog>
 
     <section class="app-update" data-view="" aria-label="App-Updates">
       <button id="update-app" type="button" hidden>Nach Updates suchen</button>

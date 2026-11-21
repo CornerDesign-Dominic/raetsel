@@ -1,3 +1,5 @@
+import { showHint } from './puzzle-hint.js';
+
 const puzzle = {
   id: 'observatorium-1',
   people: ['Mia', 'Nora', 'Leo'],
@@ -18,7 +20,6 @@ const puzzle = {
 
 // Keep the stored value for a checkmark so existing progress is preserved.
 const checkedMark = 2;
-const feedback = document.querySelector('#grid-feedback');
 const checkButton = document.querySelector('#check-grid');
 const hintButton = document.querySelector('#hint-grid');
 const undoButton = document.querySelector('#undo-grid');
@@ -97,7 +98,6 @@ for (const person of puzzle.people) {
     button.addEventListener('click', () => {
       history.push([...marks]);
       marks[index] = marks[index] === checkedMark ? 0 : checkedMark;
-      feedback.textContent = '';
       renderMarks();
       saveMarks();
     });
@@ -131,14 +131,13 @@ window.addEventListener('hashchange', () => {
 });
 
 hintButton.addEventListener('click', () => {
-  feedback.textContent = puzzle.hints[hintIndex];
+  showHint(puzzle.hints[hintIndex]);
   hintIndex = (hintIndex + 1) % puzzle.hints.length;
 });
 
 undoButton.addEventListener('click', () => {
   if (history.length === 0) return;
   marks = history.pop();
-  feedback.textContent = '';
   renderMarks();
   saveMarks();
 });
