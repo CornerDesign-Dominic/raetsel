@@ -177,3 +177,56 @@ summary { width: fit-content; }
 .app-update button { background: #fbefd9; }
 .app-update button:disabled { cursor: progress; opacity: .65; }
 .app-update p:not(:empty) { margin-block-start: .45rem; }
+
+.word-clues {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  list-style: none;
+  padding: 0;
+  margin: .9rem 0 .15rem;
+}
+
+.word-clues li {
+  padding: .3rem .75rem;
+  border: 1px solid #d7b47c;
+  border-radius: 2rem;
+  color: var(--paper);
+  background: #274c4b;
+  font-weight: 600;
+}
+
+.word-board { padding: clamp(1rem, 4vw, 2rem); }
+.word-options { position: relative; min-inline-size: 0; margin: 0 0 1rem; padding: 0; border: 0; }
+.word-options legend { margin-block-end: .65rem; padding: 0; color: var(--petrol); font: 700 1.25rem Georgia, serif; }
+.word-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; }
+.word-image { position: relative; display: block; min-width: 0; cursor: pointer; }
+.word-image input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.word-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 3px solid #b89973;
+  border-radius: .75rem;
+}
+.word-image:hover img { border-color: var(--terracotta); }
+.word-image input:checked + img { border-color: var(--petrol); }
+.word-image:has(input:checked)::after {
+  position: absolute;
+  inset: .35rem .35rem auto auto;
+  display: grid;
+  place-items: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  border-radius: 50%;
+  background: var(--petrol);
+  color: var(--paper);
+  content: "✓";
+  pointer-events: none;
+}
+.word-image input:focus-visible + img { outline: 3px solid var(--petrol); outline-offset: 3px; }
+.word-hint { position: relative; font-weight: 600; }
+
+@media (min-width: 48rem) {
+  .word-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
