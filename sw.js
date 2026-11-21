@@ -1,6 +1,6 @@
 // Increase this version when the precached app files change.
 const cachePrefix = 'inveni-shell-';
-const cacheName = cachePrefix + 'v3';
+const cacheName = cachePrefix + 'v4';
 const scope = self.registration.scope;
 const shell = [
   './index.html',
@@ -14,9 +14,20 @@ const shell = [
 ].map((path) => new URL(path, scope).href);
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(cacheName).then((cache) => {
-    return cache.addAll(shell.map((url) => new Request(url, { cache: 'reload' })));
-  }));
+  event.waitUntil((async () => {
+    const cache = await caches.open(cacheName);
+    await cache.addAll(shell.map((url) => new Request(url, { cache: 'reload' })));
+
+    // Versions before v4 have no update button to activate a waiting worker.
+    const keys = await caches.keys();
+    if (keys.some((key) => /^inveni-shell-v[1-3]$/.test(key))) {
+      await self.skipWaiting();
+    }
+  })());
+});
+
+self.addEventListener('message', (event) => {
+  if (event.data?.type === 'ACTIVATE_UPDATE') event.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener('activate', (event) => {

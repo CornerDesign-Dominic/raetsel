@@ -41,11 +41,71 @@ standalone.addEventListener('change', updateInstallControls);
 updateInstallControls();
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js').catch((error) => {
+  const serviceWorker = navigator.serviceWorker;
+  const updateButton = document.querySelector('#update-app');
+  const updateStatus = document.querySelector('#update-status');
+  let controller = serviceWorker.controller;
+  let activationTimer;
+
+  serviceWorker.addEventListener('controllerchange', () => {
+    const previous = controller;
+    controller = serviceWorker.controller;
+    if (!controller || controller === previous) return;
+    window.clearTimeout(activationTimer);
+    if (previous || updateButton.disabled) window.location.reload();
+  });
+
+  serviceWorker.register('./sw.js', { updateViaCache: 'none' }).then((registration) => {
+    updateButton.hidden = false;
+    updateButton.addEventListener('click', async () => {
+      updateButton.disabled = true;
+      updateStatus.textContent = 'Suche nach Updates …';
+
+      try {
+        if (!registration.waiting && !registration.installing) await registration.update();
+        const installing = registration.installing;
+        if (installing) await waitForInstall(installing);
+        if (registration.waiting) {
+          updateStatus.textContent = 'Update wird geladen …';
+          activationTimer = window.setTimeout(() => {
+            updateStatus.textContent = 'Das Update konnte noch nicht aktiviert werden. Versuche es erneut.';
+            updateButton.disabled = false;
+          }, 15000);
+          registration.waiting.postMessage({ type: 'ACTIVATE_UPDATE' });
+          return;
+        }
+        updateStatus.textContent = 'Inveni ist auf dem neuesten Stand.';
+      } catch {
+        window.clearTimeout(activationTimer);
+        updateStatus.textContent = 'Die Updatesuche ist fehlgeschlagen. Prüfe deine Internetverbindung und versuche es erneut.';
+      }
+      updateButton.disabled = false;
+    });
+  }).catch((error) => {
     console.warn('Offline-Modus konnte nicht aktiviert werden.', error);
   });
 }
 
+function waitForInstall(worker) {
+  return new Promise((resolve, reject) => {
+    const timeout = window.setTimeout(() => finish(new Error('Installationszeit überschritten')), 15000);
+
+    function finish(error) {
+      window.clearTimeout(timeout);
+      worker.removeEventListener('statechange', onStateChange);
+      if (error) reject(error);
+      else resolve();
+    }
+
+    function onStateChange() {
+      if (worker.state === 'redundant') finish(new Error('Installation fehlgeschlagen'));
+      else if (worker.state !== 'installing') finish();
+    }
+
+    worker.addEventListener('statechange', onStateChange);
+    onStateChange();
+  });
+}
 
 const views = [...document.querySelectorAll('[data-view]')];
 
