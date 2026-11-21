@@ -127,15 +127,14 @@ summary { width: fit-content; }
 .puzzle-header p:first-child { color: var(--gold); font-weight: 600; }
 .puzzle-layout { display: grid; gap: .85rem; margin-block: 1rem; }
 .puzzle-layout .board { margin: 0; padding: clamp(1rem, 3vw, 1.75rem); }
-.puzzle-layout h3 { margin: 0; color: var(--petrol); font-family: Georgia, serif; font-size: 1.35rem; }
+.puzzle-layout h3, .rules-card h3 { margin: 0; color: var(--petrol); font-family: Georgia, serif; font-size: 1.35rem; }
 #grid-clues { padding-inline-start: 1.5rem; margin-block: .65rem 0; }
 #grid-clues li { padding-block: .2rem; }
 .logic-grid { width: 100%; margin-block: .75rem; border-spacing: .25rem; text-align: center; }
 .logic-grid th { color: var(--petrol); font-size: .9rem; }
 .logic-grid tbody th { text-align: start; }
 .logic-grid button { width: 100%; min-width: 2.75rem; padding: .35rem; font-size: 1.25rem; background: #fbefd9; border-color: #b89973; }
-.logic-grid button[data-mark="1"] { color: #753724; background: #f5d6bd; }
-.logic-grid button[data-mark="2"] { color: #fff4dc; background: var(--petrol); border-color: var(--petrol); }
+.logic-grid button[aria-pressed="true"] { color: #fff4dc; background: var(--petrol); border-color: var(--petrol); }
 .puzzle-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
 .puzzle-actions button:not(:first-child) { background: #fbefd9; }
 .puzzle-actions button:disabled { opacity: .55; cursor: default; }
@@ -146,3 +145,30 @@ summary { width: fit-content; }
 @media (min-width: 45rem) {
   .puzzle-layout { grid-template-columns: minmax(0, .95fr) minmax(0, 1.35fr); align-items: start; }
 }
+
+.icon-library { position: absolute; pointer-events: none; }
+.rules-card { padding: clamp(1rem, 3vw, 1.75rem); }
+.rules-card ul { margin-block: .55rem 0; padding-inline-start: 1.3rem; line-height: 1.5; }
+.icon-button { display: inline-grid; place-items: center; min-inline-size: 2.75rem; padding: .45rem; }
+.icon-button svg {
+  width: 1.35rem;
+  height: 1.35rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.result-dialog {
+  box-sizing: border-box;
+  width: min(27rem, calc(100% - 2rem));
+  padding: clamp(1rem, 5vw, 1.75rem);
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid #b89973;
+  border-radius: 1.25rem;
+  box-shadow: 0 12px 36px #132e3366;
+}
+.result-dialog::backdrop { background: #102e32aa; }
+.result-dialog p { margin-block: .65rem 1rem; }
+.result-dialog form { display: flex; justify-content: flex-end; }

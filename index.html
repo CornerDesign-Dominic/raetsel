@@ -13,6 +13,14 @@
   <title>Inveni</title>
 </head>
 <body>
+  <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" class="icon-library" aria-hidden="true">
+    <symbol id="icon-lightbulb" viewBox="0 0 24 24">
+      <path d="M9 18h6M10 22h4M9 15c0-1.5-3-3-3-6a6 6 0 1 1 12 0c0 3-3 4.5-3 6"/>
+    </symbol>
+    <symbol id="icon-undo-circle" viewBox="0 0 24 24">
+      <path d="M3 12a9 9 0 1 1 2.6 6.4M3 6v6h6"/>
+    </symbol>
+  </svg>
   <main class="home">
     <header class="cover" data-view="">
       <img class="compass" src="./icons/icon-192.png" alt="" width="84" height="84">
@@ -50,6 +58,14 @@
         <h2 id="grid-title" tabindex="-1">Besuch im Observatorium</h2>
         <p>Mia, Nora und Leo besuchen das Observatorium zu drei verschiedenen Zeiten. Wer kommt wann?</p>
       </header>
+      <section class="board rules-card" aria-labelledby="rules-title">
+        <h3 id="rules-title">Regeln</h3>
+        <ul id="grid-rules">
+          <li>Jede Person kommt genau einmal.</li>
+          <li>Jede Uhrzeit gehört genau einer Person.</li>
+          <li>Tippe auf ein Feld, um einen Haken zu setzen oder zu entfernen.</li>
+        </ul>
+      </section>
       <div class="puzzle-layout">
         <section class="board" aria-labelledby="clue-title">
           <h3 id="clue-title">Hinweise</h3>
@@ -57,14 +73,24 @@
         </section>
         <section class="board" aria-labelledby="assignment-title">
           <h3 id="assignment-title">Zuordnung</h3>
-          <p id="grid-instructions">Tippe auf ein Feld, um zwischen offen (·), ausgeschlossen (×) und zugeordnet (✓) zu wechseln. Jede Uhrzeit gehört genau einer Person.</p>
-          <table class="logic-grid" aria-label="Personen und Besuchszeiten" aria-describedby="grid-instructions"></table>
+          <table class="logic-grid" aria-label="Personen und Besuchszeiten" aria-describedby="grid-rules"></table>
           <div class="puzzle-actions">
             <button id="check-grid" type="button">Lösung prüfen</button>
-            <button id="hint-grid" type="button">Tipp</button>
-            <button id="undo-grid" type="button">Rückgängig</button>
+            <button class="icon-button" id="hint-grid" type="button" aria-label="Tipp anzeigen" title="Tipp anzeigen">
+              <svg aria-hidden="true"><use href="#icon-lightbulb"></use></svg>
+            </button>
+            <button class="icon-button" id="undo-grid" type="button" aria-label="Letzten Zug rückgängig machen" title="Letzten Zug rückgängig machen">
+              <svg aria-hidden="true"><use href="#icon-undo-circle"></use></svg>
+            </button>
           </div>
           <p id="grid-feedback" class="grid-feedback" role="status"></p>
+          <dialog class="result-dialog" id="grid-result" aria-labelledby="grid-result-title" aria-describedby="grid-result-message">
+            <h2 id="grid-result-title"></h2>
+            <p id="grid-result-message"></p>
+            <form method="dialog">
+              <button id="grid-result-close" autofocus>Weiter rätseln</button>
+            </form>
+          </dialog>
         </section>
       </div>
     </section>

@@ -13,15 +13,19 @@ const puzzle = {
     'Für Leo und Mia bleiben 10 und 11 Uhr. Was sagt Hinweis 3 über Leo?',
   ],
   answer: [1, 0, 2],
-  explanation: 'Nora kann weder um 10 Uhr noch als Letzte kommen. Also kommt sie um 9 Uhr. Leo kommt nicht um 10 Uhr, daher kommt er um 11 Uhr. Für Mia bleibt 10 Uhr.',
+  explanation: 'Nora kommt um 9 Uhr: Sie kommt vor Leo und nicht um 10 Uhr. Leo kommt um 11 Uhr, weil 10 Uhr für ihn ausscheidet. Mia bleibt 10 Uhr.',
 };
 
-const symbols = ['·', '×', '✓'];
-const states = ['offen', 'ausgeschlossen', 'zugeordnet'];
+// Keep the stored value for a checkmark so existing progress is preserved.
+const checkedMark = 2;
 const feedback = document.querySelector('#grid-feedback');
 const checkButton = document.querySelector('#check-grid');
 const hintButton = document.querySelector('#hint-grid');
 const undoButton = document.querySelector('#undo-grid');
+const resultDialog = document.querySelector('#grid-result');
+const resultTitle = document.querySelector('#grid-result-title');
+const resultMessage = document.querySelector('#grid-result-message');
+const resultClose = document.querySelector('#grid-result-close');
 const storageKey = 'inveni:logikgitter:' + puzzle.id;
 const size = puzzle.people.length * puzzle.times.length;
 let marks = readMarks();
@@ -31,8 +35,8 @@ let hintIndex = 0;
 function readMarks() {
   try {
     const saved = JSON.parse(localStorage.getItem(storageKey));
-    if (Array.isArray(saved) && saved.length === size && saved.every((mark) => Number.isInteger(mark) && mark >= 0 && mark < symbols.length)) {
-      return saved;
+    if (Array.isArray(saved) && saved.length === size && saved.every((mark) => Number.isInteger(mark) && mark >= 0 && mark <= checkedMark)) {
+      return saved.map((mark) => mark === checkedMark ? checkedMark : 0);
     }
   } catch {
     // Storage can be unavailable in private sessions.
@@ -42,11 +46,9 @@ function readMarks() {
 
 function renderMarks() {
   for (const [index, button] of cells.entries()) {
-    const mark = marks[index];
-    button.textContent = symbols[mark];
-    button.dataset.mark = mark;
-    const { person, time } = button.dataset;
-    button.setAttribute('aria-label', person + ', ' + time + ': ' + states[mark]);
+    const selected = marks[index] === checkedMark;
+    button.textContent = selected ? '✓' : '·';
+    button.setAttribute('aria-pressed', String(selected));
   }
   undoButton.disabled = history.length === 0;
 }
@@ -90,12 +92,11 @@ for (const person of puzzle.people) {
   for (const time of puzzle.times) {
     const button = document.createElement('button');
     button.type = 'button';
-    button.dataset.person = person;
-    button.dataset.time = time;
+    button.setAttribute('aria-label', person + ', ' + time);
     const index = cells.length;
     button.addEventListener('click', () => {
       history.push([...marks]);
-      marks[index] = (marks[index] + 1) % symbols.length;
+      marks[index] = marks[index] === checkedMark ? 0 : checkedMark;
       feedback.textContent = '';
       renderMarks();
       saveMarks();
@@ -106,19 +107,27 @@ for (const person of puzzle.people) {
 }
 
 checkButton.addEventListener('click', () => {
-  const positives = marks.filter((mark) => mark === 2).length;
-  const hasContradiction = marks.some((mark, index) => {
-    const correct = index % puzzle.times.length === puzzle.answer[Math.floor(index / puzzle.times.length)];
-    return (mark === 2 && !correct) || (mark === 1 && correct);
+  const selected = marks.flatMap((mark, index) => mark === checkedMark ? [index] : []);
+  const hasContradiction = selected.some((index) => {
+    const personIndex = Math.floor(index / puzzle.times.length);
+    return index % puzzle.times.length !== puzzle.answer[personIndex];
   });
+  const solved = !hasContradiction && selected.length === puzzle.people.length;
 
-  if (hasContradiction) {
-    feedback.textContent = 'Mindestens eine Markierung widerspricht den Hinweisen. Schau dir deine Zuordnungen und Ausschlüsse noch einmal an.';
-  } else if (positives < puzzle.people.length) {
-    feedback.textContent = 'Setze ein ✓ für jede Person, um deine Lösung zu prüfen.';
+  resultTitle.textContent = solved ? 'Hurra, geschafft!' : 'Oh nein!';
+  resultClose.textContent = solved ? 'Schließen' : 'Weiter rätseln';
+  if (solved) {
+    resultMessage.textContent = puzzle.explanation;
+  } else if (hasContradiction) {
+    resultMessage.textContent = 'Mindestens ein Haken passt nicht zu den Hinweisen. Schau dir deine Zuordnungen noch einmal an.';
   } else {
-    feedback.textContent = 'Gelöst! ' + puzzle.explanation;
+    resultMessage.textContent = 'Deine Lösung ist noch offen. Setze für jede Person einen Haken.';
   }
+  resultDialog.showModal();
+});
+
+window.addEventListener('hashchange', () => {
+  if (resultDialog.open) resultDialog.close();
 });
 
 hintButton.addEventListener('click', () => {
