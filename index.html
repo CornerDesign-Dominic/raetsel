@@ -36,7 +36,7 @@
           <span><strong>Logik</strong><small>Kombinieren, ausschließen und Schlüsse ziehen.</small></span>
           <span aria-hidden="true">›</span>
         </a>
-        <a class="game-card" href="#sprache">
+        <a class="game-card" href="#sprache" hidden>
           <span class="game-symbol" aria-hidden="true">Aa</span>
           <span><strong>Sprache</strong><small>Begriffe verbinden und Assoziationen entdecken.</small></span>
           <span aria-hidden="true">›</span>
@@ -100,52 +100,54 @@
       </div>
     </section>
 
-    <section class="board" data-view="sprache" aria-labelledby="language-title" hidden>
-      <a class="back-link" href="#start">← Rätselbereiche</a>
-      <h2 id="language-title" tabindex="-1">Sprache</h2>
-      <div class="game-list">
-        <a class="game-card" href="#wortverbindung">
-          <span class="game-symbol" aria-hidden="true">✦</span>
-          <span><strong>Wortverbindung</strong><small>Finde das Bild, zu dem alle drei Begriffe passen.</small></span>
-          <span aria-hidden="true">›</span>
-        </a>
-      </div>
-    </section>
-
-    <section data-view="wortverbindung" aria-labelledby="word-title" hidden>
-      <a class="back-link" href="#sprache">← Sprache</a>
-      <header class="puzzle-header">
-        <p id="word-level"></p>
-        <h2 id="word-title" tabindex="-1">Wortverbindung</h2>
-        <p>Welches Bild passt zu allen drei Begriffen?</p>
-      </header>
-
-      <section class="board word-clue-card" aria-labelledby="word-clue-title">
-        <h3 id="word-clue-title">Begriffe</h3>
-        <ul class="word-clues"></ul>
+    <template id="paused-language-category">
+      <section class="board" data-view="sprache" aria-labelledby="language-title" hidden>
+        <a class="back-link" href="#start">← Rätselbereiche</a>
+        <h2 id="language-title" tabindex="-1">Sprache</h2>
+        <div class="game-list">
+          <a class="game-card" href="#wortverbindung">
+            <span class="game-symbol" aria-hidden="true">✦</span>
+            <span><strong>Wortverbindung</strong><small>Finde das Bild, zu dem alle drei Begriffe passen.</small></span>
+            <span aria-hidden="true">›</span>
+          </a>
+        </div>
       </section>
 
-      <form id="word-game" class="board word-board">
-        <fieldset class="word-options">
-          <legend>Wähle ein Bild</legend>
-          <div class="word-grid"></div>
-        </fieldset>
-        <div class="puzzle-actions">
-          <button type="submit">Lösen</button>
-          <button class="icon-button" id="hint-word" type="button" aria-label="Tipp anzeigen" title="Tipp anzeigen" aria-haspopup="dialog" aria-controls="puzzle-hint">
-            <svg aria-hidden="true"><use href="#icon-lightbulb"></use></svg>
-          </button>
-        </div>
-      </form>
+      <section data-view="wortverbindung" aria-labelledby="word-title" hidden>
+        <a class="back-link" href="#sprache">← Sprache</a>
+        <header class="puzzle-header">
+          <p id="word-level"></p>
+          <h2 id="word-title" tabindex="-1">Wortverbindung</h2>
+          <p>Welches Bild passt zu allen drei Begriffen?</p>
+        </header>
 
-      <dialog class="result-dialog" id="word-result" aria-labelledby="word-result-title" aria-describedby="word-result-message">
-        <h2 id="word-result-title"></h2>
-        <p id="word-result-message"></p>
-        <form method="dialog">
-          <button id="word-result-close" autofocus>Weiter rätseln</button>
+        <section class="board word-clue-card" aria-labelledby="word-clue-title">
+          <h3 id="word-clue-title">Begriffe</h3>
+          <ul class="word-clues"></ul>
+        </section>
+
+        <form id="word-game" class="board word-board">
+          <fieldset class="word-options">
+            <legend>Wähle ein Bild</legend>
+            <div class="word-grid"></div>
+          </fieldset>
+          <div class="puzzle-actions">
+            <button type="submit">Lösen</button>
+            <button class="icon-button" id="hint-word" type="button" aria-label="Tipp anzeigen" title="Tipp anzeigen" aria-haspopup="dialog" aria-controls="puzzle-hint">
+              <svg aria-hidden="true"><use href="#icon-lightbulb"></use></svg>
+            </button>
+          </div>
         </form>
-      </dialog>
-    </section>
+
+        <dialog class="result-dialog" id="word-result" aria-labelledby="word-result-title" aria-describedby="word-result-message">
+          <h2 id="word-result-title"></h2>
+          <p id="word-result-message"></p>
+          <form method="dialog">
+            <button id="word-result-close" autofocus>Weiter rätseln</button>
+          </form>
+        </dialog>
+      </section>
+    </template>
 
     <section class="board" data-view="zahlen-und-muster" aria-labelledby="numbers-title" hidden>
       <a class="back-link" href="#start">← Rätselbereiche</a>

@@ -1,6 +1,5 @@
 import { games, levels, chooseDifficulty, closeDifficulty } from './puzzle-levels.js';
 import './logic-grid.js';
-import './word-connection.js';
 import './number-pattern.js';
 
 const installSection = document.querySelector('#install');
