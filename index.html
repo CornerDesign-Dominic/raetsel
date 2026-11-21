@@ -64,17 +64,13 @@
     <section data-view="logikgitter" aria-labelledby="grid-title" hidden>
       <a class="back-link" href="#logik">← Logik</a>
       <header class="puzzle-header">
-        <p>Logikgitter · Einstieg</p>
+        <p id="grid-level">Logikgitter</p>
         <h2 id="grid-title" tabindex="-1">Besuch im Observatorium</h2>
-        <p>Mia, Nora und Leo besuchen das Observatorium zu drei verschiedenen Zeiten. Wer kommt wann?</p>
+        <p id="grid-intro"></p>
       </header>
       <section class="board rules-card" aria-labelledby="rules-title">
         <h3 id="rules-title">Regeln</h3>
-        <ul id="grid-rules">
-          <li>Jede Person kommt genau einmal.</li>
-          <li>Jede Uhrzeit gehört genau einer Person.</li>
-          <li>Tippe auf ein Feld, um einen Haken zu setzen oder zu entfernen.</li>
-        </ul>
+        <ul id="grid-rules"></ul>
       </section>
       <div class="puzzle-layout">
         <section class="board" aria-labelledby="clue-title">
@@ -83,7 +79,7 @@
         </section>
         <section class="board" aria-labelledby="assignment-title">
           <h3 id="assignment-title">Zuordnung</h3>
-          <table class="logic-grid" aria-label="Personen und Besuchszeiten" aria-describedby="grid-rules"></table>
+          <div id="logic-tables"></div>
           <div class="puzzle-actions">
             <button id="check-grid" type="button">Lösen</button>
             <button class="icon-button" id="hint-grid" type="button" aria-label="Tipp anzeigen" title="Tipp anzeigen" aria-haspopup="dialog" aria-controls="puzzle-hint">
@@ -119,40 +115,20 @@
     <section data-view="wortverbindung" aria-labelledby="word-title" hidden>
       <a class="back-link" href="#sprache">← Sprache</a>
       <header class="puzzle-header">
+        <p id="word-level"></p>
         <h2 id="word-title" tabindex="-1">Wortverbindung</h2>
         <p>Welches Bild passt zu allen drei Begriffen?</p>
       </header>
 
       <section class="board word-clue-card" aria-labelledby="word-clue-title">
         <h3 id="word-clue-title">Begriffe</h3>
-        <ul class="word-clues">
-          <li>Ortszeit</li>
-          <li>Teilstriche</li>
-          <li>Schatten</li>
-        </ul>
+        <ul class="word-clues"></ul>
       </section>
 
       <form id="word-game" class="board word-board">
         <fieldset class="word-options">
           <legend>Wähle ein Bild</legend>
-          <div class="word-grid">
-            <label class="word-image">
-              <input type="radio" name="word-answer" value="kompass">
-              <img src="./images/sonnenzeit/kompass.webp" alt="Rundes Metallgehäuse mit Strichen am Rand und zweifarbiger Nadel" width="360" height="272">
-            </label>
-            <label class="word-image">
-              <input type="radio" name="word-answer" value="sextant">
-              <img src="./images/sonnenzeit/sextant.webp" alt="Messingrahmen mit gebogener Skala, beweglichem Zeiger und kleinem Fernrohr" width="360" height="272">
-            </label>
-            <label class="word-image">
-              <input type="radio" name="word-answer" value="sonnenuhr">
-              <img src="./images/sonnenzeit/sonnenuhr.webp" alt="Runde Platte mit Strichen und einem dreieckigen Aufsatz, der einen Schatten wirft" width="360" height="272">
-            </label>
-            <label class="word-image">
-              <input type="radio" name="word-answer" value="sanduhr">
-              <img src="./images/sonnenzeit/sanduhr.webp" alt="Zwei verbundene Glaskammern, zwischen denen Sand rieselt" width="360" height="272">
-            </label>
-          </div>
+          <div class="word-grid"></div>
         </fieldset>
         <div class="puzzle-actions">
           <button type="submit">Lösen</button>
@@ -186,24 +162,14 @@
     <section data-view="musterfeld" aria-labelledby="pattern-title" hidden>
       <a class="back-link" href="#zahlen-und-muster">← Zahlen &amp; Muster</a>
       <header class="puzzle-header">
+        <p id="pattern-level"></p>
         <h2 id="pattern-title" tabindex="-1">Musterfeld</h2>
         <p id="pattern-rule">In jeder Zeile ergeben die ersten beiden Zahlen nach derselben Rechenregel die dritte. Welche Zahl fehlt?</p>
       </header>
 
       <form id="pattern-game" class="board pattern-board">
         <table class="pattern-grid" aria-label="Zahlenraster" aria-describedby="pattern-rule">
-          <tbody>
-            <tr><td>2</td><td>5</td><td>9</td></tr>
-            <tr><td>3</td><td>4</td><td>10</td></tr>
-            <tr><td>1</td><td>8</td><td>10</td></tr>
-            <tr>
-              <td>4</td><td>6</td>
-              <td class="pattern-missing">
-                <input id="pattern-answer" name="pattern-answer" type="text" inputmode="numeric"
-                  autocomplete="off" aria-label="Fehlende Zahl in Zeile 4, Spalte 3" placeholder="?">
-              </td>
-            </tr>
-          </tbody>
+          <tbody></tbody>
         </table>
         <div class="puzzle-actions">
           <button type="submit">Lösen</button>
@@ -232,9 +198,31 @@
       <p id="puzzle-hint-text"></p>
     </dialog>
 
+    <dialog class="result-dialog" id="difficulty-dialog" aria-labelledby="difficulty-title" aria-describedby="difficulty-game">
+      <h2 id="difficulty-title">Schwierigkeit wählen</h2>
+      <p id="difficulty-game"></p>
+      <div class="difficulty-choices">
+        <button type="button" data-level="leicht" autofocus>Leicht</button>
+        <button type="button" data-level="mittel">Mittel</button>
+        <button type="button" data-level="schwer">Schwer</button>
+      </div>
+      <button class="secondary-action" id="cancel-difficulty" type="button">Zurück</button>
+    </dialog>
+
+    <dialog class="result-dialog" id="reset-dialog" aria-labelledby="reset-title" aria-describedby="reset-description">
+      <h2 id="reset-title">Spielstand zurücksetzen?</h2>
+      <p id="reset-description">Gelöste Rätsel und angefangene Zuordnungen werden auf diesem Gerät zurückgesetzt.</p>
+      <form method="dialog" class="puzzle-actions">
+        <button class="secondary-action" type="submit" autofocus>Abbrechen</button>
+        <button id="confirm-reset" type="submit">Zurücksetzen</button>
+      </form>
+    </dialog>
+
     <section class="app-update" data-view="" aria-label="App-Updates">
       <button id="update-app" type="button" hidden>Nach Updates suchen</button>
       <p id="update-status" role="status"></p>
+      <button id="reset-progress" type="button">Spielstand zurücksetzen</button>
+      <p id="reset-status" role="status"></p>
     </section>
 
     <section id="install" class="install" aria-label="App installieren" hidden>

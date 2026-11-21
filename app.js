@@ -1,3 +1,4 @@
+import { games, levels, chooseDifficulty, closeDifficulty } from './puzzle-levels.js';
 import './logic-grid.js';
 import './word-connection.js';
 import './number-pattern.js';
@@ -112,13 +113,23 @@ function waitForInstall(worker) {
 const views = [...document.querySelectorAll('[data-view]')];
 
 function showView(moveFocus = false) {
-  const route = window.location.hash.slice(1);
-  const currentView = views.find((view) => view.dataset.view === route);
+  const [route, level] = window.location.hash.slice(1).split('/');
+  const game = games.get(route);
+  const gameLevel = game && Object.hasOwn(levels, level) ? level : null;
+  const destination = game && !gameLevel ? game.category : route;
+  const currentView = views.find((view) => view.dataset.view === destination);
   const activeRoute = currentView?.dataset.view ?? '';
 
   for (const view of views) {
     view.hidden = view.dataset.view !== activeRoute;
   }
+
+  if (gameLevel) game.load(gameLevel);
+  if (game && !gameLevel) {
+    chooseDifficulty(route, game.title);
+    return;
+  }
+  closeDifficulty();
 
   if (moveFocus) {
     const heading = currentView?.querySelector('h2') ?? document.querySelector('#puzzles-title');

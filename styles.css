@@ -280,3 +280,13 @@ summary { width: fit-content; }
   font-size: 1.5rem;
   line-height: 1;
 }
+
+.difficulty-choices { display: grid; gap: .5rem; margin-block-end: .85rem; }
+.secondary-action { background: #fbefd9; }
+#reset-dialog #confirm-reset { background: var(--gold); }
+#reset-progress { margin-block-start: .5rem; }
+.logic-grid { table-layout: fixed; }
+.logic-grid caption { text-align: start; color: var(--petrol); font-weight: 700; margin-block: .4rem; }
+.logic-grid th { overflow-wrap: anywhere; }
+.logic-grid button { min-width: 0; }
+.pattern-grid .pattern-intermediate { background: #efddbf; }
