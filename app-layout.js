@@ -1,3 +1,5 @@
+const overviewNav = document.querySelector('#overview-nav');
+const overviewLinks = [...overviewNav.querySelectorAll('a')];
 const headerTitle = document.querySelector('#app-title');
 const back = document.querySelector('#app-back');
 const openRules = document.querySelector('#app-rules');
@@ -54,7 +56,7 @@ const ruleContent = {
     'Auf der Karte ist Norden oben. Einige Merkmale spielen für den Weg keine Rolle.',
   ],
   einmaleins: () => [
-    'Mit „Go“ startet die Zeit. Gib das Ergebnis über den Nummernblock oder die Tastatur ein.',
+    'Mit „Starten“ startet die Zeit. Gib das Ergebnis über den Nummernblock oder die Tastatur ein.',
     'Mit „Abgeben“ oder Enter prüfst du die Antwort und wechselst sofort zur nächsten Aufgabe. Der Kreispfeil leert die Eingabe.',
     'Nach dem Durchlauf siehst du, wie viele Antworten richtig waren und wie viele du pro Sekunde abgegeben hast.',
   ],
@@ -118,7 +120,12 @@ export function updateLayout(route, view, game) {
   ruleRoute = playView && Object.hasOwn(ruleContent, route) ? route : undefined;
   const title = route ? view?.querySelector('h2')?.textContent : 'Inveni';
   headerTitle.textContent = title || game?.title || 'Inveni';
-  back.hidden = route === '';
+  back.hidden = !playView;
+  overviewNav.hidden = Boolean(playView);
+  for (const link of overviewLinks) {
+    if (link.hash === '#' + route) link.setAttribute('aria-current', 'page');
+    else link.removeAttribute('aria-current');
+  }
   back.href = '#' + (game?.category ?? view?.dataset.parent ?? 'start');
   openRules.hidden = !ruleRoute;
   document.body.classList.toggle('is-playing', Boolean(playView));

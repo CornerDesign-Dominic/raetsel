@@ -108,7 +108,7 @@ root.querySelector('#bubble-restart').addEventListener('click', start);
 
 games.set('seifenblasen', {
   title: 'Seifenblasen',
-  category: 'zahlen',
+  category: 'training',
   load(selectedLevel) {
     level = selectedLevel;
     levelLabel.textContent = levels[level];

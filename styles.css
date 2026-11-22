@@ -171,11 +171,6 @@ summary { width: fit-content; }
 .result-dialog p { margin-block: .65rem 1rem; }
 .result-dialog form { display: flex; justify-content: flex-end; }
 
-.app-update { margin-block: 1rem; }
-.app-update button { background: #fbefd9; }
-.app-update button:disabled { cursor: progress; opacity: .65; }
-.app-update p:not(:empty) { margin-block-start: .45rem; }
-
 .word-clue-card { padding: clamp(1rem, 4vw, 2rem); }
 
 .word-clue-card h3 {

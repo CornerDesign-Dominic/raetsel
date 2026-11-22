@@ -117,7 +117,7 @@ next.addEventListener('click', () => {
   form.elements.hours.focus({ preventScroll: true });
 });
 
-games.set('zeit', { title: 'Zeit', category: 'zahlen', load(selectedLevel) {
+games.set('zeit', { title: 'Zeit', category: 'training', load(selectedLevel) {
   level = selectedLevel;
   restart();
 } });

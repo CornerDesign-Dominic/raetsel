@@ -238,4 +238,4 @@ form.addEventListener('submit', (event) => {
   continueButton.focus({ preventScroll: true });
 });
 
-games.set(game, { title: 'Haus', category: 'zahlen', load, leave });
+games.set(game, { title: 'Haus', category: 'training', load, leave });

@@ -113,7 +113,7 @@ next.addEventListener('click', () => {
 
 games.set('merken', {
   title: 'Merken',
-  category: 'kurzzeitgedaechtnis',
+  category: 'training',
   load(selectedLevel) {
     level = selectedLevel;
     reset();

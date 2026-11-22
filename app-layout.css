@@ -56,7 +56,6 @@
 }
 .home .board::before { display: none; }
 .home .game-list { margin-block-start: .65rem; gap: .5rem; }
-.home .menu-page > .game-list { margin-block-start: 0; }
 .home .game-card { gap: .6rem; padding: .65rem; border-radius: .55rem; }
 
 body.is-playing {
@@ -76,7 +75,6 @@ body.is-playing {
   padding: .25rem max(.375rem, env(safe-area-inset-right))
     max(.375rem, env(safe-area-inset-bottom)) max(.375rem, env(safe-area-inset-left));
 }
-.is-playing .install { display: none; }
 .play-view {
   display: flow-root;
   transform: scale(var(--play-scale, 1));
@@ -121,3 +119,61 @@ body.is-playing {
   .play-view .where-map { width: min(100%, 68dvh); }
   .play-view .house-platform { min-block-size: 5.6rem; }
 }
+
+.overview-nav {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: min(100%, 38rem);
+  margin-inline: auto;
+  padding-inline: max(.5rem, env(safe-area-inset-left)) max(.5rem, env(safe-area-inset-right));
+}
+.overview-nav a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .35rem;
+  min-block-size: 3rem;
+  border-block-end: .2rem solid transparent;
+  color: var(--paper);
+  text-decoration: none;
+  font-weight: 650;
+}
+.overview-nav a[aria-current='page'] { border-color: var(--gold); color: #ffe4b5; }
+.overview-nav a:focus-visible { outline-color: var(--paper); outline-offset: -4px; }
+.overview-nav svg {
+  flex: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.overview {
+  width: min(100%, 38rem);
+  margin: .65rem auto;
+  color: var(--petrol);
+}
+.overview h3 { margin: 0 0 .4rem; font: 750 1rem/1.25 system-ui, sans-serif; }
+.overview .game-list { grid-template-columns: 1fr; gap: 0; margin: 0; }
+.overview .game-card {
+  min-height: 3rem;
+  padding: .45rem .6rem;
+  border: 0;
+  border-block-end: 1px solid #d3bc9e;
+  border-radius: 0;
+  background: transparent;
+}
+.overview .game-card:hover, .overview .game-card:focus-visible { background: #fbefd9; }
+.overview .game-card strong { font: 650 1.0625rem/1.3 system-ui, sans-serif; }
+.overview .game-card .game-symbol { font-size: 1rem; }
+.game-group + .game-group { margin-block-start: 1.15rem; }
+
+.profile-settings button { display: block; min-block-size: 3rem; background: #fbefd9; }
+.profile-settings #update-app:disabled { cursor: progress; opacity: .65; }
+.profile-settings .install { margin-block-start: 1rem; }
+.profile-settings p:not(:empty) { margin-block-start: .45rem; }
+.is-playing .header-action { min-width: 3rem; min-height: 3rem; }
+.is-playing .app-header-inner { grid-template-columns: 3rem minmax(0, 1fr) 3rem; }

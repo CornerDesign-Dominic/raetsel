@@ -38,7 +38,7 @@ root.innerHTML = `
         <input id="training-answer" type="text" inputmode="none" autocomplete="off" maxlength="3" disabled>
       </div>
       <div id="training-start" class="training-start">
-        <button id="training-go" type="button">Go</button>
+        <button id="training-go" type="button">Starten</button>
       </div>
 
       <fieldset id="training-controls" class="training-controls" aria-label="Nummernblock" disabled>
@@ -110,7 +110,7 @@ function setStatus(next) {
   startArea.hidden = running;
   stop.hidden = !running || Number.isFinite(mode.count);
   results.hidden = status !== 'finished';
-  go.textContent = status === 'finished' ? 'Nochmal' : 'Go';
+  go.textContent = status === 'finished' ? 'Nochmal' : 'Starten';
 }
 
 function reset() {
@@ -202,7 +202,7 @@ stop.addEventListener('click', () => finish(elapsedSeconds()));
 
 games.set('einmaleins', {
   title: '1×1-Training',
-  category: 'zahlen',
+  category: 'training',
   chooserTitle: 'Trainingsdauer wählen',
   options: Object.fromEntries(Object.entries(modes).map(([key, { title, count }]) =>
     [key, Number.isFinite(count) ? title + ' · ' + count + ' Aufgaben' : title])),

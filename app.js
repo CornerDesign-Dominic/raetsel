@@ -122,20 +122,23 @@ const views = [...document.querySelectorAll('[data-view]')];
 const legacyRoutes = new Map([
   ['busfahrt', 'haus'],
   ['logik', 'raetsel'],
-  ['zahlen-und-muster', 'zahlen'],
-  ['gedaechtnis', 'kurzzeitgedaechtnis'],
+  ['zahlen-und-muster', 'training'],
+  ['zahlen', 'training'],
+  ['kurzzeitgedaechtnis', 'training'],
+  ['start', 'training'],
+  ['gedaechtnis', 'training'],
 ]);
 let activeGame;
 
 function showView(moveFocus = false) {
   const [requestedRoute, level] = window.location.hash.slice(1).split('/');
-  const route = legacyRoutes.get(requestedRoute) ?? requestedRoute;
+  const route = legacyRoutes.get(requestedRoute) ?? (requestedRoute || 'training');
   const game = games.get(route);
   const gameLevel = game && Object.hasOwn(game.options ?? levels, level) ? level : null;
   const needsDifficulty = game && !gameLevel;
   const destination = needsDifficulty ? game.category : route;
-  const currentView = views.find((view) => view.dataset.view === destination);
-  const activeRoute = currentView?.dataset.view ?? '';
+  const currentView = views.find((view) => view.dataset.view === destination) ?? views[0];
+  const activeRoute = currentView.dataset.view;
 
   activeGame?.leave?.();
   activeGame = needsDifficulty ? undefined : game;

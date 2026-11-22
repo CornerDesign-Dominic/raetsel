@@ -34,90 +34,120 @@
     <symbol id="icon-book" viewBox="0 0 24 24">
       <path d="M12 6c-3-2-6-2-9-1v14c3-1 6-1 9 1 3-2 6-2 9-1V5c-3-1-6-1-9 1Zm0 0v14"/>
     </symbol>
+    <symbol id="icon-training" viewBox="0 0 24 24">
+      <path d="M3 12h4l3-6 4 12 3-6h4"/>
+    </symbol>
+    <symbol id="icon-puzzles" viewBox="0 0 24 24">
+      <path d="m12 3 9 9-9 9-9-9Z"/>
+    </symbol>
+    <symbol id="icon-profile" viewBox="0 0 24 24">
+      <circle cx="12" cy="8" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/>
+    </symbol>
   </svg>
   <header class="app-header">
     <div class="app-header-inner">
       <a id="app-back" class="icon-button header-action" href="#start" aria-label="Zurück" hidden>
         <svg aria-hidden="true"><use href="#icon-back"></use></svg>
       </a>
-      <h1 id="app-title" tabindex="-1">Inveni</h1>
+      <h1 id="app-title" tabindex="-1">Training</h1>
       <button id="app-rules" class="icon-button header-action" type="button" aria-label="Regeln öffnen"
         title="Regeln öffnen" aria-haspopup="dialog" aria-controls="rules-dialog" hidden>
         <svg aria-hidden="true"><use href="#icon-book"></use></svg>
       </button>
     </div>
+    <nav id="overview-nav" class="overview-nav" aria-label="Hauptnavigation" hidden>
+      <a href="#training"><svg aria-hidden="true"><use href="#icon-training"></use></svg>Training</a>
+      <a href="#raetsel"><svg aria-hidden="true"><use href="#icon-puzzles"></use></svg>Rätsel</a>
+      <a href="#mein-profil"><svg aria-hidden="true"><use href="#icon-profile"></use></svg>Profil</a>
+    </nav>
   </header>
   <main class="home">
-    <nav class="board menu-page" data-view="" aria-label="Hauptmenü">
-      <div class="game-list">
-        <a class="game-card" href="#training">
-          <span class="game-symbol" aria-hidden="true">↗</span>
-          <span><strong>Training</strong><small>Übe gezielt Gedächtnis und Kopfrechnen.</small></span>
-          <span aria-hidden="true">›</span>
-        </a>
-        <a class="game-card" href="#raetsel">
-          <span class="game-symbol" aria-hidden="true">◇</span>
-          <span><strong>Rätsel</strong><small>Kombiniere Hinweise und entdecke Muster.</small></span>
-          <span aria-hidden="true">›</span>
-        </a>
-        <a class="game-card" href="#mein-profil">
-          <span class="game-symbol" aria-hidden="true">○</span>
-          <span><strong>Mein Profil</strong><small>Persönliche Angaben, Statistiken und Einstellungen.</small></span>
-          <span aria-hidden="true">›</span>
-        </a>
-      </div>
-    </nav>
-
-    <section class="board menu-page" data-view="training" aria-labelledby="training-menu-title" hidden>
+    <section class="overview" data-view="training" aria-labelledby="training-menu-title" hidden>
       <h2 id="training-menu-title" hidden>Training</h2>
-      <div class="game-list">
-        <a class="game-card" href="#kurzzeitgedaechtnis">
-          <span class="game-symbol" aria-hidden="true">↔</span>
-          <span><strong>Kurzzeitgedächtnis</strong><small>Merke dir Folgen und gib sie wieder.</small></span>
-          <span aria-hidden="true">›</span>
-        </a>
-        <a class="game-card" href="#zahlen">
-          <span class="game-symbol numbers-symbol" aria-hidden="true">123</span>
-          <span><strong>Zahlen</strong><small>Trainiere Kopfrechnen und Zählen.</small></span>
-          <span aria-hidden="true">›</span>
-        </a>
-      </div>
+      <section class="game-group" aria-labelledby="memory-group">
+        <h3 id="memory-group">Kurzzeitgedächtnis</h3>
+        <div class="game-list">
+          <a class="game-card" href="#pfeilfolge">
+            <span class="game-symbol" aria-hidden="true">↗</span>
+            <span><strong>Pfeilfolge</strong></span>
+            <span aria-hidden="true">›</span>
+          </a>
+          <a class="game-card" href="#merken">
+            <span class="game-symbol" aria-hidden="true">▦</span>
+            <span><strong>Merken</strong></span>
+            <span aria-hidden="true">›</span>
+          </a>
+        </div>
+      </section>
+      <section class="game-group" aria-labelledby="numbers-group">
+        <h3 id="numbers-group">Zahlen</h3>
+        <div class="game-list">
+          <a class="game-card" href="#einmaleins">
+            <span class="game-symbol" aria-hidden="true">×</span>
+            <span><strong>1×1-Training</strong></span>
+            <span aria-hidden="true">›</span>
+          </a>
+          <a class="game-card" href="#haus">
+            <span class="game-symbol" aria-hidden="true">⌂</span>
+            <span><strong>Haus</strong></span>
+            <span aria-hidden="true">›</span>
+          </a>
+          <a class="game-card" href="#seifenblasen">
+            <span class="game-symbol" aria-hidden="true">○</span>
+            <span><strong>Seifenblasen</strong></span>
+            <span aria-hidden="true">›</span>
+          </a>
+          <a class="game-card" href="#zeit">
+            <span class="game-symbol" aria-hidden="true">◷</span>
+            <span><strong>Zeit</strong></span>
+            <span aria-hidden="true">›</span>
+          </a>
+        </div>
+      </section>
     </section>
 
-    <section class="board menu-page" data-view="raetsel" aria-labelledby="raetsel-title" hidden>
+    <section class="overview" data-view="raetsel" aria-labelledby="raetsel-title" hidden>
       <h2 id="raetsel-title" hidden>Rätsel</h2>
       <div class="game-list">
         <a class="game-card" href="#logikgitter">
           <span class="game-symbol" aria-hidden="true">▦</span>
-          <span><strong>Logikgitter</strong><small>Bringe Hinweise zusammen und finde die richtige Zuordnung.</small></span>
+          <span><strong>Logikgitter</strong></span>
           <span aria-hidden="true">›</span>
         </a>
         <a class="game-card" href="#wo-wohne-ich">
           <span class="game-symbol" aria-hidden="true">⌂</span>
-          <span><strong>Wo wohne ich?</strong><small>Verfolge den Weg rückwärts bis zum richtigen Haus.</small></span>
+          <span><strong>Wo wohne ich?</strong></span>
           <span aria-hidden="true">›</span>
         </a>
         <a class="game-card" href="#musterfeld">
           <span class="game-symbol" aria-hidden="true">▦</span>
-          <span><strong>Musterfeld</strong><small>Entdecke die Regel und ergänze die fehlende Zahl.</small></span>
+          <span><strong>Musterfeld</strong></span>
           <span aria-hidden="true">›</span>
         </a>
         <a class="game-card" href="#sudoku">
           <span class="game-symbol" aria-hidden="true">▦</span>
-          <span><strong>Sudoku</strong><small>Ergänze die Zahlen von 1 bis 9.</small></span>
+          <span><strong>Sudoku</strong></span>
           <span aria-hidden="true">›</span>
         </a>
       </div>
     </section>
 
-    <section class="board" data-view="mein-profil" aria-labelledby="profile-title" hidden>
-      <h2 id="profile-title" hidden>Mein Profil</h2>
-      <p>Hier findest du später deine persönlichen Angaben wie Name und Alter, deine Spielstatistiken und Einstellungen.</p>
-      <section class="app-update" aria-label="App-Verwaltung">
+    <section class="overview" data-view="mein-profil" aria-labelledby="profile-title" hidden>
+      <h2 id="profile-title" hidden>Profil</h2>
+      <section class="profile-settings" aria-labelledby="settings-title">
+        <h3 id="settings-title">Einstellungen</h3>
         <button id="update-app" type="button" hidden>Nach Updates suchen</button>
         <p id="update-status" role="status"></p>
         <button id="reset-progress" type="button">Spielstand zurücksetzen</button>
         <p id="reset-status" role="status"></p>
+        <section id="install" class="install" aria-label="App installieren" hidden>
+          <button id="install-button" type="button">Inveni installieren</button>
+          <details id="install-help">
+            <summary>Inveni installieren</summary>
+            <p><strong>iPhone und iPad:</strong> Öffne Inveni in Safari. Wähle im Teilen-Menü „Zum Home-Bildschirm“. Aktiviere „Als Web-App öffnen“, falls diese Option erscheint.</p>
+            <p><strong>Android:</strong> Wähle in Chrome im Menü „App installieren“ oder „Zum Startbildschirm hinzufügen“.</p>
+          </details>
+        </section>
       </section>
     </section>
 
@@ -205,32 +235,6 @@
       </section>
     </template>
 
-    <section class="board menu-page" data-view="zahlen" data-parent="training" aria-labelledby="zahlen-title" hidden>
-      <h2 id="zahlen-title" hidden>Zahlen</h2>
-      <div class="game-list">
-        <a class="game-card" href="#einmaleins">
-          <span class="game-symbol" aria-hidden="true">×</span>
-          <span><strong>1×1-Training</strong><small>Rechne zügig und miss dein Tempo.</small></span>
-          <span aria-hidden="true">›</span>
-        </a>
-        <a class="game-card" href="#haus">
-          <span class="game-symbol" aria-hidden="true">⌂</span>
-          <span><strong>Haus</strong><small>Zähle, wie viele Personen im Haus bleiben.</small></span>
-          <span aria-hidden="true">›</span>
-        </a>
-        <a class="game-card" href="#seifenblasen">
-          <span class="game-symbol" aria-hidden="true">○</span>
-          <span><strong>Seifenblasen</strong><small>Tippe die Zahlen der Reihe nach an.</small></span>
-          <span aria-hidden="true">›</span>
-        </a>
-        <a class="game-card" href="#zeit">
-          <span class="game-symbol" aria-hidden="true">◷</span>
-          <span><strong>Zeit</strong><small>Berechne die Zeitspanne zwischen zwei Uhren.</small></span>
-          <span aria-hidden="true">›</span>
-        </a>
-      </div>
-    </section>
-
     <section data-view="musterfeld" aria-labelledby="pattern-title" hidden>
       <div hidden>
         <p id="pattern-level"></p>
@@ -257,22 +261,6 @@
           <button id="pattern-result-close" autofocus>Weiter rätseln</button>
         </form>
       </dialog>
-    </section>
-
-    <section class="board menu-page" data-view="kurzzeitgedaechtnis" data-parent="training" aria-labelledby="kurzzeitgedaechtnis-title" hidden>
-      <h2 id="kurzzeitgedaechtnis-title" hidden>Kurzzeitgedächtnis</h2>
-      <div class="game-list">
-        <a class="game-card" href="#pfeilfolge">
-          <span class="game-symbol" aria-hidden="true">↗</span>
-          <span><strong>Pfeilfolge</strong><small>Merke dir die Pfeile und wiederhole sie in derselben Reihenfolge.</small></span>
-          <span aria-hidden="true">›</span>
-        </a>
-        <a class="game-card" href="#merken">
-          <span class="game-symbol" aria-hidden="true">▦</span>
-          <span><strong>Merken</strong><small>Präge dir Zahlen und ihre Positionen ein.</small></span>
-          <span aria-hidden="true">›</span>
-        </a>
-      </div>
     </section>
 
     <section data-view="haus" aria-labelledby="house-game-title" hidden>
@@ -379,14 +367,6 @@
       </form>
     </dialog>
 
-    <section id="install" class="install" aria-label="App installieren" hidden>
-      <button id="install-button" type="button">Inveni installieren</button>
-      <details id="install-help">
-        <summary>Inveni installieren</summary>
-        <p><strong>iPhone und iPad:</strong> Öffne Inveni in Safari. Wähle im Teilen-Menü „Zum Home-Bildschirm“. Aktiviere „Als Web-App öffnen“, falls diese Option erscheint.</p>
-        <p><strong>Android:</strong> Wähle in Chrome im Menü „App installieren“ oder „Zum Startbildschirm hinzufügen“.</p>
-      </details>
-    </section>
   </main>
 </body>
 </html>
