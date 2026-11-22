@@ -37,28 +37,41 @@ const cueGap = 300;
 
 const game = document.querySelector('#arrow-game');
 game.innerHTML = `
-  <section class="board arrow-board" aria-label="Pfeilfolge spielen">
-    <dl class="arrow-stats">
-      <div><dt>Folgenlänge</dt><dd data-arrow-length></dd></div>
-      <div><dt>Wiederholungen übrig</dt><dd data-arrow-retries></dd></div>
-    </dl>
-    <div class="arrow-stage" data-arrow-stage aria-hidden="true">
-      <span data-arrow-symbol>·</span>
-      <span data-arrow-step></span>
+  <section class="arrow-board" aria-label="Pfeilfolge spielen">
+    <div class="arrow-toolbar">
+      <dl class="arrow-stats">
+        <div><dt>Stufe</dt><dd data-arrow-level></dd></div>
+        <div><dt>Pfeile</dt><dd data-arrow-length></dd></div>
+        <div><dt>Wiederholungen</dt><dd data-arrow-retries></dd></div>
+      </dl>
+      <button type="button" class="icon-button arrow-restart" data-arrow-restart
+        aria-label="Durchlauf neu starten" title="Durchlauf neu starten" disabled>
+        <svg aria-hidden="true"><use href="#icon-undo-circle"></use></svg>
+      </button>
+    </div>
+    <div class="arrow-stage" data-arrow-stage>
+      <h3 data-arrow-phase></h3>
+      <div class="arrow-display" aria-hidden="true">
+        <span data-arrow-symbol></span>
+        <span data-arrow-step></span>
+      </div>
+      <progress class="arrow-progress" aria-hidden="true" data-arrow-progress hidden></progress>
+      <p class="arrow-message" data-arrow-message role="status" tabindex="-1"></p>
     </div>
     <p class="arrow-cue" data-arrow-cue aria-live="polite"></p>
-    <p class="arrow-message" data-arrow-message role="status" tabindex="-1"></p>
-    <div class="arrow-pad" data-arrow-pad role="group" aria-label="Richtung wählen"></div>
     <div class="arrow-actions">
       <button type="button" data-arrow-continue></button>
-      <button type="button" class="secondary-action" data-arrow-restart hidden>Neu starten</button>
     </div>
+    <div class="arrow-pad" data-arrow-pad role="group" aria-label="Richtung wählen"></div>
   </section>
 `;
 
 const length = game.querySelector('[data-arrow-length]');
 const retries = game.querySelector('[data-arrow-retries]');
 const stage = game.querySelector('[data-arrow-stage]');
+const phaseHeading = game.querySelector('[data-arrow-phase]');
+const progress = game.querySelector('[data-arrow-progress]');
+const levelLabel = game.querySelector('[data-arrow-level]');
 const symbol = game.querySelector('[data-arrow-symbol]');
 const step = game.querySelector('[data-arrow-step]');
 const cue = game.querySelector('[data-arrow-cue]');
@@ -85,15 +98,19 @@ function clearTimer() {
   timer = undefined;
 }
 
-function setPhase(value, text, action = '') {
+function setPhase(value, heading, text, action = '') {
   phase = value;
   message.textContent = text;
   stage.dataset.phase = phase;
+  phaseHeading.textContent = heading;
+  progress.hidden = phase !== 'watch' && phase !== 'input';
+  progress.max = sequence.length;
+  progress.value = 0;
   length.textContent = sequence.length;
   retries.textContent = retriesLeft;
   next.textContent = action;
   next.hidden = !action;
-  restart.hidden = phase === 'idle' || phase === 'ended';
+  restart.disabled = phase === 'idle' || phase === 'ended';
   for (const button of directionButtons) button.disabled = phase !== 'input';
 }
 
@@ -103,15 +120,16 @@ function resetRun() {
   entered = 0;
   retriesLeft = initialRetries;
   cue.textContent = '';
-  symbol.textContent = '·';
+  symbol.textContent = '↔';
   step.textContent = '';
-  setPhase('idle', 'Schau dir die Pfeile an und tippe sie danach in derselben Reihenfolge.', 'Folge starten');
+  setPhase('idle', 'Bereit?', 'Merke dir die Pfeile und tippe danach die Richtungen in derselben Reihenfolge.', 'Folge starten');
 }
 
 function showCue(index) {
   const direction = directions[sequence[index]];
   symbol.textContent = direction.symbol;
-  step.textContent = (index + 1) + ' von ' + sequence.length;
+  step.textContent = (index + 1) + ' / ' + sequence.length;
+  progress.value = index + 1;
   cue.textContent = 'Pfeil ' + (index + 1) + ': ' + direction.label;
 
   timer = window.setTimeout(() => {
@@ -120,8 +138,9 @@ function showCue(index) {
       timer = window.setTimeout(() => showCue(index + 1), cueGap);
     } else {
       cue.textContent = '';
-      step.textContent = '0 von ' + sequence.length;
-      setPhase('input', 'Jetzt bist du dran. Gib die Pfeilfolge ein.');
+      step.textContent = '';
+      symbol.textContent = '0 / ' + sequence.length;
+      setPhase('input', 'Deine Eingabe', 'Jetzt bist du dran. Tippe die Pfeile in der gemerkten Reihenfolge.');
       directionButtons[0].focus({ preventScroll: true });
     }
   }, cueDuration);
@@ -132,7 +151,7 @@ function playSequence() {
   entered = 0;
   symbol.textContent = '·';
   step.textContent = '';
-  setPhase('watch', 'Merk dir die Pfeile.');
+  setPhase('watch', 'Merken', 'Schau auf die Pfeile.');
   message.focus({ preventScroll: true });
   timer = window.setTimeout(() => showCue(0), cueGap);
 }
@@ -140,23 +159,27 @@ function playSequence() {
 function enterDirection(direction) {
   if (phase !== 'input') return;
   if (direction !== sequence[entered]) {
-    symbol.textContent = '·';
     step.textContent = '';
+    cue.textContent = '';
     if (retriesLeft > 0) {
       retriesLeft -= 1;
-      setPhase('retry', 'Dieser Pfeil passt nicht. Schau dir dieselbe Folge noch einmal an.', 'Folge wiederholen');
+      symbol.textContent = '↻';
+      const retryMessage = retriesLeft === 0
+        ? 'Du kannst dir die Folge ein letztes Mal ansehen.'
+        : 'Du kannst dir dieselbe Folge noch einmal ansehen.';
+      setPhase('retry', 'Falsche Richtung', retryMessage, 'Folge wiederholen');
     } else {
-      const result = sequence.length === initialLength
-        ? 'Du kannst einen neuen Durchlauf mit drei Pfeilen beginnen.'
-        : 'Deine längste richtige Folge hatte ' + (sequence.length - 1) + ' Pfeile.';
-      setPhase('ended', 'Durchlauf beendet. ' + result, 'Neuer Durchlauf');
+      const best = sequence.length > initialLength ? sequence.length - 1 : 0;
+      symbol.textContent = best;
+      setPhase('ended', 'Durchlauf beendet', 'Längste gelöste Folge: ' + best + ' Pfeile.', 'Neuer Durchlauf');
     }
     next.focus({ preventScroll: true });
     return;
   }
 
   entered += 1;
-  step.textContent = entered + ' von ' + sequence.length;
+  symbol.textContent = entered + ' / ' + sequence.length;
+  progress.value = entered;
   cue.textContent = entered + ' von ' + sequence.length + ' Pfeilen richtig.';
   if (entered !== sequence.length) return;
 
@@ -166,7 +189,7 @@ function enterDirection(direction) {
   cue.textContent = '';
   symbol.textContent = '✓';
   step.textContent = '';
-  setPhase('next', completedLength + ' Pfeile richtig. Die nächste Folge hat einen Pfeil mehr.', 'Nächste Folge');
+  setPhase('next', 'Richtig!', completedLength + ' Pfeile richtig. Jetzt kommt einer dazu.', 'Nächste Folge');
   next.focus({ preventScroll: true });
 }
 
@@ -183,8 +206,7 @@ function load(selectedLevel) {
     return button;
   });
   pad.replaceChildren(...directionButtons);
-  const levelLabel = document.querySelector('#arrow-level');
-  if (levelLabel) levelLabel.textContent = levels[level];
+  levelLabel.textContent = levels[level];
   resetRun();
 }
 

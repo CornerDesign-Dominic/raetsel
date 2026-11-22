@@ -94,8 +94,6 @@ body.is-playing {
 .play-view .logic-grid caption { margin-block: .1rem; }
 .play-view .logic-grid button { min-block-size: 2.4rem; }
 .play-view #grid-clues { margin-block-start: .35rem; line-height: 1.35; }
-.play-view .arrow-stage { min-block-size: 6.8rem; }
-.play-view .arrow-actions { margin-block-start: .6rem; }
 
 .rules-dialog #rules-game { font-weight: 700; color: var(--petrol); }
 .rules-dialog ul { padding-inline-start: 1.2rem; line-height: 1.45; }

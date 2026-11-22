@@ -26,7 +26,7 @@ const ruleContent = {
   pfeilfolge: () => [
     'Merke dir die Pfeile und tippe sie danach in derselben Reihenfolge ein.',
     'Die erste Folge hat drei Pfeile. Nach jeder richtigen Runde kommt ein Pfeil zur selben Folge hinzu.',
-    'Bei einem Fehler kannst du dieselbe Folge noch einmal sehen. Dafür hast du insgesamt zwei Versuche.',
+    'Bei einem Fehler kannst du dieselbe Folge noch einmal sehen. Pro Durchlauf stehen dir zwei Wiederholungen zur Verfügung.',
   ],
   'wo-wohne-ich': () => [
     'Verfolge die Wegbeschreibung vom markierten Ziel rückwärts und tippe auf das gesuchte Wohnhaus.',
