@@ -1,0 +1,111 @@
+#merken-game, #zeit-game {
+  display: grid;
+  gap: .55rem;
+  width: min(100%, 34rem);
+  margin-inline: auto;
+  padding: .3rem;
+  color: var(--petrol);
+}
+.training-round { font-size: .88rem; font-weight: 700; }
+.training-prompt { min-block-size: 1.4rem; font-weight: 650; }
+.training-prompt:empty { display: none; }
+
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .4rem;
+}
+.memory-tile {
+  min-block-size: clamp(3rem, 13dvh, 6rem);
+  padding: 0;
+  border-radius: .55rem;
+  border-color: #ac9677;
+  background: #f0dfbf;
+  font-size: clamp(1.35rem, 6vw, 2rem);
+  font-variant-numeric: tabular-nums;
+  touch-action: manipulation;
+}
+.memory-tile:disabled { cursor: default; }
+.memory-tile[data-active='false'] { border-color: #d6c4a4; background: #eddfc5; }
+#merken-game[data-phase='reveal'] .memory-tile[data-active='true'] { background: var(--petrol); color: var(--paper); }
+#merken-game[data-phase='recall'] .memory-tile:enabled { border: 2px solid #4e7c72; background: #fbefd9; }
+.memory-tile[data-found='true'] { border-color: #638773; background: #d5e7d7; }
+
+.time-clocks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .55rem;
+}
+.time-clock {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: .3rem;
+  margin: 0;
+  padding: .45rem .25rem;
+  border: 1px solid #b89973;
+  border-radius: .55rem;
+  background: #eedbb7;
+}
+.time-clock figcaption { display: grid; justify-items: center; text-align: center; }
+.time-clock figcaption span { min-block-size: 1.15rem; font-size: .75rem; }
+.clock-face {
+  position: relative;
+  width: min(95%, 12rem, 35dvh);
+  aspect-ratio: 1;
+  border: .15rem solid var(--petrol);
+  border-radius: 50%;
+  background: #fffbef;
+}
+.clock-number {
+  position: absolute;
+  inset: var(--y) auto auto var(--x);
+  transform: translate(-50%, -50%);
+  font-size: clamp(.65rem, 3vw, .98rem);
+  font-weight: 800;
+}
+.clock-hand {
+  position: absolute;
+  inset: auto auto 50% 50%;
+  width: .15rem;
+  border-radius: 1rem;
+  transform: translateX(-50%) rotate(var(--angle));
+  transform-origin: 50% 100%;
+}
+.clock-hour { height: 26%; width: .26rem; background: var(--petrol); }
+.clock-minute { height: 36%; background: #a34231; }
+.clock-face::after {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: .4rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--petrol);
+  transform: translate(-50%, -50%);
+  content: '';
+}
+
+.time-answer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  align-items: end;
+  gap: .35rem;
+}
+.time-answer label { display: grid; gap: .2rem; font-size: .86rem; }
+.time-answer input {
+  min-width: 0;
+  min-height: 2.75rem;
+  padding: .35rem;
+  border: 1px solid #a98c70;
+  border-radius: .55rem;
+  font: inherit;
+  font-size: 1rem;
+  text-align: center;
+  color: var(--petrol);
+  background: #fbefd9;
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+  .memory-tile { min-block-size: clamp(2.5rem, 12dvh, 3.5rem); }
+  .clock-face { width: min(85%, 30dvh); }
+}

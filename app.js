@@ -1,7 +1,9 @@
 import { games, levels, chooseDifficulty, closeDifficulty } from './puzzle-levels.js';
 import './logic-grid.js';
 import './number-pattern.js';
-import './busfahrt.js';
+import './haus.js';
+import './merken.js';
+import './zeit.js';
 import './einmaleins.js';
 import './seifenblasen.js';
 import './sudoku.js';
@@ -118,6 +120,7 @@ function waitForInstall(worker) {
 
 const views = [...document.querySelectorAll('[data-view]')];
 const legacyRoutes = new Map([
+  ['busfahrt', 'haus'],
   ['logik', 'raetsel'],
   ['zahlen-und-muster', 'zahlen'],
   ['gedaechtnis', 'kurzzeitgedaechtnis'],

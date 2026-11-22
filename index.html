@@ -9,7 +9,8 @@
   <link rel="icon" href="./icons/icon-192.png">
   <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
   <link rel="stylesheet" href="./styles.css">
-  <link rel="stylesheet" href="./busfahrt.css">
+  <link rel="stylesheet" href="./haus.css">
+  <link rel="stylesheet" href="./training-exercises.css">
   <link rel="stylesheet" href="./pfeilfolge.css">
   <link rel="stylesheet" href="./wo-wohne-ich.css">
   <link rel="stylesheet" href="./app-layout.css">
@@ -212,14 +213,19 @@
           <span><strong>1×1-Training</strong><small>Rechne zügig und miss dein Tempo.</small></span>
           <span aria-hidden="true">›</span>
         </a>
-        <a class="game-card" href="#busfahrt">
-          <span class="game-symbol" aria-hidden="true">▰</span>
-          <span><strong>Busfahrt</strong><small>Zähle mit, während Fahrgäste ein- und aussteigen.</small></span>
+        <a class="game-card" href="#haus">
+          <span class="game-symbol" aria-hidden="true">⌂</span>
+          <span><strong>Haus</strong><small>Zähle, wie viele Personen im Haus bleiben.</small></span>
           <span aria-hidden="true">›</span>
         </a>
         <a class="game-card" href="#seifenblasen">
           <span class="game-symbol" aria-hidden="true">○</span>
           <span><strong>Seifenblasen</strong><small>Tippe die Zahlen der Reihe nach an.</small></span>
+          <span aria-hidden="true">›</span>
+        </a>
+        <a class="game-card" href="#zeit">
+          <span class="game-symbol" aria-hidden="true">◷</span>
+          <span><strong>Zeit</strong><small>Berechne die Zeitspanne zwischen zwei Uhren.</small></span>
           <span aria-hidden="true">›</span>
         </a>
       </div>
@@ -261,14 +267,27 @@
           <span><strong>Pfeilfolge</strong><small>Merke dir die Pfeile und wiederhole sie in derselben Reihenfolge.</small></span>
           <span aria-hidden="true">›</span>
         </a>
+        <a class="game-card" href="#merken">
+          <span class="game-symbol" aria-hidden="true">▦</span>
+          <span><strong>Merken</strong><small>Präge dir Zahlen und ihre Positionen ein.</small></span>
+          <span aria-hidden="true">›</span>
+        </a>
       </div>
     </section>
 
-    <section data-view="busfahrt" aria-labelledby="bus-game-title" hidden>
-      <div hidden>
-        <h2 id="bus-game-title" tabindex="-1">Busfahrt</h2>
-      </div>
-      <div id="bus-game"></div>
+    <section data-view="haus" aria-labelledby="house-game-title" hidden>
+      <h2 id="house-game-title" hidden>Haus</h2>
+      <div id="house-game"></div>
+    </section>
+
+    <section data-view="merken" aria-labelledby="merken-title" hidden>
+      <h2 id="merken-title" hidden>Merken</h2>
+      <div id="merken-game"></div>
+    </section>
+
+    <section data-view="zeit" aria-labelledby="zeit-title" hidden>
+      <h2 id="zeit-title" hidden>Zeit</h2>
+      <div id="zeit-game"></div>
     </section>
 
     <section data-view="seifenblasen" aria-labelledby="bubble-title" hidden>

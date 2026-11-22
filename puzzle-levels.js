@@ -12,7 +12,8 @@ let pendingGame = '';
 function readSolved() {
   try {
     const saved = JSON.parse(localStorage.getItem(solvedKey));
-    return new Set(Array.isArray(saved) ? saved : []);
+    return new Set(Array.isArray(saved) ? saved.map(entry =>
+      typeof entry === 'string' && entry.startsWith('busfahrt/') ? 'haus/' + entry.slice('busfahrt/'.length) : entry) : []);
   } catch {
     return new Set();
   }

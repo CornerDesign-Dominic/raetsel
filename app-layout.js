@@ -23,10 +23,20 @@ const ruleContent = {
     document.querySelector('#pattern-rule').textContent,
     'Trage die fehlende Zahl beim Fragezeichen ein und tippe auf „Lösen“. Die Glühbirne gibt einen Tipp.',
   ],
-  busfahrt: () => [
-    'Der Bus startet leer. Zähle, wie viele Fahrgäste an jeder Haltestelle ein- und aussteigen.',
-    'Gib an der Endhaltestelle ein, wie viele Fahrgäste noch im Bus sind.',
-    'Eine richtige Antwort verlängert die nächste Fahrt um eine Haltestelle. Bei einer falschen Antwort wird sie kürzer, bis auf mindestens drei Haltestellen.',
+  haus: () => [
+    'Das Haus ist am Anfang leer. Zähle mit, wie viele Personen hineingehen und herauskommen.',
+    'Gib am Ende der Runde an, wie viele Personen noch im Haus sind.',
+    'Bei einer richtigen Antwort kommt in der nächsten Runde eine Gruppe hinzu. Bei einer falschen Antwort wird es eine Gruppe weniger, bis auf mindestens drei.',
+  ],
+  merken: () => [
+    'Merke dir die Positionen der Zahlen, solange sie sichtbar sind.',
+    'Tippe anschließend die Felder in der Reihenfolge 1, 2, 3 und so weiter an.',
+    'Ein Durchlauf hat fünf Runden. Die Anzahl der Zahlen steigt nach jeder zweiten Runde.',
+  ],
+  zeit: () => [
+    'Lies die beiden Uhren ab und berechne die Zeit vom Start bis zum Ende.',
+    'Unter jeder Uhr steht die Tageshälfte. Wenn das Ende nach Mitternacht liegt, steht dort „Folgetag“.',
+    'Gib Stunden und Minuten getrennt ein. Für eine Aufgabe ohne volle Stunden gibst du dort 0 ein.',
   ],
   seifenblasen: () => [
     'Beginne bei 1 und tippe immer die nächsthöhere Zahl an.',
