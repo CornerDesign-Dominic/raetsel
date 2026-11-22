@@ -33,16 +33,25 @@
 }
 
 #app-title:focus { outline: none; }
-#app-back { grid-column: 1; grid-row: 1; text-decoration: none; }
-#app-rules { grid-column: 3; grid-row: 1; }
+#app-back { grid-column: 1; grid-row: 1; justify-content: flex-start; }
+#app-rules { grid-column: 3; grid-row: 1; justify-content: flex-end; }
 .header-action {
-  min-height: 2.75rem;
-  border: 1px solid #65877d;
-  border-radius: .45rem;
-  background: #264947;
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+  min-inline-size: 3rem;
+  min-block-size: 3rem;
+  padding: 0 .45rem;
+  border: 0;
+  border-radius: .25rem;
+  background: transparent;
   color: var(--paper);
+  font: 600 .875rem/1.25 system-ui, sans-serif;
+  text-decoration: none;
 }
-.header-action:focus-visible { outline-color: var(--paper); outline-offset: 2px; }
+.header-action:hover { text-decoration: underline; text-underline-offset: .2em; }
+.header-action:focus-visible { outline: 2px solid var(--paper); outline-offset: -2px; }
+.back-chevron { font-size: 1.45rem; line-height: 1; }
 
 .home {
   padding: .55rem max(.55rem, env(safe-area-inset-right))
@@ -98,11 +107,12 @@ body.is-playing {
 .rules-dialog li + li { margin-block-start: .55rem; }
 .result-rules {
   position: absolute;
-  inset: .6rem .6rem auto auto;
-  background: #fbefd9;
-  border-color: #b89973;
+  inset-block-start: .45rem;
+  inset-inline-end: .6rem;
+  color: var(--petrol);
 }
-[data-game-result] h2 { padding-inline-end: 3rem; }
+.result-rules:focus-visible { outline-color: var(--petrol); }
+[data-game-result] h2 { padding-inline-end: 4rem; }
 
 @media (orientation: portrait) and (max-height: 760px) {
   .play-view .where-map { width: min(100%, 40dvh); }
@@ -175,5 +185,4 @@ body.is-playing {
 .profile-settings #update-app:disabled { cursor: progress; opacity: .65; }
 .profile-settings .install { margin-block-start: 1rem; }
 .profile-settings p:not(:empty) { margin-block-start: .45rem; }
-.is-playing .header-action { min-width: 3rem; min-height: 3rem; }
-.is-playing .app-header-inner { grid-template-columns: 3rem minmax(0, 1fr) 3rem; }
+.is-playing .app-header-inner { grid-template-columns: 5rem minmax(0, 1fr) 5rem; }

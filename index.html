@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="./einmaleins.css">
   <link rel="stylesheet" href="./seifenblasen.css">
   <link rel="stylesheet" href="./sudoku.css">
+  <link rel="stylesheet" href="./chalk-finish.css">
   <script type="module" src="./app.js"></script>
   <title>Inveni</title>
 </head>
@@ -28,14 +29,61 @@
     <symbol id="icon-undo-circle" viewBox="0 0 24 24">
       <path d="M3 12a9 9 0 1 1 2.6 6.4M3 6v6h6"/>
     </symbol>
-    <symbol id="icon-back" viewBox="0 0 24 24">
-      <path d="M19 12H5m6-6-6 6 6 6"/>
-    </symbol>
-    <symbol id="icon-book" viewBox="0 0 24 24">
-      <path d="M12 6c-3-2-6-2-9-1v14c3-1 6-1 9 1 3-2 6-2 9-1V5c-3-1-6-1-9 1Zm0 0v14"/>
-    </symbol>
     <symbol id="icon-training" viewBox="0 0 24 24">
       <path d="M3 12h4l3-6 4 12 3-6h4"/>
+    </symbol>
+    <symbol id="game-icon-pfeilfolge" viewBox="0 0 24 24">
+      <path d="M3 5h9m-3-3 3 3-3 3M16 12l5-5m-4 0h4v4M15 18h-9m3-3-3 3 3 3"/>
+    </symbol>
+    <symbol id="game-icon-merken" viewBox="0 0 24 24">
+      <rect x="3" y="3" width="7.5" height="7.5" rx="1.35"/>
+      <rect x="13.5" y="3" width="7.5" height="7.5" rx="1.35"/>
+      <rect x="3" y="13.5" width="7.5" height="7.5" rx="1.35"/>
+      <g transform="rotate(-11 17.25 17.25)">
+        <rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.35"/>
+        <path d="m14 18 4-4.5m-2 7.5 4.6-5"/>
+      </g>
+    </symbol>
+    <symbol id="game-icon-einmaleins" viewBox="0 0 24 24">
+      <path d="m2.2 9 2.6-2v10m-2.6 0h5.2m2.4-7.2 4.4 4.4m0-4.4-4.4 4.4m6.8-5.2 2.6-2v10m-2.6 0h5.2"/>
+    </symbol>
+    <symbol id="game-icon-haus" viewBox="0 0 24 24">
+      <path d="M2.5 5 12 3v17l-3.5.5m-6-15.5 6 2v15l-6-2V5m4 8.5v.65"/>
+      <circle cx="16.4" cy="10.4" r="1.65"/>
+      <circle cx="21" cy="13.3" r="1.2"/>
+      <path d="M13.8 21v-3.2a2.6 2.6 0 0 1 5.2 0V21Zm5.2 0h3.4v-3a1.7 1.7 0 0 0-3.25-.7"/>
+    </symbol>
+    <symbol id="game-icon-seifenblasen" viewBox="0 0 24 24">
+      <circle cx="9" cy="15.5" r="5.8"/>
+      <circle cx="17.75" cy="6" r="3.2"/>
+      <circle cx="19.5" cy="16.8" r="1.9"/>
+      <path d="M6 15a3.4 3.4 0 0 1 2.3-2.45"/>
+    </symbol>
+    <symbol id="game-icon-zeit" viewBox="0 0 24 24">
+      <circle cx="8.6" cy="15.25" r="6.2"/>
+      <path d="M10.4 7.25a6.25 6.25 0 1 1 7 7.55M8.6 11.9v3.35l2.65 2.1M16.2 5.55v3.5l2.5 1.4"/>
+    </symbol>
+    <symbol id="game-icon-logikgitter" viewBox="0 0 24 24">
+      <rect x="3.5" y="3.5" width="17" height="17" rx="1.4"/>
+      <path d="M3.5 9.25h17m-17 5.5h6m0-11.25v17m5.5-17v5.75m-3 5.9 2.15 2.15 3.85-4.25"/>
+    </symbol>
+    <symbol id="game-icon-wo-wohne-ich" viewBox="0 0 24 24">
+      <path d="M3.75 18h5.5v-6h4.5M15 6.85a3.5 3.5 0 1 1 7 0c0 2.15-3.5 5.65-3.5 5.65S15 9 15 6.85Z"/>
+      <circle cx="3.75" cy="18" r="1.7" fill="currentColor" stroke="none"/>
+      <circle cx="18.5" cy="6.85" r=".85" fill="currentColor" stroke="none"/>
+    </symbol>
+    <symbol id="game-icon-musterfeld" viewBox="0 0 24 24">
+      <rect x="3.5" y="4.25" width="4.5" height="4.5" rx=".7"/>
+      <circle cx="12" cy="6.5" r="2.25"/>
+      <rect x="16" y="4.25" width="4.5" height="4.5" rx=".7"/>
+      <circle cx="5.75" cy="16.75" r="2.25"/>
+      <rect x="9.75" y="14.5" width="4.5" height="4.5" rx=".7"/>
+      <path d="M17 15.75a1.25 1.25 0 0 1 2.5 0c0 1-1.25 1.1-1.25 1.75m0 2v.05"/>
+    </symbol>
+    <symbol id="game-icon-sudoku" viewBox="0 0 24 24">
+      <rect x="3" y="3" width="18" height="18" rx="1.1"/>
+      <path d="M9 3v18m6-18v18M3 9h18M3 15h18"/>
+      <path d="M6 6h.02M12 12h.02M18 18h.02M18 6h.02" stroke-width="2.4"/>
     </symbol>
     <symbol id="icon-puzzles" viewBox="0 0 24 24">
       <path d="m12 3 9 9-9 9-9-9Z"/>
@@ -46,13 +94,13 @@
   </svg>
   <header class="app-header">
     <div class="app-header-inner">
-      <a id="app-back" class="icon-button header-action" href="#start" aria-label="Zurück" hidden>
-        <svg aria-hidden="true"><use href="#icon-back"></use></svg>
+      <a id="app-back" class="header-action" href="#start" hidden>
+        <span class="back-chevron" aria-hidden="true">‹</span> Zurück
       </a>
       <h1 id="app-title" tabindex="-1">Training</h1>
-      <button id="app-rules" class="icon-button header-action" type="button" aria-label="Regeln öffnen"
-        title="Regeln öffnen" aria-haspopup="dialog" aria-controls="rules-dialog" hidden>
-        <svg aria-hidden="true"><use href="#icon-book"></use></svg>
+      <button id="app-rules" class="header-action" type="button"
+        aria-haspopup="dialog" aria-controls="rules-dialog" hidden>
+        Regeln
       </button>
     </div>
     <nav id="overview-nav" class="overview-nav" aria-label="Hauptnavigation" hidden>
@@ -68,12 +116,12 @@
         <h3 id="memory-group">Kurzzeitgedächtnis</h3>
         <div class="game-list">
           <a class="game-card" href="#pfeilfolge">
-            <span class="game-symbol" aria-hidden="true">↗</span>
+            <span class="game-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#game-icon-pfeilfolge"></use></svg></span>
             <span><strong>Pfeilfolge</strong></span>
             <span aria-hidden="true">›</span>
           </a>
           <a class="game-card" href="#merken">
-            <span class="game-symbol" aria-hidden="true">▦</span>
+            <span class="game-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#game-icon-merken"></use></svg></span>
             <span><strong>Merken</strong></span>
             <span aria-hidden="true">›</span>
           </a>
@@ -83,22 +131,22 @@
         <h3 id="numbers-group">Zahlen</h3>
         <div class="game-list">
           <a class="game-card" href="#einmaleins">
-            <span class="game-symbol" aria-hidden="true">×</span>
+            <span class="game-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#game-icon-einmaleins"></use></svg></span>
             <span><strong>1×1-Training</strong></span>
             <span aria-hidden="true">›</span>
           </a>
           <a class="game-card" href="#haus">
-            <span class="game-symbol" aria-hidden="true">⌂</span>
+            <span class="game-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#game-icon-haus"></use></svg></span>
             <span><strong>Haus</strong></span>
             <span aria-hidden="true">›</span>
           </a>
           <a class="game-card" href="#seifenblasen">
-            <span class="game-symbol" aria-hidden="true">○</span>
+            <span class="game-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#game-icon-seifenblasen"></use></svg></span>
             <span><strong>Seifenblasen</strong></span>
             <span aria-hidden="true">›</span>
           </a>
           <a class="game-card" href="#zeit">
-            <span class="game-symbol" aria-hidden="true">◷</span>
+            <span class="game-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#game-icon-zeit"></use></svg></span>
             <span><strong>Zeit</strong></span>
             <span aria-hidden="true">›</span>
           </a>
@@ -110,22 +158,22 @@
       <h2 id="raetsel-title" hidden>Rätsel</h2>
       <div class="game-list">
         <a class="game-card" href="#logikgitter">
-          <span class="game-symbol" aria-hidden="true">▦</span>
+          <span class="game-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#game-icon-logikgitter"></use></svg></span>
           <span><strong>Logikgitter</strong></span>
           <span aria-hidden="true">›</span>
         </a>
         <a class="game-card" href="#wo-wohne-ich">
-          <span class="game-symbol" aria-hidden="true">⌂</span>
+          <span class="game-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#game-icon-wo-wohne-ich"></use></svg></span>
           <span><strong>Wo wohne ich?</strong></span>
           <span aria-hidden="true">›</span>
         </a>
         <a class="game-card" href="#musterfeld">
-          <span class="game-symbol" aria-hidden="true">▦</span>
+          <span class="game-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#game-icon-musterfeld"></use></svg></span>
           <span><strong>Musterfeld</strong></span>
           <span aria-hidden="true">›</span>
         </a>
         <a class="game-card" href="#sudoku">
-          <span class="game-symbol" aria-hidden="true">▦</span>
+          <span class="game-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#game-icon-sudoku"></use></svg></span>
           <span><strong>Sudoku</strong></span>
           <span aria-hidden="true">›</span>
         </a>
