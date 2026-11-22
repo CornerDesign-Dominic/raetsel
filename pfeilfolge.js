@@ -62,6 +62,15 @@ game.innerHTML = `
     <p class="arrow-cue" data-arrow-cue aria-live="polite"></p>
     <div class="arrow-pad" data-arrow-pad role="group" aria-label="Richtung wählen"></div>
   </section>
+  <dialog class="result-dialog" id="arrow-restart-dialog"
+    aria-labelledby="arrow-restart-title" aria-describedby="arrow-restart-description">
+    <h2 id="arrow-restart-title">Durchlauf neu starten?</h2>
+    <p id="arrow-restart-description">Dein Fortschritt in diesem Durchlauf geht verloren.</p>
+    <form method="dialog" class="puzzle-actions">
+      <button type="submit" class="secondary-action" autofocus>Abbrechen</button>
+      <button type="button" data-arrow-confirm-restart>Neu starten</button>
+    </form>
+  </dialog>
 `;
 
 const length = game.querySelector('[data-arrow-length]');
@@ -77,6 +86,8 @@ const cue = game.querySelector('[data-arrow-cue]');
 const pad = game.querySelector('[data-arrow-pad]');
 const next = game.querySelector('[data-arrow-continue]');
 const restart = game.querySelector('[data-arrow-restart]');
+const restartDialog = game.querySelector('#arrow-restart-dialog');
+const confirmRestart = game.querySelector('[data-arrow-confirm-restart]');
 
 let level;
 let sequence = [];
@@ -202,6 +213,7 @@ function load(selectedLevel) {
 }
 
 function leave() {
+  if (restartDialog.open) restartDialog.close();
   clearTimer();
   phase = 'idle';
   cue.textContent = '';
@@ -215,11 +227,17 @@ next.addEventListener('click', () => {
 });
 
 restart.addEventListener('click', () => {
+  if (!restartDialog.open) restartDialog.showModal();
+});
+
+confirmRestart.addEventListener('click', () => {
+  restartDialog.close();
   resetRun();
   next.focus({ preventScroll: true });
 });
 
 game.addEventListener('keydown', (event) => {
+  if (restartDialog.open) return;
   if (phase !== 'input' || event.repeat || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
   const direction = keyDirections[event.code] ?? keyDirections[event.key];
   if (!choices[level].includes(direction)) return;
