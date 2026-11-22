@@ -37,9 +37,13 @@
   min-height: 0;
   gap: .3rem;
 }
+#training-form { justify-content: end; }
+
 .training-board fieldset {
+  flex: 0 1 auto;
   align-self: center;
   width: min(100%, 25rem);
+  block-size: 18.1rem;
   margin: 0;
   padding: 0;
   min-width: 0;
@@ -73,6 +77,8 @@
   align-items: center;
   justify-content: center;
   gap: .5rem;
+  align-self: center;
+  width: min(100%, 25rem);
   min-height: 2.85rem;
   padding: .15rem .35rem;
   border: 1px solid #b89973;
@@ -123,17 +129,20 @@
   .training-history li:nth-last-child(n + 3) { display: none; }
 }
 
-@media (min-width: 48rem) and (min-height: 38rem) {
-  #training-game { max-height: 40rem; }
-}
-
 @media (orientation: landscape) and (max-height: 520px) {
   #training-form {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
-    align-items: start;
+    grid-template-rows: minmax(0, 1fr);
+    align-items: end;
     column-gap: .5rem;
   }
-  .training-controls { grid-area: 1 / 2; justify-self: center; height: 100%; }
+  .training-board fieldset {
+    grid-area: 1 / 2;
+    align-self: end;
+    justify-self: center;
+    block-size: min(100%, 18.1rem);
+  }
+  .training-task, .training-start { align-self: end; justify-self: center; }
   #training-submit { min-height: 2.1rem; padding-block: .2rem; }
 }
