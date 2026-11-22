@@ -38,9 +38,7 @@ root.innerHTML = `
           <label id="training-question" for="training-answer"></label>
           <input id="training-answer" type="text" inputmode="none" autocomplete="off" maxlength="3" disabled>
         </div>
-        <div id="training-start" class="training-start">
-          <button id="training-go" type="button">Starten</button>
-        </div>
+        <button id="training-go" class="training-start" type="button">Tippe, um zu beginnen</button>
       </div>
 
       <fieldset id="training-controls" class="training-controls" aria-label="Nummernblock" disabled>
@@ -64,7 +62,6 @@ const submit = root.querySelector('#training-submit');
 const input = root.querySelector('#training-answer');
 const question = root.querySelector('#training-question');
 const task = root.querySelector('#training-task');
-const startArea = root.querySelector('#training-start');
 const go = root.querySelector('#training-go');
 const stop = root.querySelector('#training-stop');
 const summary = root.querySelector('#training-summary');
@@ -109,10 +106,11 @@ function setStatus(next) {
   controls.disabled = !running;
   input.disabled = !running;
   task.hidden = !running;
-  startArea.hidden = running;
+  go.hidden = running;
   stop.hidden = !running || Number.isFinite(mode.count);
   results.hidden = status !== 'finished';
-  go.textContent = status === 'finished' ? 'Nochmal' : 'Starten';
+  go.classList.toggle('training-repeat', status === 'finished');
+  go.textContent = status === 'finished' ? 'Nochmal' : 'Tippe, um zu beginnen';
 }
 
 function reset() {

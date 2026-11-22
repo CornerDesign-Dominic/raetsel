@@ -68,7 +68,7 @@ const ruleContent = {
     'Auf der Karte ist Norden oben. Einige Merkmale spielen für den Weg keine Rolle.',
   ],
   einmaleins: () => [
-    'Mit „Starten“ startet die Zeit. Gib das Ergebnis über den Nummernblock oder die Tastatur ein.',
+    'Tippe auf die Aufgabenkarte, um die Zeit zu starten. Gib das Ergebnis über den Nummernblock oder die Tastatur ein.',
     'Mit „Abgeben“ oder Enter prüfst du die Antwort und wechselst sofort zur nächsten Aufgabe. Der Kreispfeil leert die Eingabe.',
     'Nach dem Durchlauf siehst du, wie viele Antworten richtig waren und wie viele du pro Sekunde abgegeben hast.',
   ],
