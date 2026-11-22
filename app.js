@@ -119,8 +119,8 @@ let activeGame;
 function showView(moveFocus = false) {
   const [route, level] = window.location.hash.slice(1).split('/');
   const game = games.get(route);
-  const gameLevel = game && Object.hasOwn(levels, level) ? level : null;
-  const needsDifficulty = game && !game.direct && !gameLevel;
+  const gameLevel = game && Object.hasOwn(game.options ?? levels, level) ? level : null;
+  const needsDifficulty = game && !gameLevel;
   const destination = needsDifficulty ? game.category : route;
   const currentView = views.find((view) => view.dataset.view === destination);
   const activeRoute = currentView?.dataset.view ?? '';
@@ -133,7 +133,7 @@ function showView(moveFocus = false) {
   }
 
   if (needsDifficulty) {
-    chooseDifficulty(route, game.title);
+    chooseDifficulty(route, game);
     return;
   }
 

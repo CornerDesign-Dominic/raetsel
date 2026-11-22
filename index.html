@@ -255,6 +255,7 @@
     <section data-view="einmaleins" aria-labelledby="training-title" hidden>
       <a class="back-link" href="#zahlen-und-muster">← Zahlen &amp; Muster</a>
       <header class="puzzle-header">
+        <p id="training-mode-label"></p>
         <h2 id="training-title" tabindex="-1">1×1-Training</h2>
       </header>
       <div id="training-game"></div>
@@ -273,11 +274,7 @@
     <dialog class="result-dialog" id="difficulty-dialog" aria-labelledby="difficulty-title" aria-describedby="difficulty-game">
       <h2 id="difficulty-title">Schwierigkeit wählen</h2>
       <p id="difficulty-game"></p>
-      <div class="difficulty-choices">
-        <button type="button" data-level="leicht" autofocus>Leicht</button>
-        <button type="button" data-level="mittel">Mittel</button>
-        <button type="button" data-level="schwer">Schwer</button>
-      </div>
+      <div class="difficulty-choices"></div>
       <button class="secondary-action" id="cancel-difficulty" type="button">Zurück</button>
     </dialog>
 

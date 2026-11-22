@@ -4,7 +4,7 @@ export const games = new Map();
 const solvedKey = 'inveni:solved';
 const draftPrefix = 'inveni:logikgitter:';
 const difficulty = document.querySelector('#difficulty-dialog');
-const choices = [...difficulty.querySelectorAll('[data-level]')];
+const choices = difficulty.querySelector('.difficulty-choices');
 const reset = document.querySelector('#reset-dialog');
 const resetStatus = document.querySelector('#reset-status');
 let pendingGame = '';
@@ -30,22 +30,24 @@ export function markSolved(game, level) {
   }
 }
 
-export function chooseDifficulty(game, title) {
-  pendingGame = game;
-  difficulty.querySelector('#difficulty-game').textContent = title;
-  for (const button of choices) {
-    const level = button.dataset.level;
-    const done = solved.has(game + '/' + level);
-    button.textContent = levels[level] + (done ? ' ✓' : '');
-    button.setAttribute('aria-label', levels[level] + (done ? ', gelöst' : ''));
-  }
+export function chooseDifficulty(gameId, game) {
+  pendingGame = gameId;
+  difficulty.querySelector('#difficulty-title').textContent = game.chooserTitle ?? 'Schwierigkeit wählen';
+  difficulty.querySelector('#difficulty-game').textContent = game.title;
+  const options = Object.entries(game.options ?? levels);
+  choices.replaceChildren(...options.map(([level, label], index) => {
+    const button = document.createElement('button');
+    const done = solved.has(gameId + '/' + level);
+    button.type = 'button';
+    button.autofocus = index === 0;
+    button.textContent = label + (done ? ' ✓' : '');
+    button.setAttribute('aria-label', label + (done ? ', gelöst' : ''));
+    button.addEventListener('click', () => {
+      window.location.hash = gameId + '/' + level;
+    });
+    return button;
+  }));
   if (!difficulty.open) difficulty.showModal();
-}
-
-for (const button of choices) {
-  button.addEventListener('click', () => {
-    window.location.hash = pendingGame + '/' + button.dataset.level;
-  });
 }
 
 export function closeDifficulty() {
