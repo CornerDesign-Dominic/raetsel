@@ -490,15 +490,28 @@
       <button class="icon-button dialog-close" id="cancel-difficulty" type="button" aria-label="Auswahl schließen">
         <span aria-hidden="true">×</span>
       </button>
-      <fieldset class="difficulty-options">
-        <legend id="difficulty-label">Stufe wählen</legend>
-        <div class="difficulty-choices"></div>
-      </fieldset>
+      <div class="difficulty-options">
+        <p id="difficulty-label">Stufe wählen</p>
+        <div class="difficulty-navigation">
+          <button id="difficulty-previous" class="icon-button" type="button" aria-label="Vorherige Stufe"><span aria-hidden="true">‹</span></button>
+          <div class="difficulty-page" aria-live="polite" aria-atomic="true">
+            <h3 id="difficulty-level"></h3>
+            <p id="difficulty-position"></p>
+          </div>
+          <button id="difficulty-next" class="icon-button" type="button" aria-label="Nächste Stufe"><span aria-hidden="true">›</span></button>
+        </div>
+        <section class="difficulty-scores" aria-labelledby="difficulty-scores-title" hidden>
+          <h4 id="difficulty-scores-title">Bestenliste</h4>
+          <p id="difficulty-scores-empty">Hier erscheinen deine besten Durchläufe.</p>
+          <ol id="difficulty-scores-list"></ol>
+        </section>
+        <button id="difficulty-start" type="button" autofocus>Starten</button>
+      </div>
     </dialog>
 
     <dialog class="result-dialog" id="reset-dialog" aria-labelledby="reset-title" aria-describedby="reset-description">
       <h2 id="reset-title">Spielstand zurücksetzen?</h2>
-      <p id="reset-description">Gelöste Rätsel und angefangene Rätsel werden auf diesem Gerät zurückgesetzt.</p>
+      <p id="reset-description">Gelöste und angefangene Rätsel sowie Bestleistungen werden auf diesem Gerät zurückgesetzt.</p>
       <form method="dialog" class="puzzle-actions">
         <button class="secondary-action" type="submit" autofocus>Abbrechen</button>
         <button id="confirm-reset" type="submit">Zurücksetzen</button>

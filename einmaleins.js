@@ -1,4 +1,4 @@
-import { games } from './puzzle-levels.js';
+import { games, recordScore } from './puzzle-levels.js';
 
 const modes = {
   kurz: { title: 'Kurz', count: 10 },
@@ -75,6 +75,7 @@ const speed = root.querySelector('#training-speed');
 
 let status = 'ready';
 let mode;
+let activeLevel;
 let startedAt = 0;
 let timer;
 let answered = 0;
@@ -141,7 +142,9 @@ function finish(elapsed) {
   setStatus('finished');
   summary.textContent = 'Durchlauf beendet';
   score.textContent = correct + ' / ' + answered;
-  speed.textContent = answered > 0 ? format.format(elapsed / answered) + ' s' : '–';
+  const seconds = answered > 0 ? elapsed / answered : 0;
+  speed.textContent = answered > 0 ? format.format(seconds) + ' s' : '–';
+  if (answered > 0) recordScore('einmaleins', activeLevel, { errors: answered - correct, seconds, answered });
   summary.focus({ preventScroll: true });
 }
 
@@ -205,10 +208,24 @@ stop.addEventListener('click', () => finish(elapsedSeconds()));
 games.set('einmaleins', {
   title: '1×1-Training',
   category: 'training',
-  chooserTitle: 'Trainingsdauer wählen',
+  score: {
+    valid(result) {
+      return Number.isSafeInteger(result?.answered) && result.answered > 0
+        && Number.isSafeInteger(result.errors) && result.errors >= 0 && result.errors <= result.answered
+        && Number.isFinite(result.seconds) && result.seconds >= 0;
+    },
+    compare(a, b) {
+      return a.errors - b.errors || a.seconds - b.seconds;
+    },
+    format(result, level) {
+      const pace = format.format(result.seconds) + ' s/Antwort';
+      return result.errors + ' Fehler · ' + pace + (level === 'unendlich' ? ' · ' + result.answered + ' Antworten' : '');
+    },
+  },
   options: Object.fromEntries(Object.entries(modes).map(([key, { title, count }]) =>
     [key, Number.isFinite(count) ? title + ' · ' + count + ' Aufgaben' : title])),
   load(level) {
+    activeLevel = level;
     mode = modes[level];
     document.querySelector('#training-mode-label').textContent = this.options[level];
     reset();
