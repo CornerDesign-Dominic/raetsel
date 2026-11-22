@@ -49,19 +49,17 @@ game.innerHTML = `
         <svg aria-hidden="true"><use href="#icon-undo-circle"></use></svg>
       </button>
     </div>
-    <div class="arrow-stage" data-arrow-stage>
-      <h3 data-arrow-phase></h3>
-      <div class="arrow-display" aria-hidden="true">
-        <span data-arrow-symbol></span>
-        <span data-arrow-step></span>
+    <div class="arrow-stage" data-arrow-stage tabindex="-1">
+      <span class="arrow-symbol" data-arrow-symbol aria-hidden="true"></span>
+      <button type="button" class="arrow-stage-action" data-arrow-continue>
+        <strong data-arrow-title></strong>
+        <span data-arrow-prompt></span>
+      </button>
+      <div class="arrow-trail" data-arrow-trail aria-hidden="true">
+        <div class="arrow-trail-items" data-arrow-items></div>
       </div>
-      <progress class="arrow-progress" aria-hidden="true" data-arrow-progress hidden></progress>
-      <p class="arrow-message" data-arrow-message role="status" tabindex="-1"></p>
     </div>
     <p class="arrow-cue" data-arrow-cue aria-live="polite"></p>
-    <div class="arrow-actions">
-      <button type="button" data-arrow-continue></button>
-    </div>
     <div class="arrow-pad" data-arrow-pad role="group" aria-label="Richtung wählen"></div>
   </section>
 `;
@@ -69,13 +67,13 @@ game.innerHTML = `
 const length = game.querySelector('[data-arrow-length]');
 const retries = game.querySelector('[data-arrow-retries]');
 const stage = game.querySelector('[data-arrow-stage]');
-const phaseHeading = game.querySelector('[data-arrow-phase]');
-const progress = game.querySelector('[data-arrow-progress]');
+const title = game.querySelector('[data-arrow-title]');
+const prompt = game.querySelector('[data-arrow-prompt]');
+const trail = game.querySelector('[data-arrow-trail]');
+const items = game.querySelector('[data-arrow-items]');
 const levelLabel = game.querySelector('[data-arrow-level]');
 const symbol = game.querySelector('[data-arrow-symbol]');
-const step = game.querySelector('[data-arrow-step]');
 const cue = game.querySelector('[data-arrow-cue]');
-const message = game.querySelector('[data-arrow-message]');
 const pad = game.querySelector('[data-arrow-pad]');
 const next = game.querySelector('[data-arrow-continue]');
 const restart = game.querySelector('[data-arrow-restart]');
@@ -98,18 +96,17 @@ function clearTimer() {
   timer = undefined;
 }
 
-function setPhase(value, heading, text, action = '') {
+function setPhase(value, heading = '', instruction = '') {
   phase = value;
-  message.textContent = text;
+  game.dataset.arrowPhase = phase;
   stage.dataset.phase = phase;
-  phaseHeading.textContent = heading;
-  progress.hidden = phase !== 'watch' && phase !== 'input';
-  progress.max = sequence.length;
-  progress.value = 0;
+  title.textContent = heading;
+  title.hidden = !heading;
+  prompt.textContent = instruction;
+  next.hidden = !instruction;
+  symbol.hidden = phase !== 'watch';
   length.textContent = sequence.length;
   retries.textContent = retriesLeft;
-  next.textContent = action;
-  next.hidden = !action;
   restart.disabled = phase === 'idle' || phase === 'ended';
   for (const button of directionButtons) button.disabled = phase !== 'input';
 }
@@ -118,29 +115,30 @@ function resetRun() {
   clearTimer();
   sequence = Array.from({ length: initialLength }, randomDirection);
   entered = 0;
-  retriesLeft = initialRetries;
   cue.textContent = '';
-  symbol.textContent = '↔';
-  step.textContent = '';
-  setPhase('idle', 'Bereit?', 'Merke dir die Pfeile und tippe danach die Richtungen in derselben Reihenfolge.', 'Folge starten');
+  retriesLeft = initialRetries;
+  items.replaceChildren();
+  setPhase('idle', '', 'Tippen, um zu beginnen');
 }
 
 function showCue(index) {
   const direction = directions[sequence[index]];
   symbol.textContent = direction.symbol;
-  step.textContent = (index + 1) + ' / ' + sequence.length;
-  progress.value = index + 1;
+  const dot = document.createElement('span');
+  dot.className = 'arrow-trail-token';
+  dot.textContent = '·';
+  items.append(dot);
+  trail.scrollLeft = trail.scrollWidth;
   cue.textContent = 'Pfeil ' + (index + 1) + ': ' + direction.label;
 
   timer = window.setTimeout(() => {
-    symbol.textContent = '·';
+    symbol.textContent = '';
     if (index + 1 < sequence.length) {
       timer = window.setTimeout(() => showCue(index + 1), cueGap);
     } else {
-      cue.textContent = '';
-      step.textContent = '';
-      symbol.textContent = '0 / ' + sequence.length;
-      setPhase('input', 'Deine Eingabe', 'Jetzt bist du dran. Tippe die Pfeile in der gemerkten Reihenfolge.');
+      trail.scrollLeft = 0;
+      setPhase('input');
+      cue.textContent = 'Jetzt die Pfeilfolge eingeben.';
       directionButtons[0].focus({ preventScroll: true });
     }
   }, cueDuration);
@@ -149,47 +147,40 @@ function showCue(index) {
 function playSequence() {
   clearTimer();
   entered = 0;
-  symbol.textContent = '·';
-  step.textContent = '';
-  setPhase('watch', 'Merken', 'Schau auf die Pfeile.');
-  message.focus({ preventScroll: true });
+  symbol.textContent = '';
+  cue.textContent = '';
+  items.replaceChildren();
+  setPhase('watch');
+  stage.focus({ preventScroll: true });
   timer = window.setTimeout(() => showCue(0), cueGap);
 }
 
 function enterDirection(direction) {
   if (phase !== 'input') return;
-  if (direction !== sequence[entered]) {
-    step.textContent = '';
-    cue.textContent = '';
+  const correct = direction === sequence[entered];
+  const token = items.children[entered];
+  token.textContent = directions[direction].symbol;
+  token.dataset.result = correct ? 'correct' : 'wrong';
+  trail.scrollLeft = Math.max(0, token.offsetLeft + token.offsetWidth - trail.clientWidth);
+
+  if (!correct) {
+    cue.textContent = directions[direction].label + ': falsch.';
     if (retriesLeft > 0) {
       retriesLeft -= 1;
-      symbol.textContent = '↻';
-      const retryMessage = retriesLeft === 0
-        ? 'Du kannst dir die Folge ein letztes Mal ansehen.'
-        : 'Du kannst dir dieselbe Folge noch einmal ansehen.';
-      setPhase('retry', 'Falsche Richtung', retryMessage, 'Folge wiederholen');
+      setPhase('retry', 'Oh nein, versuch es noch mal.', 'Tippen, um zu starten');
     } else {
-      const best = sequence.length > initialLength ? sequence.length - 1 : 0;
-      symbol.textContent = best;
-      setPhase('ended', 'Durchlauf beendet', 'Längste gelöste Folge: ' + best + ' Pfeile.', 'Neuer Durchlauf');
+      setPhase('ended', 'Oh nein, versuch es noch mal.', 'Tippen für einen neuen Durchlauf');
     }
     next.focus({ preventScroll: true });
     return;
   }
 
   entered += 1;
-  symbol.textContent = entered + ' / ' + sequence.length;
-  progress.value = entered;
   cue.textContent = entered + ' von ' + sequence.length + ' Pfeilen richtig.';
   if (entered !== sequence.length) return;
 
   if (sequence.length === initialLength) markSolved(gameId, level);
-  const completedLength = sequence.length;
-  sequence.push(randomDirection());
-  cue.textContent = '';
-  symbol.textContent = '✓';
-  step.textContent = '';
-  setPhase('next', 'Richtig!', completedLength + ' Pfeile richtig. Jetzt kommt einer dazu.', 'Nächste Folge');
+  setPhase('next', 'Sehr gut. Weiter!', 'Tippen, um zu starten');
   next.focus({ preventScroll: true });
 }
 
@@ -217,7 +208,9 @@ function leave() {
 }
 
 next.addEventListener('click', () => {
+  if (phase === 'watch' || phase === 'input') return;
   if (phase === 'ended') resetRun();
+  if (phase === 'next') sequence.push(randomDirection());
   playSequence();
 });
 

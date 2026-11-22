@@ -46,7 +46,7 @@ const ruleContent = {
     'Auf Leicht bleiben alle Blasen stehen. Auf Mittel bewegen sich zwei, auf Schwer fünf.',
   ],
   pfeilfolge: () => [
-    'Merke dir die Pfeile und tippe sie danach in derselben Reihenfolge ein.',
+    'Tippe auf die große Fläche, merke dir die Pfeile und gib sie danach in derselben Reihenfolge ein.',
     'Die erste Folge hat drei Pfeile. Nach jeder richtigen Runde kommt ein Pfeil zur selben Folge hinzu.',
     'Bei einem Fehler kannst du dieselbe Folge noch einmal sehen. Pro Durchlauf stehen dir zwei Wiederholungen zur Verfügung.',
   ],

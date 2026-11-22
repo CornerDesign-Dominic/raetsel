@@ -9,7 +9,7 @@
 
 .arrow-board {
   display: grid;
-  grid-template-rows: auto minmax(9rem, 1fr) 2.75rem auto;
+  grid-template-rows: auto minmax(9rem, 1fr) auto;
   height: 100%;
   gap: .4rem;
   text-align: center;
@@ -41,52 +41,83 @@
 .arrow-restart:disabled { opacity: .45; cursor: default; }
 
 .arrow-stage {
+  position: relative;
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto auto;
-  justify-items: center;
-  gap: .25rem;
-  padding: .5rem .75rem;
+  grid-template-rows: minmax(0, 1fr) 2.4rem;
+  align-items: stretch;
+  min-inline-size: 0;
+  padding: .35rem .6rem;
   border: 1px solid #b89973;
   border-radius: .65rem;
   background: #fbefd9;
   color: var(--petrol);
 }
-
 .arrow-stage[data-phase='watch'] {
   border-color: var(--petrol);
   background: var(--petrol);
   color: var(--paper);
 }
-
 .arrow-stage[data-phase='next'] { border-color: #64836a; background: #e8ecda; }
-.arrow-stage[data-phase='retry'] { border-color: var(--terracotta); background: #fae3d7; }
-
-.arrow-stage h3 {
-  margin: 0;
-  font-size: clamp(1rem, 4.5vw, 1.2rem);
-  line-height: 1.15;
+.arrow-stage:is([data-phase='retry'], [data-phase='ended']) {
+  border-color: var(--terracotta);
+  background: #fae3d7;
 }
-
-.arrow-display { display: grid; align-content: center; justify-items: center; min-height: 0; }
-.arrow-display [data-arrow-symbol] {
-  font-size: clamp(2rem, min(13vw, 10dvh), 5rem);
+.arrow-stage [data-arrow-symbol] {
+  display: grid;
+  place-items: center;
+  font-size: clamp(2.75rem, min(18vw, 16dvh), 7rem);
   font-weight: 750;
   line-height: 1;
-  font-variant-numeric: tabular-nums;
+  color: var(--chalk-accent);
 }
-.arrow-stage[data-phase='watch'] [data-arrow-symbol] { color: var(--chalk-accent); }
-.arrow-display [data-arrow-step] { font-size: .8rem; font-variant-numeric: tabular-nums; }
-.arrow-display [data-arrow-step]:empty { display: none; }
+.arrow-stage-action {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: .4rem;
+  width: 100%;
+  padding: .5rem 1rem 2.9rem;
+  border: 0;
+  background: transparent;
+  color: var(--petrol);
+  font-size: .95rem;
+  touch-action: manipulation;
+}
+.arrow-stage[data-phase='idle'] .arrow-stage-action { padding-block-end: .5rem; }
+.arrow-stage-action strong { font-size: clamp(1.1rem, 5vw, 1.4rem); }
+.arrow-stage-action:active { background: #173a3b12; }
 
-.arrow-progress {
-  grid-row: 3;
-  width: min(100%, 14rem);
-  height: .45rem;
-  accent-color: #2a674a;
+.arrow-trail {
+  position: relative;
+  grid-row: 2;
+  overflow: hidden;
 }
-.arrow-stage[data-phase='watch'] .arrow-progress { accent-color: var(--chalk-accent); color-scheme: dark; }
-.arrow-message { grid-row: 4; font-size: .9rem; line-height: 1.3; }
-.arrow-message:focus { outline: none; }
+.arrow-trail-items {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .25rem;
+  width: max-content;
+  min-width: 100%;
+  height: 100%;
+}
+.arrow-trail-token {
+  display: grid;
+  place-items: center;
+  inline-size: clamp(1.45rem, 7vw, 2rem);
+  block-size: 1.7rem;
+  font-size: 1.45rem;
+  font-weight: 750;
+  line-height: 1;
+}
+.arrow-trail-token[data-result='correct'] { color: #246348; }
+.arrow-trail-token[data-result='wrong'] { color: #a03629; }
+
+#arrow-game[data-arrow-phase='watch'] .arrow-toolbar,
+#arrow-game[data-arrow-phase='watch'] .arrow-pad { visibility: hidden; }
 
 .arrow-cue {
   position: absolute;
@@ -97,7 +128,6 @@
   white-space: nowrap;
 }
 
-.arrow-actions button { width: 100%; min-height: 100%; padding-block: .25rem; }
 .arrow-board button:focus-visible { outline-offset: 2px; }
 
 .arrow-pad {
@@ -138,13 +168,12 @@
 @media (orientation: landscape) and (max-height: 560px) {
   #arrow-game { width: min(100%, 46rem); }
   .arrow-board {
-    grid-template: auto minmax(6rem, 1fr) 2.75rem / minmax(0, 1fr) minmax(0, 1fr);
+    grid-template: auto minmax(8rem, 1fr) / minmax(0, 1fr) minmax(0, 1fr);
   }
   .arrow-toolbar { grid-area: 1 / 1 / 2 / 3; }
   .arrow-stage { grid-area: 2 / 1; }
-  .arrow-actions { grid-area: 3 / 1; }
   .arrow-pad, .arrow-pad[data-level='leicht'] {
-    grid-area: 2 / 2 / 4 / 3;
+    grid-area: 2 / 2;
     grid-auto-rows: minmax(0, 1fr);
   }
 }
