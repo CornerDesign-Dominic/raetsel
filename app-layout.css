@@ -13,9 +13,9 @@
   align-items: center;
   gap: .5rem;
   width: min(100%, 58rem);
-  min-height: 3.5rem;
+  min-height: 3rem;
   margin-inline: auto;
-  padding: .3rem max(.65rem, env(safe-area-inset-right)) .3rem max(.65rem, env(safe-area-inset-left));
+  padding: .125rem max(.4rem, env(safe-area-inset-right)) .125rem max(.4rem, env(safe-area-inset-left));
 }
 
 #app-title {
@@ -38,11 +38,25 @@
 .header-action {
   min-height: 2.75rem;
   border: 1px solid #65877d;
-  border-radius: .65rem;
+  border-radius: .45rem;
   background: #264947;
   color: var(--paper);
 }
 .header-action:focus-visible { outline-color: var(--paper); outline-offset: 2px; }
+
+.home {
+  padding: .55rem max(.55rem, env(safe-area-inset-right))
+    max(.55rem, env(safe-area-inset-bottom)) max(.55rem, env(safe-area-inset-left));
+}
+.home .board {
+  margin-block: .5rem;
+  padding: clamp(.65rem, 2vw, 1.15rem);
+  border-radius: .65rem;
+  box-shadow: none;
+}
+.home .board::before { display: none; }
+.home .game-list { margin-block-start: .65rem; gap: .5rem; }
+.home .game-card { gap: .6rem; padding: .65rem; border-radius: .55rem; }
 
 body.is-playing {
   display: flex;
@@ -58,8 +72,8 @@ body.is-playing {
   min-block-size: 0;
   overflow: hidden;
   overflow: clip;
-  padding-block-start: .55rem;
-  padding-block-end: max(.55rem, env(safe-area-inset-bottom));
+  padding: .25rem max(.375rem, env(safe-area-inset-right))
+    max(.375rem, env(safe-area-inset-bottom)) max(.375rem, env(safe-area-inset-left));
 }
 .is-playing .install { display: none; }
 .play-view {
@@ -68,18 +82,17 @@ body.is-playing {
   transform-origin: top center;
 }
 
-.play-view .board {
-  margin-block: .45rem;
-  padding: clamp(.75rem, 2.1vw, 1.25rem);
+.home .play-view .board {
+  margin-block: .3rem;
+  padding: clamp(.45rem, 1.5vw, .9rem);
 }
-.play-view .puzzle-layout { gap: .5rem; margin-block: 0; }
+.play-view .puzzle-layout { gap: .35rem; margin-block: 0; }
+.home .play-view .puzzle-layout .board { margin-block: 0; }
 .play-view .puzzle-layout h3 { font-size: 1.18rem; }
 .play-view .logic-grid { margin-block: .35rem; }
 .play-view .logic-grid caption { margin-block: .1rem; }
 .play-view .logic-grid button { min-block-size: 2.4rem; }
 .play-view #grid-clues { margin-block-start: .35rem; line-height: 1.35; }
-.play-view .training-history { min-height: 4.7rem; }
-.play-view .training-history li { min-height: 1.17rem; }
 .play-view .arrow-stage { min-block-size: 6.8rem; }
 .play-view .arrow-actions { margin-block-start: .6rem; }
 
@@ -108,16 +121,4 @@ body.is-playing {
   }
   .play-view .where-map { width: min(100%, 68dvh); }
   .play-view .bus-platform { min-block-size: 5.6rem; }
-  .play-view #training-game .training-board:not(.training-progress) {
-    display: grid;
-    grid-template-columns: minmax(0, .85fr) minmax(0, 1fr);
-    grid-template-rows: auto 1fr auto;
-    gap: .45rem;
-  }
-  .play-view #training-results { grid-area: 1 / 1; }
-  .play-view #training-history { grid-area: 2 / 1; align-content: start; }
-  .play-view #training-stop { grid-area: 3 / 1; }
-  .play-view #training-form { grid-area: 1 / 2 / span 3; }
-  .play-view .training-pad button { min-height: 2.2rem; }
-
 }

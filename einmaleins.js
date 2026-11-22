@@ -12,13 +12,16 @@ const digits = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0].map((digit) =>
   `<button type="button" data-digit="${digit}">${digit}</button>`).join('');
 
 root.innerHTML = `
-  <section class="board training-board training-progress" aria-label="Laufender Durchlauf">
+  <section class="training-progress" aria-label="Laufender Durchlauf">
     <dl class="training-stats">
       <div><dt>Zeit</dt><dd id="training-time">0,00 s</dd></div>
       <div><dt>Antworten</dt><dd id="training-answered">0</dd></div>
     </dl>
   </section>
-  <section class="board training-board" aria-label="Einmaleins üben">
+  <div class="training-stop-row">
+    <button id="training-stop" class="secondary-action" type="button" hidden>Beenden</button>
+  </div>
+  <section class="training-board" aria-label="Einmaleins üben">
     <section id="training-results" class="training-results" aria-labelledby="training-summary" hidden>
       <h3 id="training-summary" tabindex="-1"></h3>
       <dl class="training-stats" aria-label="Statistik">
@@ -50,8 +53,6 @@ root.innerHTML = `
         </div>
       </fieldset>
     </form>
-
-    <button id="training-stop" class="secondary-action" type="button" hidden>Beenden</button>
   </section>
 `;
 
