@@ -305,8 +305,18 @@
         <p class="sudoku-level" id="sudoku-level"></p>
         <div id="sudoku-grid" class="sudoku-grid" role="group" aria-label="Sudoku-Raster"></div>
         <div id="sudoku-pad" class="sudoku-pad" role="group" aria-label="Zahlentastatur">
-          <button id="sudoku-erase" type="button">Feld leeren</button>
+          <button id="sudoku-erase" type="button" aria-label="Feld leeren" title="Feld leeren">X</button>
+        </div>
+        <div class="sudoku-actions" role="group" aria-label="Sudoku-Aktionen">
           <button id="sudoku-check" type="button">Lösen</button>
+          <button id="sudoku-hint" class="icon-button" type="button" aria-label="Zahlenhinweis"
+            title="Zahlenhinweis" aria-haspopup="dialog" aria-controls="puzzle-hint">
+            <svg aria-hidden="true"><use href="#icon-lightbulb"></use></svg>
+          </button>
+          <button id="sudoku-undo" class="icon-button" type="button" aria-label="Letzten Zug rückgängig machen"
+            title="Letzten Zug rückgängig machen" disabled>
+            <svg aria-hidden="true"><use href="#icon-undo-circle"></use></svg>
+          </button>
         </div>
         <p id="sudoku-status" class="sudoku-status" role="status"></p>
       </div>

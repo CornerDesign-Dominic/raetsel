@@ -17,7 +17,7 @@ const ruleContent = {
   sudoku: () => [
     'Setze die Zahlen von 1 bis 9 in die leeren Felder ein.',
     'Jede Zahl muss in jeder Zeile, jeder Spalte und jedem 3×3-Block genau einmal vorkommen.',
-    'Tippe ein Feld an und wähle eine Zahl. Mit „Feld leeren“ entfernst du eine eigene Eingabe und mit „Lösen“ prüfst du das Raster.',
+    'Tippe ein Feld an und wähle eine Zahl. Mit X leerst du das gewählte Feld. Die Glühbirne verrät die Zahl für dieses Feld. Der Rückgängig-Pfeil nimmt die letzte Änderung zurück.',
   ],
   musterfeld: () => [
     document.querySelector('#pattern-rule').textContent,

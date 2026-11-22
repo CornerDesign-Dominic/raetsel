@@ -1,4 +1,5 @@
 import { games, levels, markSolved } from './puzzle-levels.js';
+import { showHint } from './puzzle-hint.js';
 
 const size = 9;
 const puzzles = {
@@ -19,11 +20,20 @@ const puzzles = {
   ],
 };
 
+const solutions = {
+  leicht: '581247963643981257927356841835479612264815379179623584318762495796534128452198736',
+  mittel: '654172398798563142213984567835241976927836415461759283382417659546398721179625834',
+  schwer: '975362814684591732132847965893124657216975348457638291348759126729416583561283479',
+};
+
 const grid = document.querySelector('#sudoku-grid');
 const status = document.querySelector('#sudoku-status');
 const result = document.querySelector('#sudoku-result');
 const numberPad = document.querySelector('#sudoku-pad');
 const erase = document.querySelector('#sudoku-erase');
+const hint = document.querySelector('#sudoku-hint');
+const undo = document.querySelector('#sudoku-undo');
+const moves = [];
 const digits = Array.from({ length: size }, (_, index) => index + 1);
 let givens, values, selected, storageKey, level;
 
@@ -73,6 +83,8 @@ function render() {
   const fixed = givens[selected] !== 0;
   for (const key of keys) key.disabled = fixed;
   erase.disabled = fixed || values[selected] === 0;
+  hint.disabled = fixed;
+  undo.disabled = moves.length === 0;
 }
 
 function select(index) {
@@ -90,12 +102,29 @@ function save() {
 }
 
 function enter(value) {
-  if (givens[selected]) return;
+  if (givens[selected] || values[selected] === value) return;
+  moves.push({ index: selected, previous: values[selected] });
   values[selected] = value;
   status.textContent = conflictsAt(selected) ? 'Diese Zahl steht schon im selben Bereich.' : '';
   render();
   save();
 }
+
+hint.addEventListener('click', () => {
+  const number = solutions[level][selected];
+  showHint(`In Zeile ${rowOf(selected) + 1}, Spalte ${columnOf(selected) + 1} gehört die ${number}.`);
+});
+
+undo.addEventListener('click', () => {
+  const move = moves.pop();
+  if (!move) return;
+  values[move.index] = move.previous;
+  selected = move.index;
+  status.textContent = 'Letzten Zug rückgängig gemacht.';
+  render();
+  save();
+  if (undo.disabled) cells[selected].focus({ preventScroll: true });
+});
 
 grid.addEventListener('keydown', event => {
   const digit = digits.find(number => String(number) === event.key);
@@ -143,6 +172,7 @@ games.set('sudoku', {
     }
     values = /^\d{81}$/.test(saved) ? givens.map((given, index) => given || Number(saved[index])) : [...givens];
     selected = givens.indexOf(0);
+    moves.length = 0;
     status.textContent = '';
     document.querySelector('#sudoku-level').textContent = levels[level];
     render();

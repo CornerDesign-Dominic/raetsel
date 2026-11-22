@@ -1,5 +1,5 @@
 .sudoku-game {
-  width: min(100%, 32rem, max(18rem, calc(var(--app-height, 100dvh) - 10.5rem)));
+  width: min(100%, 32rem, max(15rem, calc(var(--app-height, 100dvh) - 15rem)));
   margin-inline: auto;
   display: grid;
   gap: .35rem;
@@ -40,25 +40,25 @@
 
 .sudoku-pad {
   display: grid;
-  grid-template-columns: repeat(9, minmax(0, 1fr));
-  gap: .15rem;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: .25rem;
 }
 .sudoku-pad button { padding: .15rem 0; border-radius: .35rem; touch-action: manipulation; }
-.sudoku-pad button:disabled { opacity: .6; cursor: default; }
-.sudoku-pad #sudoku-erase { grid-column: 1 / 5; background: #fbefd9; }
-#sudoku-check { grid-column: 5 / -1; }
+.sudoku-actions { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: .25rem; }
+.sudoku-actions .icon-button, #sudoku-erase { background: #fbefd9; }
+.sudoku-pad button:disabled, .sudoku-actions button:disabled { opacity: .6; cursor: default; }
 .sudoku-status { min-block-size: 1.2em; font-size: .85rem; }
 
 @media (orientation: landscape) and (max-height: 520px) {
   .sudoku-game {
     width: min(100%, 42rem);
     grid-template-columns: minmax(0, min(50%, max(10rem, calc(var(--app-height, 100dvh) - 5rem)))) minmax(0, 1fr);
-    grid-template-rows: auto auto 1fr;
+    grid-template-rows: auto auto auto 1fr;
     align-items: start;
     column-gap: .75rem;
   }
-  .sudoku-grid { grid-area: 2 / 1 / 4; }
-  .sudoku-pad { grid-area: 2 / 2; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .sudoku-pad #sudoku-erase, #sudoku-check { grid-column: auto / span 3; }
-  .sudoku-status { grid-row: 3; grid-column: 2; }
+  .sudoku-grid { grid-area: 2 / 1 / 5; }
+  .sudoku-pad { grid-area: 2 / 2; }
+  .sudoku-actions { grid-area: 3 / 2; }
+  .sudoku-status { grid-area: 4 / 2; }
 }
