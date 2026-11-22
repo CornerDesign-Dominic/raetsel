@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="./app-layout.css">
   <link rel="stylesheet" href="./einmaleins.css">
   <link rel="stylesheet" href="./seifenblasen.css">
+  <link rel="stylesheet" href="./sudoku.css">
   <script type="module" src="./app.js"></script>
   <title>Inveni</title>
 </head>
@@ -98,6 +99,11 @@
         <a class="game-card" href="#musterfeld">
           <span class="game-symbol" aria-hidden="true">▦</span>
           <span><strong>Musterfeld</strong><small>Entdecke die Regel und ergänze die fehlende Zahl.</small></span>
+          <span aria-hidden="true">›</span>
+        </a>
+        <a class="game-card" href="#sudoku">
+          <span class="game-symbol" aria-hidden="true">▦</span>
+          <span><strong>Sudoku</strong><small>Ergänze die Zahlen von 1 bis 9.</small></span>
           <span aria-hidden="true">›</span>
         </a>
       </div>
@@ -293,6 +299,24 @@
       <div id="training-game"></div>
     </section>
 
+    <section data-view="sudoku" aria-labelledby="sudoku-title" hidden>
+      <h2 id="sudoku-title" hidden>Sudoku</h2>
+      <div class="sudoku-game">
+        <p class="sudoku-level" id="sudoku-level"></p>
+        <div id="sudoku-grid" class="sudoku-grid" role="group" aria-label="Sudoku-Raster"></div>
+        <div id="sudoku-pad" class="sudoku-pad" role="group" aria-label="Zahlentastatur">
+          <button id="sudoku-erase" type="button">Feld leeren</button>
+          <button id="sudoku-check" type="button">Lösen</button>
+        </div>
+        <p id="sudoku-status" class="sudoku-status" role="status"></p>
+      </div>
+      <dialog id="sudoku-result" class="result-dialog" data-game-result aria-labelledby="sudoku-result-title">
+        <h2 id="sudoku-result-title">Sudoku gelöst!</h2>
+        <p>In jeder Zeile, Spalte und jedem 3×3-Block stehen die Zahlen 1 bis 9 genau einmal.</p>
+        <form method="dialog"><button autofocus>Schließen</button></form>
+      </dialog>
+    </section>
+
     <dialog class="result-dialog rules-dialog" id="rules-dialog" aria-labelledby="rules-dialog-title">
       <h2 id="rules-dialog-title">Regeln</h2>
       <p id="rules-game"></p>
@@ -319,7 +343,7 @@
 
     <dialog class="result-dialog" id="reset-dialog" aria-labelledby="reset-title" aria-describedby="reset-description">
       <h2 id="reset-title">Spielstand zurücksetzen?</h2>
-      <p id="reset-description">Gelöste Rätsel und angefangene Zuordnungen werden auf diesem Gerät zurückgesetzt.</p>
+      <p id="reset-description">Gelöste Rätsel und angefangene Rätsel werden auf diesem Gerät zurückgesetzt.</p>
       <form method="dialog" class="puzzle-actions">
         <button class="secondary-action" type="submit" autofocus>Abbrechen</button>
         <button id="confirm-reset" type="submit">Zurücksetzen</button>

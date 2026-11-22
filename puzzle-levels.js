@@ -2,7 +2,7 @@ export const levels = { leicht: 'Leicht', mittel: 'Mittel', schwer: 'Schwer' };
 export const games = new Map();
 
 const solvedKey = 'inveni:solved';
-const draftPrefix = 'inveni:logikgitter:';
+const draftPrefixes = ['inveni:logikgitter:', 'inveni:sudoku:'];
 const difficulty = document.querySelector('#difficulty-dialog');
 const choices = difficulty.querySelector('.difficulty-choices');
 const reset = document.querySelector('#reset-dialog');
@@ -71,7 +71,7 @@ document.querySelector('#confirm-reset').addEventListener('click', () => {
     localStorage.removeItem(solvedKey);
     for (let index = localStorage.length - 1; index >= 0; index--) {
       const key = localStorage.key(index);
-      if (key?.startsWith(draftPrefix)) localStorage.removeItem(key);
+      if (draftPrefixes.some(prefix => key?.startsWith(prefix))) localStorage.removeItem(key);
     }
     resetStatus.textContent = 'Spielstand zurückgesetzt.';
   } catch {

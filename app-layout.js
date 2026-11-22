@@ -14,6 +14,11 @@ const ruleContent = {
     ...Array.from(document.querySelectorAll('#grid-rules li'), (item) => item.textContent),
     document.querySelector('#grid-intro').textContent,
   ],
+  sudoku: () => [
+    'Setze die Zahlen von 1 bis 9 in die leeren Felder ein.',
+    'Jede Zahl muss in jeder Zeile, jeder Spalte und jedem 3×3-Block genau einmal vorkommen.',
+    'Tippe ein Feld an und wähle eine Zahl. Mit „Feld leeren“ entfernst du eine eigene Eingabe und mit „Lösen“ prüfst du das Raster.',
+  ],
   musterfeld: () => [
     document.querySelector('#pattern-rule').textContent,
     'Trage die fehlende Zahl beim Fragezeichen ein und tippe auf „Lösen“. Die Glühbirne gibt einen Tipp.',
