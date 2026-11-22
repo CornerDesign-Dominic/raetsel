@@ -1,0 +1,123 @@
+.app-header {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 5;
+  padding-block-start: env(safe-area-inset-top);
+  background: var(--petrol);
+  color: var(--paper);
+}
+
+.app-header-inner {
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr) 2.75rem;
+  align-items: center;
+  gap: .5rem;
+  width: min(100%, 58rem);
+  min-height: 3.5rem;
+  margin-inline: auto;
+  padding: .3rem max(.65rem, env(safe-area-inset-right)) .3rem max(.65rem, env(safe-area-inset-left));
+}
+
+#app-title {
+  grid-column: 2;
+  grid-row: 1;
+  display: -webkit-box;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  font-size: clamp(1.1rem, 4.2vw, 1.5rem);
+  line-height: 1.13;
+  text-align: center;
+}
+
+#app-title:focus { outline: none; }
+#app-back { grid-column: 1; grid-row: 1; text-decoration: none; }
+#app-rules { grid-column: 3; grid-row: 1; }
+.header-action {
+  min-height: 2.75rem;
+  border: 1px solid #65877d;
+  border-radius: .65rem;
+  background: #264947;
+  color: var(--paper);
+}
+.header-action:focus-visible { outline-color: var(--paper); outline-offset: 2px; }
+
+body.is-playing {
+  display: flex;
+  flex-direction: column;
+  block-size: 100vh;
+  block-size: var(--app-height, 100dvh);
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+.is-playing .app-header { flex: none; }
+.is-playing .home {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  overflow: hidden;
+  overflow: clip;
+  padding-block-start: .55rem;
+  padding-block-end: max(.55rem, env(safe-area-inset-bottom));
+}
+.is-playing .install { display: none; }
+.play-view {
+  display: flow-root;
+  transform: scale(var(--play-scale, 1));
+  transform-origin: top center;
+}
+
+.play-view .board {
+  margin-block: .45rem;
+  padding: clamp(.75rem, 2.1vw, 1.25rem);
+}
+.play-view .puzzle-layout { gap: .5rem; margin-block: 0; }
+.play-view .puzzle-layout h3 { font-size: 1.18rem; }
+.play-view .logic-grid { margin-block: .35rem; }
+.play-view .logic-grid caption { margin-block: .1rem; }
+.play-view .logic-grid button { min-block-size: 2.4rem; }
+.play-view #grid-clues { margin-block-start: .35rem; line-height: 1.35; }
+.play-view .training-history { min-height: 4.7rem; }
+.play-view .training-history li { min-height: 1.17rem; }
+.play-view .arrow-stage { min-block-size: 6.8rem; }
+.play-view .arrow-actions { margin-block-start: .6rem; }
+
+.rules-dialog #rules-game { font-weight: 700; color: var(--petrol); }
+.rules-dialog ul { padding-inline-start: 1.2rem; line-height: 1.45; }
+.rules-dialog li + li { margin-block-start: .55rem; }
+.result-rules {
+  position: absolute;
+  inset: .6rem .6rem auto auto;
+  background: #fbefd9;
+  border-color: #b89973;
+}
+[data-game-result] h2 { padding-inline-end: 3rem; }
+
+@media (orientation: portrait) and (max-height: 760px) {
+  .play-view .where-map { width: min(100%, 40dvh); }
+  .play-view .where-clues { margin-block: .4rem 0; line-height: 1.3; }
+  .play-view .where-legend { margin-block: .4rem .2rem; }
+  .play-view .where-map-heading { margin-block-end: .35rem; }
+}
+
+@media (orientation: landscape) and (max-height: 520px) {
+  .play-view .puzzle-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    align-items: start;
+  }
+  .play-view .where-map { width: min(100%, 68dvh); }
+  .play-view .bus-platform { min-block-size: 5.6rem; }
+  .play-view #training-game .training-board:not(.training-progress) {
+    display: grid;
+    grid-template-columns: minmax(0, .85fr) minmax(0, 1fr);
+    grid-template-rows: auto 1fr auto;
+    gap: .45rem;
+  }
+  .play-view #training-results { grid-area: 1 / 1; }
+  .play-view #training-history { grid-area: 2 / 1; align-content: start; }
+  .play-view #training-stop { grid-area: 3 / 1; }
+  .play-view #training-form { grid-area: 1 / 2 / span 3; }
+  .play-view .training-pad button { min-height: 2.2rem; }
+
+}

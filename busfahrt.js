@@ -120,11 +120,12 @@ function drawPeople(count, direction, previewTime) {
   people.replaceChildren(...passengers);
 
   const doorway = door.getBoundingClientRect();
+  const scale = doorway.width / door.offsetWidth || 1;
   const positions = passengers.map((passenger) => passenger.getBoundingClientRect());
   for (const [index, passenger] of passengers.entries()) {
     const position = positions[index];
-    passenger.style.setProperty('--bus-door-x', doorway.left + (doorway.width - position.width) / 2 - position.left + 'px');
-    passenger.style.setProperty('--bus-door-y', doorway.bottom - position.bottom + 'px');
+    passenger.style.setProperty('--bus-door-x', (doorway.left + (doorway.width - position.width) / 2 - position.left) / scale + 'px');
+    passenger.style.setProperty('--bus-door-y', (doorway.bottom - position.bottom) / scale + 'px');
   }
   scene.dataset.motion = direction;
 }

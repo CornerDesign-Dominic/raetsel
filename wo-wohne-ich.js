@@ -78,7 +78,7 @@ root.innerHTML = `
     <section class="board where-story" aria-labelledby="where-clues-title">
       <h3 id="where-clues-title">Mein Weg</h3>
       <ol class="where-clues"></ol>
-      <p id="where-instructions">Ein Schritt führt ins benachbarte Feld. Die kleinen Pfeile an den Häusern zeigen, wohin die Haustüren weisen.</p>
+      <p id="where-instructions" hidden>Ein Schritt führt ins benachbarte Feld. Die kleinen Pfeile an den Häusern zeigen, wohin die Haustüren weisen.</p>
     </section>
     <section class="board where-board" aria-labelledby="where-map-title">
       <div class="where-map-heading">
@@ -96,7 +96,7 @@ root.innerHTML = `
       </div>
     </section>
   </div>
-  <dialog class="result-dialog where-result" aria-labelledby="where-result-title" aria-describedby="where-result-message">
+  <dialog class="result-dialog where-result" data-game-result aria-labelledby="where-result-title" aria-describedby="where-result-message">
     <h2 id="where-result-title"></h2>
     <p id="where-result-message" class="where-result-message"></p>
     <form method="dialog">

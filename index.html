@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="./pfeilfolge.css">
   <link rel="stylesheet" href="./wo-wohne-ich.css">
   <link rel="stylesheet" href="./einmaleins.css">
+  <link rel="stylesheet" href="./app-layout.css">
   <script type="module" src="./app.js"></script>
   <title>Inveni</title>
 </head>
@@ -24,14 +25,26 @@
     <symbol id="icon-undo-circle" viewBox="0 0 24 24">
       <path d="M3 12a9 9 0 1 1 2.6 6.4M3 6v6h6"/>
     </symbol>
+    <symbol id="icon-back" viewBox="0 0 24 24">
+      <path d="M19 12H5m6-6-6 6 6 6"/>
+    </symbol>
+    <symbol id="icon-book" viewBox="0 0 24 24">
+      <path d="M12 6c-3-2-6-2-9-1v14c3-1 6-1 9 1 3-2 6-2 9-1V5c-3-1-6-1-9 1Zm0 0v14"/>
+    </symbol>
   </svg>
+  <header class="app-header">
+    <div class="app-header-inner">
+      <a id="app-back" class="icon-button header-action" href="#start" aria-label="Zurück" hidden>
+        <svg aria-hidden="true"><use href="#icon-back"></use></svg>
+      </a>
+      <h1 id="app-title" tabindex="-1">Inveni</h1>
+      <button id="app-rules" class="icon-button header-action" type="button" aria-label="Regeln öffnen"
+        title="Regeln öffnen" aria-haspopup="dialog" aria-controls="rules-dialog" hidden>
+        <svg aria-hidden="true"><use href="#icon-book"></use></svg>
+      </button>
+    </div>
+  </header>
   <main class="home">
-    <header class="cover" data-view="">
-      <img class="compass" src="./icons/icon-192.png" alt="" width="84" height="84">
-      <h1>Inveni</h1>
-      <p>Ich habe die Lösung gefunden.</p>
-    </header>
-
     <section class="board" data-view="" aria-labelledby="puzzles-title">
       <h2 id="puzzles-title">Rätselbereiche</h2>
       <div class="game-list">
@@ -59,8 +72,7 @@
     </section>
 
     <section class="board" data-view="logik" aria-labelledby="logic-title" hidden>
-      <a class="back-link" href="#start">← Rätselbereiche</a>
-      <h2 id="logic-title" tabindex="-1">Logik</h2>
+      <h2 hidden id="logic-title" tabindex="-1">Logik</h2>
       <div class="game-list">
         <a class="game-card" href="#logikgitter">
           <span class="game-symbol" aria-hidden="true">▦</span>
@@ -76,16 +88,12 @@
     </section>
 
     <section data-view="logikgitter" aria-labelledby="grid-title" hidden>
-      <a class="back-link" href="#logik">← Logik</a>
-      <header class="puzzle-header">
+      <div hidden>
         <p id="grid-level">Logikgitter</p>
         <h2 id="grid-title" tabindex="-1">Besuch im Observatorium</h2>
         <p id="grid-intro"></p>
-      </header>
-      <section class="board rules-card" aria-labelledby="rules-title">
-        <h3 id="rules-title">Regeln</h3>
         <ul id="grid-rules"></ul>
-      </section>
+      </div>
       <div class="puzzle-layout">
         <section class="board" aria-labelledby="clue-title">
           <h3 id="clue-title">Hinweise</h3>
@@ -103,7 +111,7 @@
               <svg aria-hidden="true"><use href="#icon-undo-circle"></use></svg>
             </button>
           </div>
-          <dialog class="result-dialog" id="grid-result" aria-labelledby="grid-result-title" aria-describedby="grid-result-message">
+          <dialog class="result-dialog" id="grid-result" data-game-result aria-labelledby="grid-result-title" aria-describedby="grid-result-message">
             <h2 id="grid-result-title"></h2>
             <p id="grid-result-message"></p>
             <form method="dialog">
@@ -164,8 +172,7 @@
     </template>
 
     <section class="board" data-view="zahlen-und-muster" aria-labelledby="numbers-title" hidden>
-      <a class="back-link" href="#start">← Rätselbereiche</a>
-      <h2 id="numbers-title" tabindex="-1">Zahlen &amp; Muster</h2>
+      <h2 hidden id="numbers-title" tabindex="-1">Zahlen &amp; Muster</h2>
       <div class="game-list">
         <a class="game-card" href="#musterfeld">
           <span class="game-symbol" aria-hidden="true">▦</span>
@@ -186,12 +193,11 @@
     </section>
 
     <section data-view="musterfeld" aria-labelledby="pattern-title" hidden>
-      <a class="back-link" href="#zahlen-und-muster">← Zahlen &amp; Muster</a>
-      <header class="puzzle-header">
+      <div hidden>
         <p id="pattern-level"></p>
         <h2 id="pattern-title" tabindex="-1">Musterfeld</h2>
         <p id="pattern-rule">In jeder Zeile ergeben die ersten beiden Zahlen nach derselben Rechenregel die dritte. Welche Zahl fehlt?</p>
-      </header>
+      </div>
 
       <form id="pattern-game" class="board pattern-board">
         <table class="pattern-grid" aria-label="Zahlenraster" aria-describedby="pattern-rule">
@@ -205,7 +211,7 @@
         </div>
       </form>
 
-      <dialog class="result-dialog" id="pattern-result" aria-labelledby="pattern-result-title" aria-describedby="pattern-result-message">
+      <dialog class="result-dialog" id="pattern-result" data-game-result aria-labelledby="pattern-result-title" aria-describedby="pattern-result-message">
         <h2 id="pattern-result-title"></h2>
         <p id="pattern-result-message"></p>
         <form method="dialog">
@@ -215,8 +221,7 @@
     </section>
 
     <section class="board" data-view="gedaechtnis" aria-labelledby="memory-title" hidden>
-      <a class="back-link" href="#start">← Rätselbereiche</a>
-      <h2 id="memory-title" tabindex="-1">Gedächtnis</h2>
+      <h2 hidden id="memory-title" tabindex="-1">Gedächtnis</h2>
       <div class="game-list">
         <a class="game-card" href="#pfeilfolge">
           <span class="game-symbol" aria-hidden="true">↗</span>
@@ -227,39 +232,42 @@
     </section>
 
     <section data-view="busfahrt" aria-labelledby="bus-game-title" hidden>
-      <a class="back-link" href="#zahlen-und-muster">← Zahlen &amp; Muster</a>
-      <header class="puzzle-header">
+      <div hidden>
         <h2 id="bus-game-title" tabindex="-1">Busfahrt</h2>
-      </header>
+      </div>
       <div id="bus-game"></div>
     </section>
 
     <section data-view="pfeilfolge" aria-labelledby="arrow-game-title" hidden>
-      <a class="back-link" href="#gedaechtnis">← Gedächtnis</a>
-      <header class="puzzle-header">
+      <div hidden>
         <p id="arrow-level"></p>
         <h2 id="arrow-game-title" tabindex="-1">Pfeilfolge</h2>
-      </header>
+      </div>
       <div id="arrow-game"></div>
     </section>
 
     <section data-view="wo-wohne-ich" aria-labelledby="map-game-title" hidden>
-      <a class="back-link" href="#logik">← Logik</a>
-      <header class="puzzle-header">
+      <div hidden>
         <p id="map-level"></p>
         <h2 id="map-game-title" tabindex="-1">Wo wohne ich?</h2>
-      </header>
+      </div>
       <div id="map-game"></div>
     </section>
 
     <section data-view="einmaleins" aria-labelledby="training-title" hidden>
-      <a class="back-link" href="#zahlen-und-muster">← Zahlen &amp; Muster</a>
-      <header class="puzzle-header">
+      <div hidden>
         <p id="training-mode-label"></p>
         <h2 id="training-title" tabindex="-1">1×1-Training</h2>
-      </header>
+      </div>
       <div id="training-game"></div>
     </section>
+
+    <dialog class="result-dialog rules-dialog" id="rules-dialog" aria-labelledby="rules-dialog-title">
+      <h2 id="rules-dialog-title">Regeln</h2>
+      <p id="rules-game"></p>
+      <ul id="rules-list"></ul>
+      <form method="dialog"><button type="submit" autofocus>Schließen</button></form>
+    </dialog>
 
     <dialog class="result-dialog hint-dialog" id="puzzle-hint" aria-labelledby="puzzle-hint-title" aria-describedby="puzzle-hint-text">
       <form method="dialog">

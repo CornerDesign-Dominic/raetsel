@@ -5,6 +5,7 @@ import './busfahrt.js';
 import './einmaleins.js';
 import './pfeilfolge.js';
 import './wo-wohne-ich.js';
+import { updateLayout, focusPageTitle } from './app-layout.js';
 
 const installSection = document.querySelector('#install');
 const installButton = document.querySelector('#install-button');
@@ -133,6 +134,7 @@ function showView(moveFocus = false) {
   }
 
   if (needsDifficulty) {
+    updateLayout(activeRoute, currentView);
     chooseDifficulty(route, game);
     return;
   }
@@ -140,12 +142,8 @@ function showView(moveFocus = false) {
   closeDifficulty();
   if (activeGame) activeGame.load(gameLevel);
 
-  if (moveFocus) {
-    const heading = currentView?.querySelector('h2') ?? document.querySelector('#puzzles-title');
-    heading.setAttribute('tabindex', '-1');
-    heading.focus({ preventScroll: true });
-    window.scrollTo(0, 0);
-  }
+  updateLayout(activeRoute, currentView, activeGame);
+  if (moveFocus) focusPageTitle();
 }
 
 window.addEventListener('hashchange', () => showView(true));
