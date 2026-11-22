@@ -2,6 +2,7 @@ import { games, levels, chooseDifficulty, closeDifficulty } from './puzzle-level
 import './logic-grid.js';
 import './number-pattern.js';
 import './busfahrt.js';
+import './einmaleins.js';
 import './pfeilfolge.js';
 import './wo-wohne-ich.js';
 
@@ -119,18 +120,19 @@ function showView(moveFocus = false) {
   const [route, level] = window.location.hash.slice(1).split('/');
   const game = games.get(route);
   const gameLevel = game && Object.hasOwn(levels, level) ? level : null;
-  const destination = game && !gameLevel ? game.category : route;
+  const needsDifficulty = game && !game.direct && !gameLevel;
+  const destination = needsDifficulty ? game.category : route;
   const currentView = views.find((view) => view.dataset.view === destination);
   const activeRoute = currentView?.dataset.view ?? '';
 
   activeGame?.leave?.();
-  activeGame = gameLevel ? game : undefined;
+  activeGame = needsDifficulty ? undefined : game;
 
   for (const view of views) {
     view.hidden = view.dataset.view !== activeRoute;
   }
 
-  if (game && !gameLevel) {
+  if (needsDifficulty) {
     chooseDifficulty(route, game.title);
     return;
   }

@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="./busfahrt.css">
   <link rel="stylesheet" href="./pfeilfolge.css">
   <link rel="stylesheet" href="./wo-wohne-ich.css">
+  <link rel="stylesheet" href="./einmaleins.css">
   <script type="module" src="./app.js"></script>
   <title>Inveni</title>
 </head>
@@ -176,6 +177,11 @@
           <span><strong>Busfahrt</strong><small>Zähle mit, während Fahrgäste ein- und aussteigen.</small></span>
           <span aria-hidden="true">›</span>
         </a>
+        <a class="game-card" href="#einmaleins">
+          <span class="game-symbol" aria-hidden="true">×</span>
+          <span><strong>1×1-Training</strong><small>Rechne zügig und miss dein Tempo.</small></span>
+          <span aria-hidden="true">›</span>
+        </a>
       </div>
     </section>
 
@@ -244,6 +250,14 @@
         <h2 id="map-game-title" tabindex="-1">Wo wohne ich?</h2>
       </header>
       <div id="map-game"></div>
+    </section>
+
+    <section data-view="einmaleins" aria-labelledby="training-title" hidden>
+      <a class="back-link" href="#zahlen-und-muster">← Zahlen &amp; Muster</a>
+      <header class="puzzle-header">
+        <h2 id="training-title" tabindex="-1">1×1-Training</h2>
+      </header>
+      <div id="training-game"></div>
     </section>
 
     <dialog class="result-dialog hint-dialog" id="puzzle-hint" aria-labelledby="puzzle-hint-title" aria-describedby="puzzle-hint-text">
