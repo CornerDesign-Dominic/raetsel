@@ -39,6 +39,7 @@
 
 .arrow-restart { flex: none; width: 2.75rem; }
 .arrow-restart:disabled { opacity: .45; cursor: default; }
+#arrow-restart-title { padding-inline-end: 3rem; }
 #arrow-restart-dialog [data-arrow-confirm-restart] { background: var(--chalk-accent); }
 
 .arrow-stage {

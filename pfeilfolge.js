@@ -67,7 +67,9 @@ game.innerHTML = `
     <h2 id="arrow-restart-title">Durchlauf neu starten?</h2>
     <p id="arrow-restart-description">Dein Fortschritt in diesem Durchlauf geht verloren.</p>
     <form method="dialog" class="puzzle-actions">
-      <button type="submit" class="secondary-action" autofocus>Abbrechen</button>
+      <button type="submit" class="icon-button dialog-close" aria-label="Neustart abbrechen" autofocus>
+        <span aria-hidden="true">×</span>
+      </button>
       <button type="button" data-arrow-confirm-restart>Neu starten</button>
     </form>
   </dialog>
