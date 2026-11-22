@@ -46,8 +46,8 @@
   list-style: none;
   margin: 0;
   padding: 0 .45rem;
+  min-block-size: 4.25rem;
 }
-.training-history:empty { display: none; }
 .training-history li {
   display: flex;
   justify-content: space-between;
@@ -105,6 +105,7 @@
 .training-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 @media (max-height: 630px) {
+  .training-history { min-block-size: 2.125rem; }
   .training-history li:nth-last-child(n + 3) { display: none; }
 }
 
