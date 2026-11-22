@@ -391,7 +391,7 @@
 
     <dialog class="result-dialog hint-dialog" id="puzzle-hint" aria-labelledby="puzzle-hint-title" aria-describedby="puzzle-hint-text">
       <form method="dialog">
-        <button class="icon-button hint-close" type="submit" aria-label="Hinweis schließen" autofocus>
+        <button class="icon-button dialog-close" type="submit" aria-label="Hinweis schließen" autofocus>
           <span aria-hidden="true">×</span>
         </button>
       </form>
@@ -399,11 +399,12 @@
       <p id="puzzle-hint-text"></p>
     </dialog>
 
-    <dialog class="result-dialog" id="difficulty-dialog" aria-labelledby="difficulty-title" aria-describedby="difficulty-game">
-      <h2 id="difficulty-title">Schwierigkeit wählen</h2>
-      <p id="difficulty-game"></p>
+    <dialog class="result-dialog" id="difficulty-dialog" aria-labelledby="difficulty-title">
+      <h2 id="difficulty-title">Stufe wählen</h2>
+      <button class="icon-button dialog-close" id="cancel-difficulty" type="button" aria-label="Auswahl schließen">
+        <span aria-hidden="true">×</span>
+      </button>
       <div class="difficulty-choices"></div>
-      <button class="secondary-action" id="cancel-difficulty" type="button">Zurück</button>
     </dialog>
 
     <dialog class="result-dialog" id="reset-dialog" aria-labelledby="reset-title" aria-describedby="reset-description">
