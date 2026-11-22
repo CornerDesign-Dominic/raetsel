@@ -29,16 +29,18 @@ root.innerHTML = `
         <div><dt>Antworten pro Sekunde</dt><dd id="training-speed">0,00</dd></div>
       </dl>
     </section>
-    <ol id="training-history" class="training-history" aria-label="Letzte Antworten"></ol>
     <p id="training-feedback" class="training-sr" role="status"></p>
 
     <form id="training-form">
-      <div class="training-task" id="training-task" hidden>
-        <label id="training-question" for="training-answer"></label>
-        <input id="training-answer" type="text" inputmode="none" autocomplete="off" maxlength="3" disabled>
-      </div>
-      <div id="training-start" class="training-start">
-        <button id="training-go" type="button">Starten</button>
+      <div class="training-stage">
+        <ol id="training-history" class="training-history" aria-label="Letzte Antworten"></ol>
+        <div class="training-task" id="training-task" hidden>
+          <label id="training-question" for="training-answer"></label>
+          <input id="training-answer" type="text" inputmode="none" autocomplete="off" maxlength="3" disabled>
+        </div>
+        <div id="training-start" class="training-start">
+          <button id="training-go" type="button">Starten</button>
+        </div>
       </div>
 
       <fieldset id="training-controls" class="training-controls" aria-label="Nummernblock" disabled>
