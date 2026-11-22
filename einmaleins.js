@@ -219,7 +219,7 @@ games.set('einmaleins', {
     },
     format(result, level) {
       const pace = format.format(result.seconds) + ' s/Antwort';
-      return result.errors + ' Fehler · ' + pace + (level === 'unendlich' ? ' · ' + result.answered + ' Antworten' : '');
+      return result.errors + ' Fehler · ' + pace + (level === 'unendlich' ? ' · ' + result.answered + (result.answered === 1 ? ' Antwort' : ' Antworten') : '');
     },
   },
   options: Object.fromEntries(Object.entries(modes).map(([key, { title, count }]) =>
