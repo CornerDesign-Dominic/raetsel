@@ -37,7 +37,14 @@
   min-height: 0;
   gap: .3rem;
 }
-.training-board fieldset { margin: 0; padding: 0; min-width: 0; border: 0; }
+.training-board fieldset {
+  align-self: center;
+  width: min(100%, 25rem);
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  border: 0;
+}
 .training-results h3 { color: var(--petrol); font: 700 1.1rem Georgia, serif; margin: 0 0 .2rem; }
 
 .training-history {
@@ -87,14 +94,21 @@
 }
 
 #training-submit { width: 100%; background: #2a674a; border-color: #205239; color: white; }
-.training-pad { display: grid; grid-template: repeat(4, minmax(0, 1fr)) / repeat(3, minmax(0, 1fr)); gap: .3rem; flex: 1; min-height: 0; }
+.training-pad {
+  display: grid;
+  grid-template: repeat(4, minmax(0, 1fr)) / repeat(3, minmax(0, 1fr));
+  gap: .3rem;
+  flex: 1;
+  min-height: 0;
+  max-height: 15rem;
+}
 .training-pad button {
   min-height: 0;
   padding: 0;
   border-color: #b89973;
   border-radius: .45rem;
   background: #fbefd9;
-  font-size: clamp(1.35rem, 5vw, 1.85rem);
+  font-size: clamp(1.25rem, 5vw, 1.6rem);
   font-weight: 700;
   touch-action: manipulation;
 }
@@ -120,6 +134,6 @@
     align-items: start;
     column-gap: .5rem;
   }
-  .training-controls { grid-area: 1 / 2; height: 100%; }
+  .training-controls { grid-area: 1 / 2; justify-self: center; height: 100%; }
   #training-submit { min-height: 2.1rem; padding-block: .2rem; }
 }
