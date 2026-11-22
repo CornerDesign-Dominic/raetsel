@@ -51,7 +51,7 @@
 
 .training-stage {
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-rows: minmax(0, 2.3fr) auto minmax(0, 1fr);
   flex: 1;
   min-block-size: 6.75rem;
   min-inline-size: 0;
@@ -69,9 +69,13 @@
   overflow: hidden;
   width: min(100%, 12rem);
   justify-self: center;
-  margin: 0 0 .35rem;
+  margin: 0 0 clamp(.65rem, 2.5dvh, 1.35rem);
   padding: 0;
   list-style: none;
+}
+.training-history:not(:empty) {
+  padding-block-end: .4rem;
+  border-block-end: 1px solid #d6c4a6;
 }
 .training-history li {
   display: flex;
@@ -132,10 +136,10 @@
   border-color: #b89973;
   border-radius: .45rem;
   background: #fbefd9;
-  font-size: clamp(1.25rem, 5vw, 1.6rem);
   font-weight: 700;
   touch-action: manipulation;
 }
+.training-pad [data-digit] { font-size: clamp(1.4rem, 5.6vw, 1.8rem); }
 .training-pad [data-digit="0"] { grid-column: span 2; }
 .training-pad button:enabled:active { background: var(--petrol); color: var(--paper); }
 .training-controls button:disabled { opacity: .55; cursor: default; }
