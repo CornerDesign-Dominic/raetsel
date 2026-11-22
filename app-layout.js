@@ -44,7 +44,8 @@ const ruleContent = {
   ],
   merken: () => [
     'Tippe auf die Spielfläche und merke dir die Positionen der Zahlen.',
-    'Tippe anschließend die Felder in der Reihenfolge 1, 2, 3 und so weiter an.',
+    'Nach dem Countdown sehen alle Rückseiten gleich aus. Tippe die Felder in der Reihenfolge 1, 2, 3 und so weiter an.',
+    'Die Aufdeckzeit beginnt beim Umdrehen der Karten und endet mit der letzten richtigen Zahl oder beim ersten falschen Tipp.',
     'Ein Durchlauf hat fünf Runden. Die Anzahl der Zahlen steigt nach jeder zweiten Runde.',
   ],
   zeit: () => [

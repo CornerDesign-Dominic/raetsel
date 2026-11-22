@@ -11,6 +11,12 @@
 .training-prompt:empty { display: none; }
 
 #merken-game { text-align: center; }
+.memory-round {
+  padding: .4rem .55rem;
+  border: 1px solid #bc9e76;
+  border-radius: .5rem;
+  background: #fbefd9;
+}
 .memory-stage {
   position: relative;
   display: grid;
@@ -24,8 +30,12 @@
 .memory-status {
   display: grid;
   grid-area: 1 / 1;
-  place-items: center;
+  grid-auto-flow: column;
+  place-content: center;
+  align-items: baseline;
+  gap: .45rem;
   font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 .memory-status:focus { outline: none; }
 .memory-action {
@@ -56,7 +66,7 @@
   gap: .4rem;
 }
 .memory-tile {
-  min-block-size: clamp(3rem, 13dvh, 6rem);
+  min-block-size: clamp(2.75rem, 11dvh, 5.5rem);
   padding: 0;
   border-radius: .55rem;
   border-color: #ac9677;
@@ -66,11 +76,27 @@
   touch-action: manipulation;
 }
 .memory-tile:disabled { cursor: default; }
-.memory-tile[data-active='false'] { border-color: #d6c4a4; background: #eddfc5; }
-#merken-game[data-phase='reveal'] .memory-tile[data-active='true'] { background: var(--petrol); color: var(--paper); }
-#merken-game[data-phase='recall'] .memory-tile:enabled { border: 2px solid #4e7c72; background: #fbefd9; }
+#merken-game[data-phase='reveal'] .memory-tile[data-face-up='true'] {
+  background: var(--petrol);
+  color: var(--paper);
+}
 .memory-tile[data-found='true'] { border-color: #638773; background: #d5e7d7; color: #246348; }
 .memory-tile[data-wrong='true'] { border-color: #a03629; background: #fae3d7; color: #a03629; }
+
+#merken-game[data-phase='finished'] .memory-stage { grid-template-rows: auto auto; }
+.memory-summary { padding: .45rem .65rem; }
+.memory-summary h3 { margin: 0 0 .2rem; }
+.memory-summary h3:focus { outline: none; }
+.memory-summary p { font-size: .875rem; }
+.memory-summary dl { max-width: 16rem; margin: .45rem auto 0; font-variant-numeric: tabular-nums; }
+.memory-summary dl > div { display: flex; justify-content: space-between; gap: .5rem; padding-block: .12rem; }
+.memory-summary dl > div:last-child { border-block-start: 1px solid #d6c4a6; margin-block-start: .3rem; padding-block-start: .3rem; font-weight: 700; }
+.memory-summary dd { margin: 0; }
+#merken-game[data-phase='finished'] .memory-action {
+  position: static;
+  align-content: center;
+  border: 1px solid #bc9e76;
+}
 
 .time-clocks {
   display: grid;
@@ -147,6 +173,6 @@
 }
 
 @media (orientation: landscape) and (max-height: 500px) {
-  .memory-tile { min-block-size: clamp(2.5rem, 12dvh, 3.5rem); }
+  .memory-tile { min-block-size: clamp(2.5rem, 10dvh, 3.5rem); }
   .clock-face { width: min(85%, 30dvh); }
 }
