@@ -239,4 +239,4 @@ form.addEventListener('submit', (event) => {
   continueButton.focus({ preventScroll: true });
 });
 
-games.set(game, { title: 'Busfahrt', category: 'zahlen-und-muster', load, leave });
+games.set(game, { title: 'Busfahrt', category: 'zahlen', load, leave });

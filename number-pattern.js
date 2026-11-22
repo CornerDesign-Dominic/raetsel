@@ -61,7 +61,7 @@ function load(level) {
   }
 }
 
-games.set(gameId, { title: 'Musterfeld', category: 'zahlen-und-muster', load });
+games.set(gameId, { title: 'Musterfeld', category: 'raetsel', load });
 
 game.addEventListener('submit', (event) => {
   event.preventDefault();

@@ -212,4 +212,4 @@ game.addEventListener('keydown', (event) => {
   enterDirection(direction);
 });
 
-games.set(gameId, { title: 'Pfeilfolge', category: 'gedaechtnis', load, leave });
+games.set(gameId, { title: 'Pfeilfolge', category: 'kurzzeitgedaechtnis', load, leave });

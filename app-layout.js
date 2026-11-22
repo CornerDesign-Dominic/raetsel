@@ -99,7 +99,7 @@ export function updateLayout(route, view, game) {
   const title = route ? view?.querySelector('h2')?.textContent : 'Inveni';
   headerTitle.textContent = title || game?.title || 'Inveni';
   back.hidden = route === '';
-  back.href = '#' + (game?.category ?? 'start');
+  back.href = '#' + (game?.category ?? view?.dataset.parent ?? 'start');
   openRules.hidden = !ruleRoute;
   document.body.classList.toggle('is-playing', Boolean(playView));
 

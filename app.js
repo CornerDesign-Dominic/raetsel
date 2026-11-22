@@ -115,10 +115,16 @@ function waitForInstall(worker) {
 }
 
 const views = [...document.querySelectorAll('[data-view]')];
+const legacyRoutes = new Map([
+  ['logik', 'raetsel'],
+  ['zahlen-und-muster', 'zahlen'],
+  ['gedaechtnis', 'kurzzeitgedaechtnis'],
+]);
 let activeGame;
 
 function showView(moveFocus = false) {
-  const [route, level] = window.location.hash.slice(1).split('/');
+  const [requestedRoute, level] = window.location.hash.slice(1).split('/');
+  const route = legacyRoutes.get(requestedRoute) ?? requestedRoute;
   const game = games.get(route);
   const gameLevel = game && Object.hasOwn(game.options ?? levels, level) ? level : null;
   const needsDifficulty = game && !gameLevel;

@@ -224,4 +224,4 @@ solveButton.addEventListener('click', () => {
 
 root.querySelector('.where-hint').addEventListener('click', () => showHint(puzzle.hint));
 
-games.set(gameId, { title: 'Wo wohne ich?', category: 'logik', load, leave });
+games.set(gameId, { title: 'Wo wohne ich?', category: 'raetsel', load, leave });

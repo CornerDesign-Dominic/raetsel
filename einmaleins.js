@@ -202,7 +202,7 @@ stop.addEventListener('click', () => finish(elapsedSeconds()));
 
 games.set('einmaleins', {
   title: '1×1-Training',
-  category: 'zahlen-und-muster',
+  category: 'zahlen',
   chooserTitle: 'Trainingsdauer wählen',
   options: Object.fromEntries(Object.entries(modes).map(([key, { title, count }]) =>
     [key, Number.isFinite(count) ? title + ' · ' + count + ' Aufgaben' : title])),

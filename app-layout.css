@@ -56,6 +56,7 @@
 }
 .home .board::before { display: none; }
 .home .game-list { margin-block-start: .65rem; gap: .5rem; }
+.home .menu-page > .game-list { margin-block-start: 0; }
 .home .game-card { gap: .6rem; padding: .65rem; border-radius: .55rem; }
 
 body.is-playing {

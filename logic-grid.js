@@ -175,7 +175,7 @@ function load(level) {
   renderMarks();
 }
 
-games.set(game, { title: 'Logikgitter', category: 'logik', load });
+games.set(game, { title: 'Logikgitter', category: 'raetsel', load });
 
 checkButton.addEventListener('click', () => {
   const selected = marks.flatMap((mark, index) => mark === checkedMark ? [cells[index]] : []);

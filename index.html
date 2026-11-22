@@ -45,34 +45,44 @@
     </div>
   </header>
   <main class="home">
-    <section class="board" data-view="" aria-labelledby="puzzles-title">
-      <h2 id="puzzles-title">Rätselbereiche</h2>
+    <nav class="board menu-page" data-view="" aria-label="Hauptmenü">
       <div class="game-list">
-        <a class="game-card" href="#logik">
+        <a class="game-card" href="#training">
+          <span class="game-symbol" aria-hidden="true">↗</span>
+          <span><strong>Training</strong><small>Übe gezielt Gedächtnis und Kopfrechnen.</small></span>
+          <span aria-hidden="true">›</span>
+        </a>
+        <a class="game-card" href="#raetsel">
           <span class="game-symbol" aria-hidden="true">◇</span>
-          <span><strong>Logik</strong><small>Kombinieren, ausschließen und Schlüsse ziehen.</small></span>
+          <span><strong>Rätsel</strong><small>Kombiniere Hinweise und entdecke Muster.</small></span>
           <span aria-hidden="true">›</span>
         </a>
-        <a class="game-card" href="#sprache" hidden>
-          <span class="game-symbol" aria-hidden="true">Aa</span>
-          <span><strong>Sprache</strong><small>Begriffe verbinden und Assoziationen entdecken.</small></span>
+        <a class="game-card" href="#mein-profil">
+          <span class="game-symbol" aria-hidden="true">○</span>
+          <span><strong>Mein Profil</strong><small>Persönliche Angaben, Statistiken und Einstellungen.</small></span>
           <span aria-hidden="true">›</span>
         </a>
-        <a class="game-card" href="#zahlen-und-muster">
-          <span class="game-symbol numbers-symbol" aria-hidden="true">123</span>
-          <span><strong>Zahlen &amp; Muster</strong><small>Rechenregeln und Zusammenhänge erkennen.</small></span>
-          <span aria-hidden="true">›</span>
-        </a>
-        <a class="game-card" href="#gedaechtnis">
+      </div>
+    </nav>
+
+    <section class="board menu-page" data-view="training" aria-labelledby="training-menu-title" hidden>
+      <h2 id="training-menu-title" hidden>Training</h2>
+      <div class="game-list">
+        <a class="game-card" href="#kurzzeitgedaechtnis">
           <span class="game-symbol" aria-hidden="true">↔</span>
-          <span><strong>Gedächtnis</strong><small>Merk dir Folgen und gib sie wieder.</small></span>
+          <span><strong>Kurzzeitgedächtnis</strong><small>Merke dir Folgen und gib sie wieder.</small></span>
+          <span aria-hidden="true">›</span>
+        </a>
+        <a class="game-card" href="#zahlen">
+          <span class="game-symbol numbers-symbol" aria-hidden="true">123</span>
+          <span><strong>Zahlen</strong><small>Trainiere Kopfrechnen und Zählen.</small></span>
           <span aria-hidden="true">›</span>
         </a>
       </div>
     </section>
 
-    <section class="board" data-view="logik" aria-labelledby="logic-title" hidden>
-      <h2 hidden id="logic-title" tabindex="-1">Logik</h2>
+    <section class="board menu-page" data-view="raetsel" aria-labelledby="raetsel-title" hidden>
+      <h2 id="raetsel-title" hidden>Rätsel</h2>
       <div class="game-list">
         <a class="game-card" href="#logikgitter">
           <span class="game-symbol" aria-hidden="true">▦</span>
@@ -84,7 +94,17 @@
           <span><strong>Wo wohne ich?</strong><small>Verfolge den Weg rückwärts bis zum richtigen Haus.</small></span>
           <span aria-hidden="true">›</span>
         </a>
+        <a class="game-card" href="#musterfeld">
+          <span class="game-symbol" aria-hidden="true">▦</span>
+          <span><strong>Musterfeld</strong><small>Entdecke die Regel und ergänze die fehlende Zahl.</small></span>
+          <span aria-hidden="true">›</span>
+        </a>
       </div>
+    </section>
+
+    <section class="board" data-view="mein-profil" aria-labelledby="profile-title" hidden>
+      <h2 id="profile-title" hidden>Mein Profil</h2>
+      <p>Hier findest du später deine persönlichen Angaben wie Name und Alter, deine Spielstatistiken und Einstellungen.</p>
     </section>
 
     <section data-view="logikgitter" aria-labelledby="grid-title" hidden>
@@ -171,22 +191,17 @@
       </section>
     </template>
 
-    <section class="board" data-view="zahlen-und-muster" aria-labelledby="numbers-title" hidden>
-      <h2 hidden id="numbers-title" tabindex="-1">Zahlen &amp; Muster</h2>
+    <section class="board menu-page" data-view="zahlen" data-parent="training" aria-labelledby="zahlen-title" hidden>
+      <h2 id="zahlen-title" hidden>Zahlen</h2>
       <div class="game-list">
-        <a class="game-card" href="#musterfeld">
-          <span class="game-symbol" aria-hidden="true">▦</span>
-          <span><strong>Musterfeld</strong><small>Entdecke die Regel und ergänze die fehlende Zahl.</small></span>
+        <a class="game-card" href="#einmaleins">
+          <span class="game-symbol" aria-hidden="true">×</span>
+          <span><strong>1×1-Training</strong><small>Rechne zügig und miss dein Tempo.</small></span>
           <span aria-hidden="true">›</span>
         </a>
         <a class="game-card" href="#busfahrt">
           <span class="game-symbol" aria-hidden="true">▰</span>
           <span><strong>Busfahrt</strong><small>Zähle mit, während Fahrgäste ein- und aussteigen.</small></span>
-          <span aria-hidden="true">›</span>
-        </a>
-        <a class="game-card" href="#einmaleins">
-          <span class="game-symbol" aria-hidden="true">×</span>
-          <span><strong>1×1-Training</strong><small>Rechne zügig und miss dein Tempo.</small></span>
           <span aria-hidden="true">›</span>
         </a>
       </div>
@@ -220,8 +235,8 @@
       </dialog>
     </section>
 
-    <section class="board" data-view="gedaechtnis" aria-labelledby="memory-title" hidden>
-      <h2 hidden id="memory-title" tabindex="-1">Gedächtnis</h2>
+    <section class="board menu-page" data-view="kurzzeitgedaechtnis" data-parent="training" aria-labelledby="kurzzeitgedaechtnis-title" hidden>
+      <h2 id="kurzzeitgedaechtnis-title" hidden>Kurzzeitgedächtnis</h2>
       <div class="game-list">
         <a class="game-card" href="#pfeilfolge">
           <span class="game-symbol" aria-hidden="true">↗</span>
