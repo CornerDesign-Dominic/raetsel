@@ -80,11 +80,13 @@ let timer;
 let answered = 0;
 let correct = 0;
 let current;
+const factors = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 function nextTask() {
-  const left = 1 + Math.floor(Math.random() * 10);
-  const right = 1 + Math.floor(Math.random() * 10);
-  current = { label: left + ' × ' + right, answer: left * right };
+  const available = factors.filter((factor) => factor !== current?.left && factor !== current?.right);
+  const left = available[Math.floor(Math.random() * available.length)];
+  const right = available[Math.floor(Math.random() * available.length)];
+  current = { left, right, label: left + ' × ' + right, answer: left * right };
   question.textContent = current.label + ' =';
   input.value = '';
   submit.disabled = true;
