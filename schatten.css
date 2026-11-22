@@ -1,0 +1,84 @@
+.shadow-game {
+  display: grid;
+  width: min(100%, 32rem);
+  margin-inline: auto;
+  gap: .5rem;
+  color: var(--petrol);
+}
+.shadow-intro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .15rem .6rem;
+}
+.shadow-intro p:first-child { font-weight: 700; }
+.shadow-progress { font-size: .85rem; }
+.shadow-object {
+  display: block;
+  width: 100%;
+  height: clamp(5.75rem, 23dvh, 11rem);
+  object-fit: contain;
+  border-radius: .5rem;
+  background: radial-gradient(ellipse at center, #fff9ec, #ecddc1);
+}
+.shadow-choices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .375rem;
+}
+.shadow-choice {
+  position: relative;
+  min-height: 3rem;
+  padding: 0;
+  border: 1px solid #b79c75;
+  border-radius: .4rem;
+  background: #fbefd9;
+  touch-action: manipulation;
+}
+.shadow-choice canvas {
+  display: block;
+  width: 100%;
+  height: clamp(4rem, 15dvh, 8.5rem);
+  object-fit: contain;
+}
+.shadow-choice[aria-disabled='true'] { cursor: default; }
+.shadow-choice[data-answer='wrong'] {
+  border-color: #943f36;
+  color: #873932;
+  background: #f6e1d9;
+}
+.shadow-choice[data-answer='correct'] {
+  border-color: #377050;
+  color: #225c40;
+  background: #dfebd9;
+}
+.shadow-letter, .shadow-mark {
+  position: absolute;
+  inset-block-start: .25rem;
+  font-size: .875rem;
+  line-height: 1;
+}
+.shadow-letter { inset-inline-start: .4rem; }
+.shadow-mark { inset-inline-end: .4rem; font-size: 1.25rem; }
+.shadow-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 3rem;
+  gap: .35rem;
+}
+.shadow-actions p { font-size: .875rem; }
+.shadow-actions button { min-height: 3rem; }
+
+@media (orientation: landscape) and (max-height: 520px) {
+  .shadow-game {
+    width: min(100%, 40rem);
+    grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+    grid-template-areas: 'intro intro' 'object choices' 'actions actions';
+  }
+  .shadow-intro { grid-area: intro; }
+  .shadow-object { grid-area: object; height: 100%; min-height: 0; }
+  .shadow-choices { grid-area: choices; }
+  .shadow-actions { grid-area: actions; }
+}

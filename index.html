@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="./einmaleins.css">
   <link rel="stylesheet" href="./seifenblasen.css">
   <link rel="stylesheet" href="./sudoku.css">
+  <link rel="stylesheet" href="./schatten.css">
   <link rel="stylesheet" href="./chalk-finish.css">
   <script type="module" src="./app.js"></script>
   <title>Inveni</title>
@@ -79,6 +80,10 @@
       <circle cx="5.75" cy="16.75" r="2.25"/>
       <rect x="9.75" y="14.5" width="4.5" height="4.5" rx=".7"/>
       <path d="M17 15.75a1.25 1.25 0 0 1 2.5 0c0 1-1.25 1.1-1.25 1.75m0 2v.05"/>
+    </symbol>
+    <symbol id="game-icon-schatten" viewBox="0 0 24 24">
+      <path d="M4 7.5 9 4l5 3.5v6L9 17l-5-3.5ZM15.5 8l4.5 3.5v6L15 21l-4.5-3.25"/>
+      <path d="m15 13 3-2m-4 5 4-2m-4 5 4-2"/>
     </symbol>
     <symbol id="game-icon-sudoku" viewBox="0 0 24 24">
       <rect x="3" y="3" width="18" height="18" rx="1.1"/>
@@ -170,6 +175,11 @@
         <a class="game-card" href="#musterfeld">
           <span class="game-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#game-icon-musterfeld"></use></svg></span>
           <span><strong>Musterfeld</strong></span>
+          <span aria-hidden="true">›</span>
+        </a>
+        <a class="game-card" href="#schatten">
+          <span class="game-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#game-icon-schatten"></use></svg></span>
+          <span><strong>Schatten</strong></span>
           <span aria-hidden="true">›</span>
         </a>
         <a class="game-card" href="#sudoku">
@@ -352,6 +362,22 @@
         <h2 id="training-title" tabindex="-1">1×1-Training</h2>
       </div>
       <div id="training-game"></div>
+    </section>
+
+    <section data-view="schatten" aria-labelledby="shadow-title" hidden>
+      <h2 id="shadow-title" hidden>Schatten</h2>
+      <div class="shadow-game">
+        <div class="shadow-intro">
+          <p>Welcher Schatten passt?</p>
+          <p class="shadow-progress" id="shadow-progress" tabindex="-1"></p>
+        </div>
+        <canvas class="shadow-object" id="shadow-object" width="320" height="240" role="img"></canvas>
+        <div class="shadow-choices" id="shadow-choices" role="group" aria-label="Vier Schatten"></div>
+        <div class="shadow-actions">
+          <p id="shadow-feedback" role="status"></p>
+          <button type="button" id="shadow-next" hidden>Weiter</button>
+        </div>
+      </div>
     </section>
 
     <section data-view="sudoku" aria-labelledby="sudoku-title" hidden>

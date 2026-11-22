@@ -16,6 +16,10 @@ const ruleContent = {
     ...Array.from(document.querySelectorAll('#grid-rules li'), (item) => item.textContent),
     document.querySelector('#grid-intro').textContent,
   ],
+  schatten: () => [
+    'Vergleiche den Umriss des Objekts mit den vier Schatten und tippe auf den passenden.',
+    'Bei einem falschen Tipp kannst du einen anderen Schatten wählen.',
+  ],
   sudoku: () => [
     'Setze die Zahlen von 1 bis 9 in die leeren Felder ein.',
     'Jede Zahl muss in jeder Zeile, jeder Spalte und jedem 3×3-Block genau einmal vorkommen.',
