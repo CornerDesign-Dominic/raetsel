@@ -33,7 +33,8 @@ export function markSolved(game, level) {
 
 export function chooseDifficulty(gameId, game) {
   pendingGame = gameId;
-  difficulty.querySelector('#difficulty-title').textContent = game.chooserTitle ?? 'Stufe wählen';
+  difficulty.querySelector('#difficulty-title').textContent = game.title;
+  difficulty.querySelector('#difficulty-label').textContent = game.chooserTitle ?? 'Stufe wählen';
   const options = Object.entries(game.options ?? levels);
   choices.replaceChildren(...options.map(([level, label], index) => {
     const button = document.createElement('button');

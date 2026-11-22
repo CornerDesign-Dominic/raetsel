@@ -276,7 +276,9 @@ summary { width: fit-content; }
   line-height: 1;
 }
 
-.difficulty-choices { display: grid; gap: .5rem; margin-block-start: .85rem; }
+.difficulty-options { min-inline-size: 0; margin: .85rem 0 0; padding: 0; border: 0; }
+.difficulty-options legend { margin-inline: auto; margin-block-end: .5rem; padding: 0; text-align: center; }
+.difficulty-choices { display: grid; gap: .5rem; }
 .difficulty-choices button { background: #fbefd9; border-color: #9a836a; }
 .difficulty-choices button:hover { border-color: var(--petrol); }
 .secondary-action { background: #fbefd9; }

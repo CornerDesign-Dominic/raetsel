@@ -400,11 +400,14 @@
     </dialog>
 
     <dialog class="result-dialog" id="difficulty-dialog" aria-labelledby="difficulty-title">
-      <h2 id="difficulty-title">Stufe wählen</h2>
+      <h2 id="difficulty-title"></h2>
       <button class="icon-button dialog-close" id="cancel-difficulty" type="button" aria-label="Auswahl schließen">
         <span aria-hidden="true">×</span>
       </button>
-      <div class="difficulty-choices"></div>
+      <fieldset class="difficulty-options">
+        <legend id="difficulty-label">Stufe wählen</legend>
+        <div class="difficulty-choices"></div>
+      </fieldset>
     </dialog>
 
     <dialog class="result-dialog" id="reset-dialog" aria-labelledby="reset-title" aria-describedby="reset-description">
