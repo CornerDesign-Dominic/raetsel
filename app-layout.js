@@ -16,6 +16,14 @@ const ruleContent = {
     ...Array.from(document.querySelectorAll('#grid-rules li'), (item) => item.textContent),
     document.querySelector('#grid-intro').textContent,
   ],
+  zahlenreihe: () => [
+    'Lies die Reihe von links nach rechts und finde den Rechenschritt von einer Zahl zur nächsten.',
+    'Auf Leicht und Mittel bleibt der Schritt gleich. Auf Schwer wechseln sich zwei Schritte ab. Gib die nächste Zahl ein.',
+  ],
+  mustergruppe: () => [
+    'Vergleiche die Farben der Striche in den vier Feldern. Ihre Reihenfolge kann sich ändern.',
+    'Drei Felder haben von jeder Farbe gleich viele Striche. Tippe das Feld an, in dem ein Strich eine andere Farbe hat.',
+  ],
   schatten: () => [
     'Vergleiche den Umriss des Objekts mit den vier Schatten und tippe auf den passenden.',
     'Bei einem falschen Tipp kannst du einen anderen Schatten wählen.',

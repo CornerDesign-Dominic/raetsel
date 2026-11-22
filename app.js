@@ -8,6 +8,8 @@ import './einmaleins.js';
 import './seifenblasen.js';
 import './sudoku.js';
 import './schatten.js';
+import './zahlenreihe.js';
+import './mustergruppe.js';
 import './pfeilfolge.js';
 import './wo-wohne-ich.js';
 import { updateLayout, focusPageTitle } from './app-layout.js';

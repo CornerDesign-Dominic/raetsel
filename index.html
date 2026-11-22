@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="./seifenblasen.css">
   <link rel="stylesheet" href="./sudoku.css">
   <link rel="stylesheet" href="./schatten.css">
+  <link rel="stylesheet" href="./sequence-training.css">
   <link rel="stylesheet" href="./chalk-finish.css">
   <script type="module" src="./app.js"></script>
   <title>Inveni</title>
@@ -81,6 +82,14 @@
       <rect x="9.75" y="14.5" width="4.5" height="4.5" rx=".7"/>
       <path d="M17 15.75a1.25 1.25 0 0 1 2.5 0c0 1-1.25 1.1-1.25 1.75m0 2v.05"/>
     </symbol>
+    <symbol id="game-icon-zahlenreihe" viewBox="0 0 24 24">
+      <rect x="2" y="8" width="5" height="8" rx="1"/>
+      <rect x="9.5" y="8" width="5" height="8" rx="1"/>
+      <path d="M17 10a2 2 0 1 1 2.6 1.9c-.7.3-1 1-1 1.6m0 2.4v.1"/>
+    </symbol>
+    <symbol id="game-icon-mustergruppe" viewBox="0 0 24 24">
+      <path d="M3 3h6v6H3zm12 0h6v6h-6zM3 15h6v6H3zm12 3 3-4 3 4-3 4z"/>
+    </symbol>
     <symbol id="game-icon-schatten" viewBox="0 0 24 24">
       <path d="M4 7.5 9 4l5 3.5v6L9 17l-5-3.5ZM15.5 8l4.5 3.5v6L15 21l-4.5-3.25"/>
       <path d="m15 13 3-2m-4 5 4-2m-4 5 4-2"/>
@@ -140,6 +149,11 @@
             <span><strong>1×1-Training</strong></span>
             <span aria-hidden="true">›</span>
           </a>
+          <a class="game-card" href="#zahlenreihe">
+            <span class="game-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#game-icon-zahlenreihe"></use></svg></span>
+            <span><strong>Zahlenreihe</strong></span>
+            <span aria-hidden="true">›</span>
+          </a>
           <a class="game-card" href="#haus">
             <span class="game-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#game-icon-haus"></use></svg></span>
             <span><strong>Haus</strong></span>
@@ -153,6 +167,16 @@
           <a class="game-card" href="#zeit">
             <span class="game-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#game-icon-zeit"></use></svg></span>
             <span><strong>Zeit</strong></span>
+            <span aria-hidden="true">›</span>
+          </a>
+        </div>
+      </section>
+      <section class="game-group" aria-labelledby="patterns-group">
+        <h3 id="patterns-group">Muster erkennen</h3>
+        <div class="game-list">
+          <a class="game-card" href="#mustergruppe">
+            <span class="game-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#game-icon-mustergruppe"></use></svg></span>
+            <span><strong>Mustergruppe</strong></span>
             <span aria-hidden="true">›</span>
           </a>
         </div>
@@ -362,6 +386,42 @@
         <h2 id="training-title" tabindex="-1">1×1-Training</h2>
       </div>
       <div id="training-game"></div>
+    </section>
+
+    <section data-view="zahlenreihe" aria-labelledby="series-title" hidden>
+      <h2 id="series-title" hidden>Zahlenreihe</h2>
+      <div class="sequence-training">
+        <div class="exercise-intro">
+          <p>Welche Zahl kommt als Nächstes?</p>
+          <p class="exercise-progress" tabindex="-1"></p>
+        </div>
+        <form>
+          <div class="number-series" role="group" aria-label="Zahlen von links nach rechts">
+            <input type="text" inputmode="numeric" enterkeyhint="done" autocomplete="off"
+              maxlength="5" placeholder="?" aria-label="Nächste Zahl">
+          </div>
+          <button type="submit">Lösen</button>
+        </form>
+        <div class="exercise-actions">
+          <p role="status"></p>
+          <button type="button" class="exercise-next" hidden>Weiter</button>
+        </div>
+      </div>
+    </section>
+
+    <section data-view="mustergruppe" aria-labelledby="family-title" hidden>
+      <h2 id="family-title" hidden>Mustergruppe</h2>
+      <div class="sequence-training">
+        <div class="exercise-intro">
+          <p>Welches Feld gehört nicht dazu?</p>
+          <p class="exercise-progress" tabindex="-1"></p>
+        </div>
+        <div class="family-choices" role="group" aria-label="Vier Muster"></div>
+        <div class="exercise-actions">
+          <p role="status"></p>
+          <button type="button" class="exercise-next" hidden>Weiter</button>
+        </div>
+      </div>
     </section>
 
     <section data-view="schatten" aria-labelledby="shadow-title" hidden>
