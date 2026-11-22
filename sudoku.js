@@ -1,4 +1,4 @@
-import { games, levels, markSolved } from './puzzle-levels.js';
+import { games, markSolved } from './puzzle-levels.js';
 import { showHint } from './puzzle-hint.js';
 
 const size = 9;
@@ -26,6 +26,7 @@ const solutions = {
   schwer: '975362814684591732132847965893124657216975348457638291348759126729416583561283479',
 };
 
+const clock = document.querySelector('#sudoku-time');
 const grid = document.querySelector('#sudoku-grid');
 const status = document.querySelector('#sudoku-status');
 const result = document.querySelector('#sudoku-result');
@@ -36,6 +37,11 @@ const undo = document.querySelector('#sudoku-undo');
 const moves = [];
 const digits = Array.from({ length: size }, (_, index) => index + 1);
 let givens, values, selected, storageKey, level;
+let elapsed = 0;
+let startedAt;
+let interval;
+let active = false;
+let completed = false;
 
 const rowOf = index => Math.floor(index / size);
 const columnOf = index => index % size;
@@ -74,7 +80,6 @@ function render() {
     cell.textContent = value || '';
     cell.tabIndex = index === selected ? 0 : -1;
     cell.classList.toggle('is-given', given);
-    cell.classList.toggle('is-peer', shareGroup(index, selected));
     cell.classList.toggle('is-conflict', conflict);
     cell.setAttribute('aria-pressed', index === selected);
     cell.setAttribute('aria-label', 'Zeile ' + (rowOf(index) + 1) + ', Spalte ' + (columnOf(index) + 1) +
@@ -93,9 +98,37 @@ function select(index) {
   render();
 }
 
+function elapsedTime() {
+  return elapsed + (startedAt === undefined ? 0 : performance.now() - startedAt);
+}
+
+function renderTimer() {
+  const seconds = Math.floor(elapsedTime() / 1000);
+  clock.textContent = String(Math.floor(seconds / 60)).padStart(2, '0') +
+    ':' + String(seconds % 60).padStart(2, '0');
+}
+
+function syncTimer() {
+  if (active && !completed && !document.hidden) {
+    if (startedAt === undefined) {
+      startedAt = performance.now();
+      interval = window.setInterval(renderTimer, 250);
+    }
+  } else if (startedAt !== undefined) {
+    elapsed = elapsedTime();
+    startedAt = undefined;
+    window.clearInterval(interval);
+    save();
+  }
+  if (active) renderTimer();
+}
+
+document.addEventListener('visibilitychange', syncTimer);
+
 function save() {
   try {
     localStorage.setItem(storageKey, values.join(''));
+    localStorage.setItem(storageKey + ':time', String(Math.floor(elapsedTime())));
   } catch {
     // The current puzzle remains playable without storage.
   }
@@ -105,6 +138,8 @@ function enter(value) {
   if (givens[selected] || values[selected] === value) return;
   moves.push({ index: selected, previous: values[selected] });
   values[selected] = value;
+  completed = false;
+  syncTimer();
   status.textContent = conflictsAt(selected) ? 'Diese Zahl steht schon im selben Bereich.' : '';
   render();
   save();
@@ -120,6 +155,8 @@ undo.addEventListener('click', () => {
   if (!move) return;
   values[move.index] = move.previous;
   selected = move.index;
+  completed = false;
+  syncTimer();
   status.textContent = 'Letzten Zug rückgängig gemacht.';
   render();
   save();
@@ -152,6 +189,8 @@ document.querySelector('#sudoku-check').addEventListener('click', () => {
     status.textContent = 'Es sind noch Felder frei.';
   } else {
     status.textContent = '';
+    completed = true;
+    syncTimer();
     markSolved('sudoku', level);
     if (!result.open) result.showModal();
   }
@@ -165,8 +204,11 @@ games.set('sudoku', {
     storageKey = 'inveni:sudoku:' + level;
     givens = [...puzzles[level].join('')].map(Number);
     let saved = '';
+    elapsed = 0;
     try {
       saved = localStorage.getItem(storageKey) ?? '';
+      const savedTime = Number(localStorage.getItem(storageKey + ':time'));
+      if (Number.isSafeInteger(savedTime) && savedTime >= 0) elapsed = savedTime;
     } catch {
       // The puzzle can still be played without storage.
     }
@@ -174,10 +216,14 @@ games.set('sudoku', {
     selected = givens.indexOf(0);
     moves.length = 0;
     status.textContent = '';
-    document.querySelector('#sudoku-level').textContent = levels[level];
+    completed = values.join('') === solutions[level];
+    active = true;
+    syncTimer();
     render();
   },
   leave() {
+    active = false;
+    syncTimer();
     if (result.open) result.close();
   },
 });

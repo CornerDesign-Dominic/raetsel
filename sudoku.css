@@ -6,7 +6,7 @@
   color: var(--petrol);
 }
 
-.sudoku-level { font-size: .875rem; font-weight: 700; }
+.sudoku-timer { text-align: center; font-size: .875rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 .sudoku-grid {
   display: grid;
   grid-template-columns: repeat(9, minmax(0, 1fr));
@@ -32,10 +32,10 @@
 .sudoku-cell:nth-child(n + 19):nth-child(-n + 27),
 .sudoku-cell:nth-child(n + 46):nth-child(-n + 54) { border-block-end: 2px solid var(--petrol); }
 .sudoku-cell:nth-child(n + 73) { border-block-end: 0; }
-.sudoku-cell.is-peer { background: #f4e6c9; }
 .sudoku-cell.is-given { background: #e5d8b8; font-weight: 850; }
 .sudoku-cell.is-conflict { background: #f6c9b9; color: #852b22; }
-.sudoku-cell[aria-pressed='true'] { box-shadow: inset 0 0 0 2px #296960; }
+.sudoku-cell[aria-pressed='true'] { background: #cce6dd; box-shadow: inset 0 0 0 2px #296960; }
+.sudoku-cell.is-conflict[aria-pressed='true'] { background: #f6c9b9; }
 .sudoku-cell:focus-visible { outline: 2px dashed var(--petrol); outline-offset: -5px; }
 
 .sudoku-pad {
