@@ -148,7 +148,7 @@ body.is-playing {
   text-decoration: none;
   font-weight: 650;
 }
-.overview-nav a[aria-current='page'] { border-color: var(--gold); color: #ffe4b5; }
+.overview-nav a[aria-current='page'] { border-color: var(--chalk-accent); color: var(--paper); }
 .overview-nav a:focus-visible { outline-color: var(--paper); outline-offset: -4px; }
 .overview-nav svg {
   flex: none;

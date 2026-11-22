@@ -74,7 +74,7 @@
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
-.arrow-stage[data-phase='watch'] [data-arrow-symbol] { color: var(--gold); }
+.arrow-stage[data-phase='watch'] [data-arrow-symbol] { color: var(--chalk-accent); }
 .arrow-display [data-arrow-step] { font-size: .8rem; font-variant-numeric: tabular-nums; }
 .arrow-display [data-arrow-step]:empty { display: none; }
 
@@ -84,7 +84,7 @@
   height: .45rem;
   accent-color: #2a674a;
 }
-.arrow-stage[data-phase='watch'] .arrow-progress { accent-color: var(--gold); color-scheme: dark; }
+.arrow-stage[data-phase='watch'] .arrow-progress { accent-color: var(--chalk-accent); color-scheme: dark; }
 .arrow-message { grid-row: 4; font-size: .9rem; line-height: 1.3; }
 .arrow-message:focus { outline: none; }
 
@@ -132,7 +132,7 @@
   touch-action: manipulation;
 }
 
-.arrow-pad button:enabled:active { background: var(--petrol); color: var(--gold); }
+.arrow-pad button:enabled:active { background: var(--petrol); color: var(--chalk-accent); }
 .arrow-pad button:disabled { cursor: default; opacity: .48; }
 
 @media (orientation: landscape) and (max-height: 560px) {

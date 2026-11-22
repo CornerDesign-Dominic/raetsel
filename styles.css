@@ -3,7 +3,7 @@
   --petrol: #173a3b;
   --paper: #f6e9d3;
   --sand: #f0dcb7;
-  --gold: #e9ad59;
+  --chalk-accent: #aec9ba;
   --terracotta: #a9543d;
   --ink: #52392b;
   font-family: system-ui, sans-serif;
@@ -44,7 +44,7 @@ h1, h2 { margin: 0; font-family: Georgia, serif; }
 h1 { font-size: clamp(3.5rem, 10vw, 6rem); line-height: 1; }
 h2 { font-size: clamp(1.65rem, 4vw, 2.15rem); color: var(--petrol); }
 p { margin: 0; line-height: 1.5; }
-.cover p { color: var(--gold); }
+.cover p { color: var(--chalk-accent); }
 
 .board {
   position: relative;
@@ -86,7 +86,7 @@ button, summary {
   font: 600 1rem/1.4 system-ui, sans-serif;
   cursor: pointer;
 }
-button { background: var(--gold); }
+button { background: var(--chalk-accent); border-color: #5d7a6f; }
 summary { width: fit-content; }
 :focus-visible { outline: 3px solid var(--petrol); outline-offset: 4px; }
 
@@ -119,12 +119,12 @@ summary { width: fit-content; }
 .game-card:hover { border-color: var(--terracotta); }
 .game-card strong { display: block; font-family: Georgia, serif; font-size: 1.35rem; }
 .game-card small { display: block; margin-top: .25rem; color: var(--ink); line-height: 1.4; }
-.game-symbol { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; background: var(--petrol); color: var(--gold); border-radius: .55rem; font-size: 1.5rem; }
+.game-symbol { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; background: var(--petrol); color: var(--chalk-accent); border-radius: .55rem; font-size: 1.5rem; }
 .back-link { position: relative; display: inline-flex; align-items: center; min-height: 2.75rem; color: var(--petrol); }
 .back-link + h2 { margin-top: .5rem; }
 .puzzle-header { padding: 1rem clamp(1rem, 4vw, 2rem); background: var(--petrol); color: var(--paper); border-radius: 1.25rem; }
 .puzzle-header h2 { margin-block: .45rem; color: inherit; }
-.puzzle-header p:first-child { color: var(--gold); font-weight: 600; }
+.puzzle-header p:first-child { color: var(--chalk-accent); font-weight: 600; }
 .puzzle-layout { display: grid; gap: .85rem; margin-block: 1rem; }
 .puzzle-layout .board { margin: 0; padding: clamp(1rem, 3vw, 1.75rem); }
 .puzzle-layout h3, .rules-card h3 { margin: 0; color: var(--petrol); font-family: Georgia, serif; font-size: 1.35rem; }
@@ -277,8 +277,10 @@ summary { width: fit-content; }
 }
 
 .difficulty-choices { display: grid; gap: .5rem; margin-block-end: .85rem; }
+.difficulty-choices button { background: #fbefd9; border-color: #9a836a; }
+.difficulty-choices button:hover { border-color: var(--petrol); }
 .secondary-action { background: #fbefd9; }
-#reset-dialog #confirm-reset { background: var(--gold); }
+#reset-dialog #confirm-reset { background: #f1d2c7; border-color: var(--terracotta); }
 #reset-progress { margin-block-start: .5rem; }
 .logic-grid { table-layout: fixed; }
 .logic-grid caption { text-align: start; color: var(--petrol); font-weight: 700; margin-block: .4rem; }
