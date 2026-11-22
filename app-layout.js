@@ -23,6 +23,11 @@ const ruleContent = {
     'Gib an der Endhaltestelle ein, wie viele Fahrgäste noch im Bus sind.',
     'Eine richtige Antwort verlängert die nächste Fahrt um eine Haltestelle. Bei einer falschen Antwort wird sie kürzer, bis auf mindestens drei Haltestellen.',
   ],
+  seifenblasen: () => [
+    'Beginne bei 1 und tippe immer die nächsthöhere Zahl an.',
+    'Eine richtige Blase platzt. An einer freien Stelle erscheint eine neue Blase mit einer Zahl, die um eins höher ist als die bisher größte.',
+    'Auf Leicht bleiben alle Blasen stehen. Auf Mittel bewegen sich zwei, auf Schwer fünf.',
+  ],
   pfeilfolge: () => [
     'Merke dir die Pfeile und tippe sie danach in derselben Reihenfolge ein.',
     'Die erste Folge hat drei Pfeile. Nach jeder richtigen Runde kommt ein Pfeil zur selben Folge hinzu.',

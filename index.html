@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="./wo-wohne-ich.css">
   <link rel="stylesheet" href="./app-layout.css">
   <link rel="stylesheet" href="./einmaleins.css">
+  <link rel="stylesheet" href="./seifenblasen.css">
   <script type="module" src="./app.js"></script>
   <title>Inveni</title>
 </head>
@@ -210,6 +211,11 @@
           <span><strong>Busfahrt</strong><small>Zähle mit, während Fahrgäste ein- und aussteigen.</small></span>
           <span aria-hidden="true">›</span>
         </a>
+        <a class="game-card" href="#seifenblasen">
+          <span class="game-symbol" aria-hidden="true">○</span>
+          <span><strong>Seifenblasen</strong><small>Tippe die Zahlen der Reihe nach an.</small></span>
+          <span aria-hidden="true">›</span>
+        </a>
       </div>
     </section>
 
@@ -257,6 +263,11 @@
         <h2 id="bus-game-title" tabindex="-1">Busfahrt</h2>
       </div>
       <div id="bus-game"></div>
+    </section>
+
+    <section data-view="seifenblasen" aria-labelledby="bubble-title" hidden>
+      <h2 id="bubble-title" hidden>Seifenblasen</h2>
+      <div id="bubble-game"></div>
     </section>
 
     <section data-view="pfeilfolge" aria-labelledby="arrow-game-title" hidden>

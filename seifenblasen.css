@@ -1,0 +1,108 @@
+.play-view[data-view='seifenblasen'] { block-size: 100%; }
+
+#bubble-game {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) 1.25rem;
+  gap: .4rem;
+  width: min(100%, 38rem);
+  height: 100%;
+  max-height: 43rem;
+  margin-inline: auto;
+}
+
+.bubble-toolbar { display: flex; gap: .4rem; }
+.bubble-stats {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: .5rem;
+  margin: 0;
+  padding: .35rem .65rem;
+  border: 1px solid #bc9e76;
+  border-radius: .55rem;
+  background: #fbefd9;
+}
+.bubble-stats > div { display: flex; flex-wrap: wrap; align-items: baseline; gap: .05rem .4rem; }
+.bubble-stats > div:last-child { justify-content: end; text-align: end; }
+.bubble-stats dt { font-size: .85rem; }
+.bubble-stats dd { margin: 0; font-weight: 750; color: var(--petrol); font-variant-numeric: tabular-nums; }
+.bubble-restart { flex: none; }
+
+.bubble-field {
+  container-type: size;
+  display: grid;
+  grid-template: repeat(3, minmax(0, 1fr)) / repeat(3, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid #668982;
+  border-radius: .65rem;
+  background: radial-gradient(ellipse at 25% 12%, #285957, #173a3b 75%);
+}
+
+.bubble-slot { display: grid; place-items: center; }
+.bubble-orbit {
+  position: relative;
+  display: grid;
+  place-items: center;
+  inline-size: min(23cqw, 23cqh, 6.25rem);
+  aspect-ratio: 1;
+  --drift-x: min(4.3cqw, 1.25rem);
+  --drift-y: min(4.3cqh, 1.25rem);
+  --bubble-period: 4.3s;
+}
+.bubble-slot:nth-child(even) .bubble-orbit { --bubble-period: 3.5s; }
+.bubble-orbit[data-moving] {
+  animation: bubble-drift var(--bubble-period) ease-in-out var(--bubble-delay) infinite;
+}
+.bubble-slot:nth-child(even) .bubble-orbit[data-moving] { animation-direction: reverse; }
+.bubble-orbit:has(:focus-visible) { animation-play-state: paused; }
+
+.bubble {
+  width: 100%;
+  height: 100%;
+  min-block-size: 0;
+  padding: 0;
+  border: 1px solid #bdede7;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 28% 22%, #f4fff5 5%, #c5e7d6 27%, #a8d5cf 63%, #98bade 100%);
+  box-shadow: inset 0 0 0 .15rem #f9fcf355, inset 0 -.2rem .5rem #615ca542;
+  color: #173a3b;
+  font-size: clamp(.9rem, min(8cqw, 8cqh), 2.25rem);
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  touch-action: manipulation;
+}
+.bubble:active { background: #e8efbc; }
+.bubble:focus-visible { outline: 2px solid #fff5cd; outline-offset: 2px; }
+.bubble.is-missed { background: #f4c6b8; border-color: #fff0e9; }
+
+.bubble-burst {
+  position: absolute;
+  inset: 8%;
+  border: .18rem dotted #c5ede2;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: bubble-burst .24s ease-out both;
+}
+.bubble-feedback {
+  text-align: center;
+  font-size: .9rem;
+  line-height: 1.25rem;
+}
+
+@keyframes bubble-drift {
+  0%, 100% { transform: translate(calc(-1 * var(--drift-x)), 0); }
+  25% { transform: translate(0, calc(-1 * var(--drift-y))); }
+  50% { transform: translate(var(--drift-x), 0); }
+  75% { transform: translate(0, var(--drift-y)); }
+}
+@keyframes bubble-burst {
+  from { transform: scale(.75); opacity: 1; }
+  to { transform: scale(1.2); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bubble-orbit { --drift-x: .3rem; --drift-y: .3rem; }
+  .bubble-orbit[data-moving] { animation-duration: 8s; }
+  .bubble-burst { animation-duration: .01s; }
+}
