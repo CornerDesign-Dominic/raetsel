@@ -26,7 +26,7 @@ root.innerHTML = `
       <h3 id="training-summary" tabindex="-1"></h3>
       <dl class="training-stats" aria-label="Statistik">
         <div><dt>Richtig</dt><dd id="training-score">0 / 0</dd></div>
-        <div><dt>Antworten pro Sekunde</dt><dd id="training-speed">0,00</dd></div>
+        <div><dt>Sekunden pro Antwort</dt><dd id="training-speed">–</dd></div>
       </dl>
     </section>
     <p id="training-feedback" class="training-sr" role="status"></p>
@@ -141,7 +141,7 @@ function finish(elapsed) {
   setStatus('finished');
   summary.textContent = 'Durchlauf beendet';
   score.textContent = correct + ' / ' + answered;
-  speed.textContent = format.format(elapsed > 0 ? answered / elapsed : 0);
+  speed.textContent = answered > 0 ? format.format(elapsed / answered) + ' s' : '–';
   summary.focus({ preventScroll: true });
 }
 
