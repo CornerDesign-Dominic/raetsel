@@ -129,6 +129,15 @@
   text-align: center;
 }
 
+.training-task input:focus {
+  border-color: var(--petrol);
+  outline: none;
+}
+
+@media (forced-colors: active) {
+  .training-task input:focus { border-color: Highlight; }
+}
+
 #training-submit {
   width: 100%;
   min-block-size: 3.67rem;
