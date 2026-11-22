@@ -105,6 +105,12 @@
     <section class="board" data-view="mein-profil" aria-labelledby="profile-title" hidden>
       <h2 id="profile-title" hidden>Mein Profil</h2>
       <p>Hier findest du später deine persönlichen Angaben wie Name und Alter, deine Spielstatistiken und Einstellungen.</p>
+      <section class="app-update" aria-label="App-Verwaltung">
+        <button id="update-app" type="button" hidden>Nach Updates suchen</button>
+        <p id="update-status" role="status"></p>
+        <button id="reset-progress" type="button">Spielstand zurücksetzen</button>
+        <p id="reset-status" role="status"></p>
+      </section>
     </section>
 
     <section data-view="logikgitter" aria-labelledby="grid-title" hidden>
@@ -309,13 +315,6 @@
         <button id="confirm-reset" type="submit">Zurücksetzen</button>
       </form>
     </dialog>
-
-    <section class="app-update" data-view="" aria-label="App-Updates">
-      <button id="update-app" type="button" hidden>Nach Updates suchen</button>
-      <p id="update-status" role="status"></p>
-      <button id="reset-progress" type="button">Spielstand zurücksetzen</button>
-      <p id="reset-status" role="status"></p>
-    </section>
 
     <section id="install" class="install" aria-label="App installieren" hidden>
       <button id="install-button" type="button">Inveni installieren</button>
