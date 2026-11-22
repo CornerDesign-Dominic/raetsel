@@ -31,7 +31,7 @@ const ruleContent = {
     'Bei einer richtigen Antwort kommt in der nächsten Runde eine Gruppe hinzu. Bei einer falschen Antwort wird es eine Gruppe weniger, bis auf mindestens drei.',
   ],
   merken: () => [
-    'Merke dir die Positionen der Zahlen, solange sie sichtbar sind.',
+    'Tippe auf die Spielfläche und merke dir die Positionen der Zahlen.',
     'Tippe anschließend die Felder in der Reihenfolge 1, 2, 3 und so weiter an.',
     'Ein Durchlauf hat fünf Runden. Die Anzahl der Zahlen steigt nach jeder zweiten Runde.',
   ],

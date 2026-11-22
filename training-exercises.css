@@ -10,7 +10,47 @@
 .training-prompt { min-block-size: 1.4rem; font-weight: 650; }
 .training-prompt:empty { display: none; }
 
+#merken-game { text-align: center; }
+.memory-stage {
+  position: relative;
+  display: grid;
+  grid-template-rows: 3.5rem auto;
+  gap: .35rem;
+  padding: .45rem;
+  border: 1px solid #b89973;
+  border-radius: .65rem;
+  background: #fbefd9;
+}
+.memory-status {
+  display: grid;
+  grid-area: 1 / 1;
+  place-items: center;
+  font-weight: 700;
+}
+.memory-status:focus { outline: none; }
+.memory-action {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  gap: .1rem;
+  width: 100%;
+  padding: .5rem .35rem;
+  border: 0;
+  background: transparent;
+  line-height: 1.2;
+  touch-action: manipulation;
+}
+.memory-action strong { font-size: 1.05rem; }
+.memory-action span { font-size: .875rem; }
+#merken-game[data-phase='ready'] .memory-action { align-content: center; }
+#merken-game[data-phase='ready'] .memory-action span { font-size: 1.1rem; }
+#merken-game[data-phase='ready'] .memory-grid { visibility: hidden; }
+#merken-game:is([data-phase='result'], [data-phase='finished']) .memory-action:active { background: #173a3b12; }
+
 .memory-grid {
+  grid-area: 2 / 1;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: .4rem;
@@ -29,7 +69,8 @@
 .memory-tile[data-active='false'] { border-color: #d6c4a4; background: #eddfc5; }
 #merken-game[data-phase='reveal'] .memory-tile[data-active='true'] { background: var(--petrol); color: var(--paper); }
 #merken-game[data-phase='recall'] .memory-tile:enabled { border: 2px solid #4e7c72; background: #fbefd9; }
-.memory-tile[data-found='true'] { border-color: #638773; background: #d5e7d7; }
+.memory-tile[data-found='true'] { border-color: #638773; background: #d5e7d7; color: #246348; }
+.memory-tile[data-wrong='true'] { border-color: #a03629; background: #fae3d7; color: #a03629; }
 
 .time-clocks {
   display: grid;
