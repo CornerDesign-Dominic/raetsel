@@ -113,6 +113,8 @@ function reset() {
   window.clearInterval(timer);
   history.replaceChildren();
   feedback.textContent = '';
+  input.value = '';
+  submit.disabled = true;
   answered = 0;
   correct = 0;
   current = undefined;
@@ -184,7 +186,15 @@ input.addEventListener('keydown', (event) => {
 });
 
 mountNumberPad(root.querySelector('#training-pad'), input);
-go.addEventListener('click', start);
+go.addEventListener('click', () => {
+  if (status === 'finished') {
+    reset();
+    go.focus({ preventScroll: true });
+    return;
+  }
+
+  start();
+});
 stop.addEventListener('click', () => finish(elapsedSeconds()));
 
 games.set('einmaleins', {
