@@ -102,6 +102,9 @@
     <symbol id="icon-puzzles" viewBox="0 0 24 24">
       <path d="m12 3 9 9-9 9-9-9Z"/>
     </symbol>
+    <symbol id="icon-home" viewBox="0 0 24 24">
+      <path d="m3 10 9-7 9 7M5 9v11h5v-6h4v6h5V9"/>
+    </symbol>
     <symbol id="icon-profile" viewBox="0 0 24 24">
       <circle cx="12" cy="8" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/>
     </symbol>
@@ -111,19 +114,32 @@
       <a id="app-back" class="header-action" href="#start" hidden>
         <span class="back-chevron" aria-hidden="true">‹</span> Zurück
       </a>
-      <h1 id="app-title" tabindex="-1">Training</h1>
+      <h1 id="app-title" tabindex="-1">Start</h1>
       <button id="app-rules" class="header-action" type="button"
         aria-haspopup="dialog" aria-controls="rules-dialog" hidden>
         Regeln
       </button>
     </div>
     <nav id="overview-nav" class="overview-nav" aria-label="Hauptnavigation" hidden>
+      <a href="#start"><svg aria-hidden="true"><use href="#icon-home"></use></svg>Start</a>
       <a href="#training"><svg aria-hidden="true"><use href="#icon-training"></use></svg>Training</a>
       <a href="#raetsel"><svg aria-hidden="true"><use href="#icon-puzzles"></use></svg>Rätsel</a>
       <a href="#mein-profil"><svg aria-hidden="true"><use href="#icon-profile"></use></svg>Profil</a>
     </nav>
   </header>
   <main class="home">
+    <section class="overview" data-view="start" aria-labelledby="start-title" hidden>
+      <h2 id="start-title" hidden>Start</h2>
+      <section class="start-planned" aria-labelledby="start-planned-title">
+        <h3 id="start-planned-title">In Planung</h3>
+        <ul>
+          <li>Wochenrätsel</li>
+          <li>Teste deinen IQ</li>
+          <li>Dein Tagesdurchlauf</li>
+        </ul>
+      </section>
+    </section>
+
     <section class="overview" data-view="training" aria-labelledby="training-menu-title" hidden>
       <h2 id="training-menu-title" hidden>Training</h2>
       <section class="game-group" aria-labelledby="memory-group">
@@ -270,7 +286,7 @@
 
     <template id="paused-language-category">
       <section class="board" data-view="sprache" aria-labelledby="language-title" hidden>
-        <a class="back-link" href="#start">← Rätselbereiche</a>
+        <a class="back-link" href="#raetsel">← Rätselbereiche</a>
         <h2 id="language-title" tabindex="-1">Sprache</h2>
         <div class="game-list">
           <a class="game-card" href="#wortverbindung">

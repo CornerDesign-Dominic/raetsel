@@ -128,14 +128,13 @@ const legacyRoutes = new Map([
   ['zahlen-und-muster', 'training'],
   ['zahlen', 'training'],
   ['kurzzeitgedaechtnis', 'training'],
-  ['start', 'training'],
   ['gedaechtnis', 'training'],
 ]);
 let activeGame;
 
 function showView(moveFocus = false) {
   const [requestedRoute, level] = window.location.hash.slice(1).split('/');
-  const route = legacyRoutes.get(requestedRoute) ?? (requestedRoute || 'training');
+  const route = legacyRoutes.get(requestedRoute) ?? (requestedRoute || 'start');
   const game = games.get(route);
   const gameLevel = game && Object.hasOwn(game.options ?? levels, level) ? level : null;
   const needsDifficulty = game && !gameLevel;
