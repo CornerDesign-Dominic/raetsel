@@ -1,6 +1,6 @@
 import { games, markSolved } from './puzzle-levels.js';
 import { mountNumberPad } from './number-pad.js';
-import { addStageAction, mountTrainingSession } from './training-session.js';
+import { addStageAction, mountLives, mountTrainingSession } from './training-session.js';
 
 const game = 'haus';
 const firstGroupCount = 3;
@@ -20,7 +20,6 @@ stage.innerHTML = `
   <div class="training-toolbar">
     <dl class="training-stats training-progress">
       <div><dt>Gruppen</dt><dd id="house-group-display"></dd></div>
-      <div><dt>Leben</dt><dd id="house-lives"></dd></div>
     </dl>
   </div>
   <form id="house-answer" class="training-board number-training-form">
@@ -53,7 +52,7 @@ stage.innerHTML = `
 `;
 
 const groupDisplay = stage.querySelector('#house-group-display');
-const lifeDisplay = stage.querySelector('#house-lives');
+const renderLives = mountLives(stage.querySelector('.training-stats'));
 const feedback = stage.querySelector('.house-feedback');
 const roundResult = stage.querySelector('#house-round-result');
 const roundDetail = stage.querySelector('#house-round-detail');
@@ -217,7 +216,7 @@ function resetRun() {
   scene.dataset.motion = 'parked';
   people.replaceChildren();
   groupDisplay.textContent = '0 / ' + nextGroupCount;
-  lifeDisplay.textContent = lives;
+  renderLives(lives);
   status.textContent = '';
   showPhase('ready');
 }
@@ -269,12 +268,13 @@ form.addEventListener('submit', (event) => {
   const correct = Number(response) === round.inside;
   nextGroupCount = Math.max(firstGroupCount, round.groups.length + (correct ? 1 : -1));
   roundsAnswered++;
+  const outOfLives = !correct && lives === 0;
   if (correct) correctRounds++;
-  else lives--;
-  lifeDisplay.textContent = lives;
+  else if (!outOfLives) lives--;
+  renderLives(lives);
 
   const detail = round.inside === 1 ? 'Im Haus war 1 Person.' : 'Im Haus waren ' + round.inside + ' Personen.';
-  if (lives > 0) {
+  if (!outOfLives) {
     showRoundFeedback(correct, detail);
     return;
   }
@@ -283,8 +283,8 @@ form.addEventListener('submit', (event) => {
   showPhase('result');
   status.textContent = '';
   session.finish({
-    detail: 'Beide Leben sind aufgebraucht. ' + detail,
-    metrics: [['Richtig', correctRounds + ' / ' + roundsAnswered], ['Fehler', startingLives]],
+    detail: 'Kein Fehlversuch übrig. ' + detail,
+    metrics: [['Richtig', correctRounds + ' / ' + roundsAnswered], ['Fehler', roundsAnswered - correctRounds]],
   });
 });
 

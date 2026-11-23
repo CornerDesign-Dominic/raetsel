@@ -106,3 +106,23 @@ export function addStageAction(stage, action, label = 'Tippe, um zu beginnen') {
   stage.append(button);
   return button;
 }
+
+export function mountLives(stats) {
+  const item = document.createElement('div');
+  item.className = 'training-lives';
+  item.innerHTML = `
+    <dt class="training-sr">Verbleibende Fehlversuche</dt>
+    <dd>
+      <span data-life-count></span><span aria-hidden="true">×</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path class="training-heart-outline" d="M12 20.4C9.1 18.2 3 13.9 2.8 8.9 2.6 4.1 8.2 2.6 12 7.1c3.5-4.4 9.3-3 9.2 1.7-.2 4.9-6.3 9.4-9.2 11.6Z"/>
+        <path class="training-heart-grain" d="m6.4 9.3 2.2-2.1m-2 5 3.4-3.3m-1.4 5.1 3.8-3.6m-.9 5.1 5-4.8m-2.5 5.2 3-2.8"/>
+      </svg>
+    </dd>`;
+  stats.append(item);
+  const count = item.querySelector('[data-life-count]');
+  return (lives) => {
+    count.textContent = lives;
+    item.classList.toggle('is-empty', lives === 0);
+  };
+}

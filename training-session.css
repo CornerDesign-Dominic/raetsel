@@ -102,3 +102,10 @@
   .memory-grid { width: min(100%, 22rem); }
   .memory-tile { min-block-size: clamp(1.8rem, 10dvh, 3.5rem); }
 }
+
+.training-lives dd { display: inline-flex; align-items: center; }
+.training-lives svg { width: 1.45rem; height: 1.45rem; margin-inline-start: .25rem; color: var(--terracotta); }
+.training-heart-outline { fill: currentColor; fill-opacity: .17; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; }
+.training-heart-grain { fill: none; stroke: currentColor; stroke-width: 1.15; stroke-dasharray: .8 1.2; stroke-linecap: round; opacity: .65; }
+.training-lives.is-empty .training-heart-outline { fill: none; }
+.training-lives.is-empty .training-heart-grain { display: none; }

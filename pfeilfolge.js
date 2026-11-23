@@ -1,5 +1,5 @@
 import { games, markSolved } from './puzzle-levels.js';
-import { mountTrainingSession } from './training-session.js';
+import { mountLives, mountTrainingSession } from './training-session.js';
 
 const gameId = 'pfeilfolge';
 const directions = {
@@ -42,7 +42,6 @@ game.innerHTML = `
     <div class="arrow-toolbar">
       <dl class="training-stats training-progress">
         <div><dt>Pfeile</dt><dd data-arrow-length></dd></div>
-        <div><dt>Wiederholungen</dt><dd data-arrow-retries></dd></div>
       </dl>
     </div>
     <div class="arrow-stage" data-arrow-stage tabindex="-1">
@@ -61,7 +60,7 @@ game.innerHTML = `
 `;
 
 const length = game.querySelector('[data-arrow-length]');
-const retries = game.querySelector('[data-arrow-retries]');
+const renderLives = mountLives(game.querySelector('.training-stats'));
 const stage = game.querySelector('[data-arrow-stage]');
 const title = game.querySelector('[data-arrow-title]');
 const prompt = game.querySelector('[data-arrow-prompt]');
@@ -104,7 +103,7 @@ function setPhase(value, heading = '', instruction = '') {
   next.hidden = !instruction;
   symbol.hidden = phase !== 'watch';
   length.textContent = sequence.length;
-  retries.textContent = retriesLeft;
+  renderLives(retriesLeft);
   session.setRunning(phase !== 'idle' && phase !== 'ended');
   for (const button of directionButtons) button.disabled = phase !== 'input';
 }

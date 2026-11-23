@@ -42,7 +42,7 @@ const ruleContent = {
     'Jede Gruppe geht entweder hinein oder hinaus. Dieselbe Richtung kommt höchstens zweimal hintereinander vor.',
     'Gib am Ende der Runde an, wie viele Personen noch im Haus sind.',
     'Bei einer richtigen Antwort kommt in der nächsten Runde eine Gruppe hinzu. Bei einer falschen Antwort wird es eine Gruppe weniger, bis auf mindestens drei.',
-    'Solange du noch ein Leben hast, startet die nächste Runde nach drei Sekunden. Jeder Fehler kostet ein Leben. Nach zwei Fehlern endet der Durchlauf.',
+    'Die nächste Runde startet nach drei Sekunden. Das Herz zeigt, wie viele Fehler du dir noch erlauben kannst. Bei 0× beendet der nächste Fehler den Durchlauf.',
     'Je nach Schwierigkeit sind höchstens 15, 25 oder 35 Personen gleichzeitig im Haus. Die Animation wird nach jeweils zwei Gruppen schneller, bis sie ihr Höchsttempo erreicht.',
   ],
   merken: () => [
@@ -65,7 +65,7 @@ const ruleContent = {
   pfeilfolge: () => [
     'Tippe auf die große Fläche, merke dir die Pfeile und gib sie danach in derselben Reihenfolge ein.',
     'Die erste Folge hat drei Pfeile. Nach jeder richtigen Runde kommt ein Pfeil zur selben Folge hinzu.',
-    'Bei einem Fehler kannst du dieselbe Folge noch einmal sehen. Pro Durchlauf stehen dir zwei Wiederholungen zur Verfügung.',
+    'Das Herz zeigt deine zwei Wiederholungsversuche. Bei einem Fehler kannst du dieselbe Folge noch einmal sehen, solange du einen Versuch übrig hast. Bei 0× beendet der nächste Fehler den Durchlauf.',
   ],
   'wo-wohne-ich': () => [
     'Verfolge die Wegbeschreibung vom markierten Ziel rückwärts und tippe auf das gesuchte Wohnhaus.',

@@ -14,6 +14,8 @@ Das gemeinsame Auswahlmodal aus `puzzle-levels.js` zeigt den Spielnamen und pro 
 | Mitte | Eine große Spielfläche mit der aktuellen Aufgabe oder Szene. Im Bereitschaftszustand startet ein Tipp auf die Fläche den Durchlauf. Verwende „Tippe, um zu beginnen“. |
 | Unten | Der feste Eingabebereich für einen Zahlenblock, Richtungstasten oder eine vergleichbare Steuerung. Bei direkter Interaktion, etwa mit Karten und Blasen, sind die Elemente der Spielfläche selbst die Tippziele. |
 
+Bei Trainings mit begrenzten Fehlversuchen zeigt `mountLives()` in der oberen Leiste ein Kreideherz mit der verbleibenden Anzahl. Bei 0× läuft das Spiel bis zum nächsten Fehler weiter.
+
 Der Reset fragt über ein gemeinsames Modal nach. Die Bestätigung verwirft den laufenden Durchlauf und öffnet den Bereitschaftszustand derselben Stufe. Das × bricht die Abfrage ab. Ein verworfener Durchlauf zählt nicht als Ergebnis. In einem endlosen Modus kann die Aktion „Beenden“ einen Durchlauf bewusst mit Ergebnis abschließen.
 
 Nutze die Fläche des Geräts mit kleinen Außenabständen und gut erreichbaren Tasten. Auf dem Handy im Hochformat steht die Eingabe am unteren Rand. Bei geringer Höhe im Querformat darf sie neben der Aufgabe stehen. Der Spielbereich bleibt fest und die App-Navigation ist während des Spiels ausgeblendet.
