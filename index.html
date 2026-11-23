@@ -391,7 +391,13 @@
     <section data-view="zahlenreihe" aria-labelledby="series-title" hidden>
       <h2 id="series-title" hidden>Zahlenreihe</h2>
       <div class="number-training">
-        <p class="training-progress exercise-progress" tabindex="-1"></p>
+        <div class="training-toolbar">
+          <p class="training-progress exercise-progress" tabindex="-1"></p>
+          <button id="series-reset" class="icon-button training-reset" type="button" aria-label="Durchlauf zurücksetzen"
+            title="Durchlauf zurücksetzen" aria-haspopup="dialog" aria-controls="series-reset-dialog">
+            <svg aria-hidden="true"><use href="#icon-undo-circle"></use></svg>
+          </button>
+        </div>
         <form class="number-training-form training-board">
           <div class="training-stage series-stage">
             <p class="series-prompt">Welche Zahl kommt als Nächstes?</p>
@@ -408,6 +414,17 @@
           </fieldset>
         </form>
       </div>
+      <dialog class="result-dialog training-reset-dialog" id="series-reset-dialog"
+        aria-labelledby="series-reset-title" aria-describedby="series-reset-message">
+        <h2 id="series-reset-title">Durchlauf abbrechen?</h2>
+        <p id="series-reset-message">Du kehrst zur ersten Aufgabe dieser Stufe zurück.</p>
+        <form method="dialog">
+          <button class="icon-button dialog-close" type="submit" aria-label="Weiterspielen" autofocus>
+            <span aria-hidden="true">×</span>
+          </button>
+          <button id="series-confirm-reset" type="button">Durchlauf abbrechen</button>
+        </form>
+      </dialog>
     </section>
 
     <section data-view="mustergruppe" aria-labelledby="family-title" hidden>

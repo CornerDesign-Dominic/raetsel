@@ -15,7 +15,7 @@ root.innerHTML = `
       <div><dt>Zeit</dt><dd id="training-time">0,00 s</dd></div>
       <div><dt>Antworten</dt><dd id="training-answered">0</dd></div>
     </dl>
-    <button id="training-reset" class="icon-button" type="button" aria-label="Durchlauf zurücksetzen"
+    <button id="training-reset" class="icon-button training-reset" type="button" aria-label="Durchlauf zurücksetzen"
       title="Durchlauf zurücksetzen" aria-haspopup="dialog" aria-controls="training-reset-dialog" disabled>
       <svg aria-hidden="true"><use href="#icon-undo-circle"></use></svg>
     </button>
@@ -62,7 +62,7 @@ root.innerHTML = `
       <button id="training-leave" class="secondary-action" type="button">Verlassen</button>
     </div>
   </dialog>
-  <dialog class="result-dialog" id="training-reset-dialog"
+  <dialog class="result-dialog training-reset-dialog" id="training-reset-dialog"
     aria-labelledby="training-reset-title" aria-describedby="training-reset-message">
     <h2 id="training-reset-title">Durchlauf abbrechen?</h2>
     <p id="training-reset-message">Dein Fortschritt in diesem Durchlauf geht verloren.</p>

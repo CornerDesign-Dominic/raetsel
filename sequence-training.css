@@ -114,6 +114,14 @@
   background: #dfebd9;
 }
 
+@media (orientation: portrait) and (max-height: 520px) {
+  .number-training-form:has(.series-stage) .training-controls { block-size: 15rem; }
+  .number-training-form:has(.series-stage) .number-training-submit {
+    min-block-size: 2.75rem;
+    padding-block: .2rem;
+  }
+}
+
 @media (orientation: landscape) and (max-height: 520px) {
   .number-series > * { font-size: clamp(1rem, 3vw, 1.6rem); }
   .family-choices {

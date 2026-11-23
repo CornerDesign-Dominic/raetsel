@@ -24,7 +24,8 @@ const sets = {
 const clueCounts = { leicht: 3, mittel: 4, schwer: 5 };
 const view = document.querySelector('[data-view="zahlenreihe"]');
 const progress = view.querySelector('.exercise-progress');
-const form = view.querySelector('form');
+const form = view.querySelector('.number-training-form');
+const resetDialog = view.querySelector('#series-reset-dialog');
 const row = view.querySelector('.number-series');
 const input = view.querySelector('input');
 const check = form.querySelector('button[type=submit]');
@@ -114,12 +115,26 @@ next.addEventListener('click', () => {
   progress.focus({ preventScroll: true });
 });
 
+function resetRun() {
+  round = 0;
+  showRound();
+}
+
+view.querySelector('#series-reset').addEventListener('click', () => resetDialog.showModal());
+view.querySelector('#series-confirm-reset').addEventListener('click', () => {
+  resetDialog.close();
+  resetRun();
+  progress.focus({ preventScroll: true });
+});
+
 games.set('zahlenreihe', {
   title: 'Zahlenreihe',
   category: 'training',
   load(activeLevel) {
     level = activeLevel;
-    round = 0;
-    showRound();
+    resetRun();
+  },
+  leave() {
+    if (resetDialog.open) resetDialog.close();
   },
 });
