@@ -1,4 +1,5 @@
 import { games, markSolved } from './puzzle-levels.js';
+import { mountTrainingSession } from './training-session.js';
 
 const settings = {
   leicht: { count: 3, preview: 3000 },
@@ -11,19 +12,14 @@ const formatTime = (ms) => seconds.format(ms / 1000) + ' s';
 
 const root = document.querySelector('#merken-game');
 root.innerHTML = `
-  <p class="training-round memory-round" id="merken-round"></p>
+  <div class="training-toolbar"><p class="training-progress" id="merken-round"></p></div>
   <div class="memory-stage">
     <div class="memory-status" id="merken-prompt" tabindex="-1">
       <span id="merken-clock-label"></span>
       <span id="merken-clock" role="timer"></span>
     </div>
     <div class="memory-grid" id="merken-grid" role="group" aria-label="Zahlenfelder"></div>
-    <section class="memory-summary" aria-labelledby="merken-result" hidden>
-      <h3 id="merken-result" tabindex="-1"></h3>
-      <p>Aufdeckzeit</p>
-      <dl id="merken-times"></dl>
-    </section>
-    <button type="button" class="memory-action" id="merken-next">
+    <button type="button" class="memory-action training-ready" id="merken-next">
       <strong data-memory-result></strong>
       <span data-memory-action></span>
     </button>
@@ -34,9 +30,6 @@ const prompt = root.querySelector('#merken-prompt');
 const clockLabel = root.querySelector('#merken-clock-label');
 const clock = root.querySelector('#merken-clock');
 const grid = root.querySelector('#merken-grid');
-const summary = root.querySelector('.memory-summary');
-const summaryTitle = root.querySelector('#merken-result');
-const summaryTimes = root.querySelector('#merken-times');
 const next = root.querySelector('#merken-next');
 const resultLabel = next.querySelector('[data-memory-result]');
 const actionLabel = next.querySelector('[data-memory-action]');
@@ -48,6 +41,12 @@ const tiles = Array.from({ length: 16 }, (_, index) => {
   return tile;
 });
 grid.append(...tiles);
+
+const session = mountTrainingSession(root, {
+  toolbar: root.querySelector('.training-toolbar'),
+  stage: root.querySelector('.memory-stage'),
+  reset,
+});
 
 let level, round, score, phase, frame, phaseStartedAt, roundTimes, sequence, position, wrongTile;
 
@@ -65,7 +64,7 @@ function setPhase(value, message, action = '') {
   resultLabel.hidden = !resultLabel.textContent;
   actionLabel.textContent = action;
   next.hidden = !action;
-  summary.hidden = value !== 'finished';
+  session.setRunning(value !== 'ready' && value !== 'finished');
   grid.hidden = value === 'finished';
 }
 
@@ -136,21 +135,6 @@ function reveal() {
   frame = window.requestAnimationFrame(tick);
 }
 
-function showSummary() {
-  summaryTitle.textContent = `${score} von ${rounds} Folgen richtig`;
-  const total = roundTimes.reduce((sum, duration) => sum + duration, 0);
-  const rows = [...roundTimes.map((duration, index) => [`Runde ${index + 1}`, duration]), ['Gesamt', total]];
-  summaryTimes.replaceChildren(...rows.map(([label, duration]) => {
-    const row = document.createElement('div');
-    const name = document.createElement('dt');
-    const time = document.createElement('dd');
-    name.textContent = label;
-    time.textContent = formatTime(duration);
-    row.append(name, time);
-    return row;
-  }));
-}
-
 function choose(index, keyboard) {
   if (phase !== 'recall' || tiles[index].disabled) return;
   const correct = sequence[position] === index;
@@ -172,9 +156,17 @@ function choose(index, keyboard) {
   stopClock();
   if (round === rounds) {
     if (score === rounds) markSolved('merken', level);
-    showSummary();
-    setPhase('finished', '', 'Tippen für einen neuen Durchlauf');
-    summaryTitle.focus({ preventScroll: true });
+    setPhase('finished', '');
+    const total = roundTimes.reduce((sum, duration) => sum + duration, 0);
+    session.finish({
+      stacked: true,
+      detail: 'Aufdeckzeiten pro Runde',
+      metrics: [
+        ['Richtig', score + ' / ' + rounds],
+        ...roundTimes.map((duration, index) => ['Runde ' + (index + 1), formatTime(duration)]),
+        ['Gesamt', formatTime(total)],
+      ],
+    });
   } else {
     setPhase('result', correct ? 'Sehr gut. Weiter!' : 'Oh nein, das war das falsche Feld.', 'Tippen für die nächste Runde');
     render();
@@ -183,8 +175,7 @@ function choose(index, keyboard) {
 }
 
 next.addEventListener('click', () => {
-  if (phase === 'finished') reset();
-  else if (phase === 'result') round++;
+  if (phase === 'result') round++;
   showRound();
   reveal();
 });
@@ -196,5 +187,8 @@ games.set('merken', {
     level = selectedLevel;
     reset();
   },
-  leave: stopClock,
+  leave() {
+    stopClock();
+    session.leave();
+  },
 });

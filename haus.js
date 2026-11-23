@@ -1,4 +1,6 @@
-import { games, levels, markSolved } from './puzzle-levels.js';
+import { games, markSolved } from './puzzle-levels.js';
+import { mountNumberPad } from './number-pad.js';
+import { addStageAction, mountTrainingSession } from './training-session.js';
 
 const game = 'haus';
 const firstWaveCount = 3;
@@ -12,56 +14,58 @@ const settings = {
 
 const stage = document.querySelector('#house-game');
 stage.innerHTML = `
-  <section class="board house-board" aria-label="Haus">
-    <div class="house-progress">
-      <p id="house-level"></p>
-      <p id="house-wave-display"></p>
-    </div>
-    <div class="house-scene" id="house-scene" data-motion="parked" aria-hidden="true">
-      <div class="house-platform">
-        <div class="house-building">
-          <div class="house-roof"></div>
-          <div class="house-facade">
-            <i class="house-window"></i><span class="house-door"></span><i class="house-window"></i>
+  <div class="training-toolbar"><p class="training-progress" id="house-wave-display"></p></div>
+  <form id="house-answer" class="training-board number-training-form">
+    <div class="training-stage house-stage">
+      <div class="house-scene" id="house-scene" data-motion="parked" aria-hidden="true">
+        <div class="house-platform">
+          <div class="house-building">
+            <div class="house-roof"></div>
+            <div class="house-facade">
+              <i class="house-window"></i><span class="house-door"></span><i class="house-window"></i>
+            </div>
           </div>
         </div>
+        <div class="house-pavement">
+          <div id="house-people" class="house-people"></div>
+        </div>
       </div>
-      <div class="house-pavement">
-        <div id="house-people" class="house-people"></div>
+      <p id="house-cue" class="house-cue" tabindex="-1"></p>
+      <p id="house-status" class="house-status" role="status" aria-atomic="true"></p>
+      <div class="house-question" hidden>
+        <label for="house-count">Wie viele Personen sind noch im Haus?</label>
+        <input id="house-count" type="text" inputmode="none" autocomplete="off" maxlength="2" placeholder="?"
+          aria-describedby="house-error">
+        <p id="house-error" role="status"></p>
       </div>
     </div>
-    <p id="house-cue" class="house-cue" tabindex="-1"></p>
-    <p id="house-status" class="house-status" role="status" aria-atomic="true"></p>
-    <div class="house-actions" id="house-ready">
-      <button type="button" id="house-start">Runde starten</button>
-    </div>
-    <form id="house-answer" class="house-answer" hidden>
-      <label for="house-count">Wie viele Personen sind noch im Haus?</label>
-      <div class="house-input-row">
-        <input id="house-count" type="text" inputmode="numeric" autocomplete="off" aria-describedby="house-error">
-        <button type="submit">Lösen</button>
-      </div>
-      <p id="house-error" role="status"></p>
-    </form>
-    <div class="house-actions" id="house-next" hidden>
-      <button type="button" id="house-continue">Nächste Runde</button>
-    </div>
-  </section>
+    <fieldset class="training-controls" aria-label="Nummernblock" hidden disabled>
+      <button class="number-training-submit" type="submit" disabled>Abgeben</button>
+      <div class="training-pad"></div>
+    </fieldset>
+  </form>
 `;
 
-const levelDisplay = stage.querySelector('#house-level');
 const waveDisplay = stage.querySelector('#house-wave-display');
 const scene = stage.querySelector('#house-scene');
 const people = stage.querySelector('#house-people');
 const door = stage.querySelector('.house-door');
 const cue = stage.querySelector('#house-cue');
 const status = stage.querySelector('#house-status');
-const readyActions = stage.querySelector('#house-ready');
 const form = stage.querySelector('#house-answer');
 const answer = stage.querySelector('#house-count');
 const error = stage.querySelector('#house-error');
-const nextActions = stage.querySelector('#house-next');
-const continueButton = stage.querySelector('#house-continue');
+
+const playArea = stage.querySelector('.house-stage');
+const controls = form.querySelector('fieldset');
+const submit = form.querySelector('[type=submit]');
+const question = stage.querySelector('.house-question');
+const go = addStageAction(playArea, playRound);
+const session = mountTrainingSession(stage, {
+  toolbar: stage.querySelector('.training-toolbar'), stage: playArea,
+  reset: resetRun, restart: ready,
+});
+mountNumberPad(form.querySelector('.training-pad'), answer);
 
 let currentLevel;
 let nextWaves = firstWaveCount;
@@ -103,9 +107,10 @@ function describe(text, screenReader = text) {
 
 function showPhase(nextPhase) {
   phase = nextPhase;
-  readyActions.hidden = phase !== 'ready';
-  form.hidden = phase !== 'answer';
-  nextActions.hidden = phase !== 'result';
+  go.hidden = phase !== 'ready';
+  scene.hidden = cue.hidden = phase !== 'play';
+  question.hidden = controls.hidden = controls.disabled = phase !== 'answer';
+  session.setRunning(phase === 'play' || phase === 'answer');
 }
 
 function drawPeople(count, direction, previewTime) {
@@ -183,6 +188,7 @@ function playRound() {
   stopTimer();
   showPhase('play');
   answer.value = '';
+  submit.disabled = true;
   answer.removeAttribute('aria-invalid');
   error.textContent = '';
   round = createRound(nextWaves, settings[currentLevel]);
@@ -195,28 +201,38 @@ function playRound() {
   wait(advanceWave, 900);
 }
 
-function load(level) {
+function ready() {
   stopTimer();
-  currentLevel = level;
-  nextWaves = firstWaveCount;
   round = null;
   scene.dataset.motion = 'parked';
   people.replaceChildren();
-  levelDisplay.textContent = levels[level] + ' · maximal ' + settings[level].capacity + ' im Haus';
-  waveDisplay.textContent = firstWaveCount + ' Gruppen';
-  describe('Das Haus ist leer. Zähle mit, wer hineingeht und herauskommt.');
+  waveDisplay.textContent = nextWaves + ' Gruppen';
+  describe('');
   showPhase('ready');
+}
+
+function resetRun() {
+  nextWaves = firstWaveCount;
+  ready();
+}
+
+function load(level) {
+  currentLevel = level;
+  resetRun();
 }
 
 function leave() {
   stopTimer();
-  scene.dataset.motion = 'parked';
   people.replaceChildren();
-  showPhase('ready');
+  session.leave();
 }
 
-stage.querySelector('#house-start').addEventListener('click', () => playRound());
-continueButton.addEventListener('click', () => playRound());
+answer.addEventListener('input', () => {
+  answer.value = answer.value.replace(/\D/g, '');
+  submit.disabled = !answer.value;
+  answer.removeAttribute('aria-invalid');
+  error.textContent = '';
+});
 
 form.addEventListener('submit', (event) => {
   event.preventDefault();
@@ -232,10 +248,11 @@ form.addEventListener('submit', (event) => {
   const correct = Number(response) === round.inside;
   nextWaves = Math.max(firstWaveCount, round.waves.length + (correct ? 1 : -1));
   if (correct) markSolved(game, currentLevel);
-  const remaining = round.inside === 1 ? '1 Person' : round.inside + ' Personen';
-  describe((correct ? 'Richtig! ' : 'Knapp daneben. ') + 'Im Haus: ' + remaining + '. Nächste Runde: ' + nextWaves + ' Gruppen.');
   showPhase('result');
-  continueButton.focus({ preventScroll: true });
+  session.finish({
+    detail: correct ? 'Richtig gezählt!' : 'Knapp daneben.',
+    metrics: [['Deine Antwort', response], ['Im Haus', round.inside], ['Gruppen als Nächstes', nextWaves]],
+  });
 });
 
 games.set(game, { title: 'Haus', category: 'training', load, leave });

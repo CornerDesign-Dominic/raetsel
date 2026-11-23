@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="./schatten.css">
   <link rel="stylesheet" href="./sequence-training.css">
   <link rel="stylesheet" href="./chalk-finish.css">
+  <link rel="stylesheet" href="./training-session.css">
   <script type="module" src="./app.js"></script>
   <title>Inveni</title>
 </head>
@@ -363,7 +364,7 @@
 
     <section data-view="haus" aria-labelledby="house-game-title" hidden>
       <h2 id="house-game-title" hidden>Haus</h2>
-      <div id="house-game"></div>
+      <div id="house-game" class="number-training"></div>
     </section>
 
     <section data-view="merken" aria-labelledby="merken-title" hidden>
@@ -373,7 +374,7 @@
 
     <section data-view="zeit" aria-labelledby="zeit-title" hidden>
       <h2 id="zeit-title" hidden>Zeit</h2>
-      <div id="zeit-game"></div>
+      <div id="zeit-game" class="number-training"></div>
     </section>
 
     <section data-view="seifenblasen" aria-labelledby="bubble-title" hidden>
@@ -409,15 +410,11 @@
       <div class="number-training">
         <div class="training-toolbar">
           <p class="training-progress exercise-progress" tabindex="-1"></p>
-          <button id="series-reset" class="icon-button training-reset" type="button" aria-label="Durchlauf zurücksetzen"
-            title="Durchlauf zurücksetzen" aria-haspopup="dialog" aria-controls="series-reset-dialog">
-            <svg aria-hidden="true"><use href="#icon-undo-circle"></use></svg>
-          </button>
         </div>
         <form class="number-training-form training-board">
           <div class="training-stage series-stage">
-            <p class="series-prompt">Welche Zahl kommt als Nächstes?</p>
-            <div class="number-series" role="group" aria-label="Zahlen von links nach rechts">
+            <p class="series-prompt" hidden>Welche Zahl kommt als Nächstes?</p>
+            <div class="number-series" hidden role="group" aria-label="Zahlen von links nach rechts">
               <input type="text" inputmode="none" autocomplete="off"
                 maxlength="5" placeholder="?" aria-label="Nächste Zahl">
             </div>
@@ -430,31 +427,20 @@
           </fieldset>
         </form>
       </div>
-      <dialog class="result-dialog training-reset-dialog" id="series-reset-dialog"
-        aria-labelledby="series-reset-title" aria-describedby="series-reset-message">
-        <h2 id="series-reset-title">Durchlauf abbrechen?</h2>
-        <p id="series-reset-message">Du kehrst zur ersten Aufgabe dieser Stufe zurück.</p>
-        <form method="dialog">
-          <button class="icon-button dialog-close" type="submit" aria-label="Weiterspielen" autofocus>
-            <span aria-hidden="true">×</span>
-          </button>
-          <button id="series-confirm-reset" type="button">Durchlauf abbrechen</button>
-        </form>
-      </dialog>
     </section>
 
     <section data-view="mustergruppe" aria-labelledby="family-title" hidden>
       <h2 id="family-title" hidden>Mustergruppe</h2>
-      <div class="sequence-training">
-        <div class="exercise-intro">
-          <p>Welches Feld gehört nicht dazu?</p>
-          <p class="exercise-progress" tabindex="-1"></p>
+      <div class="number-training">
+        <div class="training-toolbar"><p class="training-progress exercise-progress" tabindex="-1"></p></div>
+        <div class="training-stage family-stage">
+          <div class="family-task" hidden>
+            <p>Welches Feld gehört nicht dazu?</p>
+            <div class="family-choices" role="group" aria-label="Vier Muster"></div>
+            <p role="status"></p>
+          </div>
         </div>
-        <div class="family-choices" role="group" aria-label="Vier Muster"></div>
-        <div class="exercise-actions">
-          <p role="status"></p>
-          <button type="button" class="exercise-next" hidden>Weiter</button>
-        </div>
+        <button type="button" class="number-training-submit exercise-next" hidden>Weiter</button>
       </div>
     </section>
 

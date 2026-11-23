@@ -1,27 +1,25 @@
-import { games, levels } from './puzzle-levels.js';
+import { games } from './puzzle-levels.js';
+import { addStageAction, mountTrainingSession } from './training-session.js';
 
 const bubbleCount = 6;
 const movingCounts = { leicht: 0, mittel: 2, schwer: 5 };
 const root = document.querySelector('#bubble-game');
 
 root.innerHTML = `
-  <div class="bubble-toolbar">
-    <dl class="bubble-stats">
-      <div><dt>Stufe</dt><dd id="bubble-level"></dd></div>
-      <div><dt>Nächste Zahl</dt><dd id="bubble-next" aria-live="polite">1</dd></div>
-    </dl>
-    <button type="button" class="icon-button bubble-restart" id="bubble-restart"
-      aria-label="Neu starten" title="Neu starten">
-      <svg aria-hidden="true"><use href="#icon-undo-circle"></use></svg>
-    </button>
+  <div class="training-toolbar">
+    <p class="training-progress">Nächste Zahl <strong id="bubble-next">1</strong></p>
   </div>
-  <div class="bubble-field" id="bubble-field" role="group" aria-label="Seifenblasen"></div>
-  <p class="bubble-feedback" id="bubble-feedback" role="status"></p>
+  <div class="training-stage bubble-stage">
+    <div class="bubble-field" id="bubble-field" role="group" aria-label="Seifenblasen" hidden></div>
+    <p class="bubble-feedback" id="bubble-feedback" role="status"></p>
+  </div>
+  <div class="training-stop-row">
+    <button type="button" class="secondary-action" id="bubble-stop" hidden>Beenden</button>
+  </div>
 `;
 
 const field = root.querySelector('#bubble-field');
 const feedback = root.querySelector('#bubble-feedback');
-const levelLabel = root.querySelector('#bubble-level');
 const nextLabel = root.querySelector('#bubble-next');
 const slots = Array.from({ length: 9 }, () => {
   const slot = document.createElement('div');
@@ -34,6 +32,26 @@ let level;
 let nextNumber;
 let highestNumber;
 let lastMiss;
+let misses;
+const stage = root.querySelector('.bubble-stage');
+const stop = root.querySelector('#bubble-stop');
+const go = addStageAction(stage, start);
+const session = mountTrainingSession(root, {
+  toolbar: root.querySelector('.training-toolbar'), stage, reset,
+});
+stop.addEventListener('click', () => {
+  field.hidden = stop.hidden = true;
+  feedback.textContent = '';
+  session.finish({ metrics: [['Geplatzt', nextNumber - 1], ['Fehlversuche', misses]] });
+});
+
+function reset() {
+  session.setRunning(false);
+  field.hidden = stop.hidden = true;
+  nextLabel.textContent = '1';
+  feedback.textContent = '';
+  go.hidden = false;
+}
 
 function randomIndex(length) {
   return Math.floor(Math.random() * length);
@@ -56,6 +74,10 @@ function placeBubble(slot, number, moving) {
 }
 
 function start() {
+  session.setRunning(true);
+  go.hidden = true;
+  field.hidden = stop.hidden = false;
+  misses = 0;
   nextNumber = 1;
   highestNumber = bubbleCount;
   nextLabel.textContent = nextNumber;
@@ -84,11 +106,12 @@ function burst(button) {
 
 field.addEventListener('click', (event) => {
   const button = event.target.closest('.bubble');
-  if (!button) return;
+  if (field.hidden || !button) return;
 
   lastMiss?.classList.remove('is-missed');
   lastMiss = undefined;
   if (Number(button.dataset.number) !== nextNumber) {
+    misses++;
     button.classList.add('is-missed');
     lastMiss = button;
     feedback.textContent = `Tippe auf die ${nextNumber}.`;
@@ -104,14 +127,12 @@ field.addEventListener('click', (event) => {
   if (event.detail === 0) replacement.focus({ preventScroll: true });
 });
 
-root.querySelector('#bubble-restart').addEventListener('click', start);
-
 games.set('seifenblasen', {
   title: 'Seifenblasen',
   category: 'training',
   load(selectedLevel) {
     level = selectedLevel;
-    levelLabel.textContent = levels[level];
-    start();
+    reset();
   },
+  leave: session.leave,
 });

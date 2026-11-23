@@ -1,0 +1,110 @@
+.play-view:is(
+  [data-view='haus'], [data-view='zeit'], [data-view='merken'], [data-view='mustergruppe']
+) { block-size: 100%; }
+
+.training-toolbar > p { align-content: center; }
+.training-toolbar .training-reset { flex: none; width: 2.75rem; }
+.training-result-dialog { max-block-size: calc(100dvh - 2rem); overflow: auto; }
+.training-result-stats {
+  grid-template-columns: none;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+}
+.training-result-list { display: grid; grid: auto-flow / 1fr; padding-inline: .75rem; }
+.training-result-list > div { display: flex; justify-content: space-between; gap: .5rem; }
+.training-result-list > div:last-child {
+  border-block-start: 1px solid #d6c4a6;
+  padding-block-start: .4rem;
+  font-weight: 700;
+}
+
+#merken-game, #bubble-game {
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+  height: 100%;
+  width: min(100%, 38rem);
+  margin-inline: auto;
+}
+.memory-stage {
+  flex: 1;
+  min-block-size: 0;
+  grid-template-rows: minmax(2.5rem, 1fr) auto minmax(0, 1fr);
+}
+.memory-grid {
+  width: min(100%, 25rem);
+  margin-inline: auto;
+}
+.memory-tile { min-block-size: clamp(2rem, 10dvh, 5.5rem); }
+
+.bubble-stage {
+  grid-template-rows: minmax(0, 1fr) 1.4rem;
+  gap: .25rem;
+  padding: .3rem;
+}
+.bubble-stage:has(.bubble-field[hidden]) { grid-template-rows: minmax(0, 1fr); }
+.bubble-stage:has(.bubble-field[hidden]) .bubble-feedback { display: none; }
+
+.family-stage, .house-stage, .time-stage { grid-template: minmax(0, 1fr) / minmax(0, 1fr); }
+.family-stage { container-type: size; }
+.family-task, .time-task, .house-question {
+  display: grid;
+  align-content: center;
+  gap: .35rem;
+  min-height: 0;
+  text-align: center;
+}
+.family-task p:first-child { font-weight: 650; }
+.family-task [role='status'] { min-height: 1.25rem; font-size: .875rem; }
+.family-choices { width: min(100%, 27rem, max(7rem, calc(100cqh - 5rem))); }
+
+.house-stage { align-content: center; grid-template-rows: auto auto; }
+.house-cue { min-block-size: 1.5rem; margin: .4rem 0 0; text-align: center; }
+.house-question label { font-weight: 700; }
+.house-question input, .time-answer input {
+  width: min(100%, 6rem);
+  justify-self: center;
+  min-block-size: 2.5rem;
+  padding: .1rem .3rem;
+  border: 1px solid #a98c70;
+  border-radius: .4rem;
+  background: var(--paper);
+  color: var(--petrol);
+  font: 750 1.25rem/1.1 system-ui, sans-serif;
+  text-align: center;
+}
+.house-question input:focus, .time-answer input[data-active] {
+  outline: 2px solid var(--petrol);
+  outline-offset: -2px;
+}
+.house-question [role='status'] { font-size: .875rem; }
+
+.time-stage { container-type: size; }
+.time-answer {
+  width: min(100%, 15rem);
+  justify-self: center;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.time-clock { padding-block: .15rem; gap: .1rem; }
+.clock-face { width: min(95%, 12rem, max(2.6rem, calc(100cqh - 8rem))); }
+.time-clock figcaption { line-height: 1.15; }
+#zeit-result { font-size: .85rem; min-block-size: 1.15rem; }
+#zeit-result:empty { display: block; }
+
+.arrow-stage[data-phase='ended'] { grid-template-rows: minmax(0, 1fr); }
+.arrow-stage[data-phase='ended'] .arrow-trail { visibility: hidden; }
+
+@media (orientation: portrait) and (max-height: 640px) {
+  .training-board fieldset { block-size: clamp(12.5rem, 43dvh, 16rem); }
+  .number-training-submit { min-block-size: 2.8rem; padding-block: .25rem; }
+}
+
+@media (orientation: landscape) and (max-height: 560px) {
+  .family-choices { width: min(100%, 32rem, max(9rem, calc(4 * (100cqh - 5rem)))); }
+  .memory-grid { width: min(100%, 22rem); }
+  .memory-tile { min-block-size: clamp(1.8rem, 10dvh, 3.5rem); }
+}
+
+@media (orientation: landscape) and (max-height: 520px) {
+  #house-answer:not(:has(fieldset:not([hidden]))) { display: flex; }
+}

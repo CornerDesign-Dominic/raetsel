@@ -1,19 +1,3 @@
-.sequence-training {
-  display: grid;
-  gap: .65rem;
-  width: min(100%, 32rem);
-  margin-inline: auto;
-  padding-block: .25rem;
-  color: var(--petrol);
-}
-.exercise-intro {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: .15rem .65rem;
-}
-.exercise-intro p:first-child { font-weight: 700; }
 .exercise-progress { font-size: .85rem; }
 .series-stage {
   grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr);
@@ -54,15 +38,6 @@
 }
 .number-series input:focus { outline: 2px solid var(--petrol); outline-offset: -2px; }
 .number-series input::placeholder { color: #50756b; opacity: 1; text-align: center; }
-.exercise-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: .5rem;
-  min-height: 3rem;
-}
-.exercise-actions [role='status'] { font-size: .9rem; }
-.exercise-actions button { min-height: 3rem; flex-shrink: 0; }
 .family-choices {
   display: grid;
   width: min(100%, 54dvh, 27rem);
@@ -114,18 +89,9 @@
   background: #dfebd9;
 }
 
-@media (orientation: portrait) and (max-height: 520px) {
-  .number-training-form:has(.series-stage) .training-controls { block-size: 15rem; }
-  .number-training-form:has(.series-stage) .number-training-submit {
-    min-block-size: 2.75rem;
-    padding-block: .2rem;
-  }
-}
-
 @media (orientation: landscape) and (max-height: 520px) {
   .number-series > * { font-size: clamp(1rem, 3vw, 1.6rem); }
   .family-choices {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    width: min(100%, 98dvh, 32rem);
   }
 }

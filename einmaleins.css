@@ -121,11 +121,11 @@
 .training-right { color: #256943; font-weight: 800; }
 .training-wrong { color: #a13931; font-weight: 800; }
 
-.training-task, .training-repeat {
+.training-task {
   grid-row: 2;
   justify-self: center;
 }
-.training-start:not(.training-repeat) {
+.training-start {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -136,8 +136,8 @@
   font-size: clamp(1rem, 4vw, 1.25rem);
   touch-action: manipulation;
 }
-.training-start:not(.training-repeat):focus-visible { outline-offset: -4px; }
-.training-start:not(.training-repeat):active { background: #173a3b12; }
+.training-start:focus-visible { outline-offset: -4px; }
+.training-start:active { background: #173a3b12; }
 
 .training-task {
   display: flex;

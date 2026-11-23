@@ -51,12 +51,13 @@ const ruleContent = {
   zeit: () => [
     'Lies die beiden Uhren ab und berechne die Zeit vom Start bis zum Ende.',
     'Unter jeder Uhr steht die Tageshälfte. Wenn das Ende nach Mitternacht liegt, steht dort „Folgetag“.',
-    'Gib Stunden und Minuten getrennt ein. Für eine Aufgabe ohne volle Stunden gibst du dort 0 ein.',
+    'Tippe auf Stunden oder Minuten, um das Feld zu wählen. Ein freies Feld zählt als 0.',
   ],
   seifenblasen: () => [
     'Beginne bei 1 und tippe immer die nächsthöhere Zahl an.',
     'Eine richtige Blase platzt. An einer freien Stelle erscheint eine neue Blase mit einer Zahl, die um eins höher ist als die bisher größte.',
     'Auf Leicht bleiben alle Blasen stehen. Auf Mittel bewegen sich zwei, auf Schwer fünf.',
+    'Mit „Beenden“ siehst du dein Ergebnis.',
   ],
   pfeilfolge: () => [
     'Tippe auf die große Fläche, merke dir die Pfeile und gib sie danach in derselben Reihenfolge ein.',

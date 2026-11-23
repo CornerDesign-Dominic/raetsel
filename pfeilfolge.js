@@ -1,4 +1,5 @@
-import { games, levels, markSolved } from './puzzle-levels.js';
+import { games, markSolved } from './puzzle-levels.js';
+import { mountTrainingSession } from './training-session.js';
 
 const gameId = 'pfeilfolge';
 const directions = {
@@ -39,19 +40,14 @@ const game = document.querySelector('#arrow-game');
 game.innerHTML = `
   <section class="arrow-board" aria-label="Pfeilfolge spielen">
     <div class="arrow-toolbar">
-      <dl class="arrow-stats">
-        <div><dt>Stufe</dt><dd data-arrow-level></dd></div>
+      <dl class="training-stats training-progress">
         <div><dt>Pfeile</dt><dd data-arrow-length></dd></div>
         <div><dt>Wiederholungen</dt><dd data-arrow-retries></dd></div>
       </dl>
-      <button type="button" class="icon-button arrow-restart" data-arrow-restart
-        aria-label="Durchlauf neu starten" title="Durchlauf neu starten" disabled>
-        <svg aria-hidden="true"><use href="#icon-undo-circle"></use></svg>
-      </button>
     </div>
     <div class="arrow-stage" data-arrow-stage tabindex="-1">
       <span class="arrow-symbol" data-arrow-symbol aria-hidden="true"></span>
-      <button type="button" class="arrow-stage-action" data-arrow-continue>
+      <button type="button" class="arrow-stage-action training-ready" data-arrow-continue>
         <strong data-arrow-title></strong>
         <span data-arrow-prompt></span>
       </button>
@@ -62,17 +58,6 @@ game.innerHTML = `
     <p class="arrow-cue" data-arrow-cue aria-live="polite"></p>
     <div class="arrow-pad" data-arrow-pad role="group" aria-label="Richtung wählen"></div>
   </section>
-  <dialog class="result-dialog" id="arrow-restart-dialog"
-    aria-labelledby="arrow-restart-title" aria-describedby="arrow-restart-description">
-    <h2 id="arrow-restart-title">Durchlauf neu starten?</h2>
-    <p id="arrow-restart-description">Dein Fortschritt in diesem Durchlauf geht verloren.</p>
-    <form method="dialog" class="puzzle-actions">
-      <button type="submit" class="icon-button dialog-close" aria-label="Neustart abbrechen" autofocus>
-        <span aria-hidden="true">×</span>
-      </button>
-      <button type="button" data-arrow-confirm-restart>Neu starten</button>
-    </form>
-  </dialog>
 `;
 
 const length = game.querySelector('[data-arrow-length]');
@@ -82,14 +67,10 @@ const title = game.querySelector('[data-arrow-title]');
 const prompt = game.querySelector('[data-arrow-prompt]');
 const trail = game.querySelector('[data-arrow-trail]');
 const items = game.querySelector('[data-arrow-items]');
-const levelLabel = game.querySelector('[data-arrow-level]');
 const symbol = game.querySelector('[data-arrow-symbol]');
 const cue = game.querySelector('[data-arrow-cue]');
 const pad = game.querySelector('[data-arrow-pad]');
 const next = game.querySelector('[data-arrow-continue]');
-const restart = game.querySelector('[data-arrow-restart]');
-const restartDialog = game.querySelector('#arrow-restart-dialog');
-const confirmRestart = game.querySelector('[data-arrow-confirm-restart]');
 
 let level;
 let sequence = [];
@@ -98,6 +79,10 @@ let retriesLeft = initialRetries;
 let phase = 'idle';
 let timer;
 let directionButtons = [];
+let longest;
+const session = mountTrainingSession(game, {
+  toolbar: game.querySelector('.arrow-toolbar'), stage, reset: resetRun,
+});
 
 function randomDirection() {
   const available = choices[level];
@@ -120,7 +105,7 @@ function setPhase(value, heading = '', instruction = '') {
   symbol.hidden = phase !== 'watch';
   length.textContent = sequence.length;
   retries.textContent = retriesLeft;
-  restart.disabled = phase === 'idle' || phase === 'ended';
+  session.setRunning(phase !== 'idle' && phase !== 'ended');
   for (const button of directionButtons) button.disabled = phase !== 'input';
 }
 
@@ -130,6 +115,7 @@ function resetRun() {
   entered = 0;
   cue.textContent = '';
   retriesLeft = initialRetries;
+  longest = 0;
   items.replaceChildren();
   setPhase('idle', '', 'Tippen, um zu beginnen');
 }
@@ -182,7 +168,10 @@ function enterDirection(direction) {
       retriesLeft -= 1;
       setPhase('retry', 'Oh nein, versuch es noch mal.', 'Tippen, um zu starten');
     } else {
-      setPhase('ended', 'Oh nein, versuch es noch mal.', 'Tippen für einen neuen Durchlauf');
+      setPhase('ended');
+      if (longest >= initialLength) markSolved(gameId, level);
+      session.finish({ metrics: [['Längste richtige Folge', longest + ' Pfeile']] });
+      return;
     }
     next.focus({ preventScroll: true });
     return;
@@ -192,7 +181,7 @@ function enterDirection(direction) {
   cue.textContent = entered + ' von ' + sequence.length + ' Pfeilen richtig.';
   if (entered !== sequence.length) return;
 
-  if (sequence.length === initialLength) markSolved(gameId, level);
+  longest = sequence.length;
   setPhase('next', 'Sehr gut. Weiter!', 'Tippen, um zu starten');
   next.focus({ preventScroll: true });
 }
@@ -210,12 +199,11 @@ function load(selectedLevel) {
     return button;
   });
   pad.replaceChildren(...directionButtons);
-  levelLabel.textContent = levels[level];
   resetRun();
 }
 
 function leave() {
-  if (restartDialog.open) restartDialog.close();
+  session.leave();
   clearTimer();
   phase = 'idle';
   cue.textContent = '';
@@ -223,23 +211,12 @@ function leave() {
 
 next.addEventListener('click', () => {
   if (phase === 'watch' || phase === 'input') return;
-  if (phase === 'ended') resetRun();
   if (phase === 'next') sequence.push(randomDirection());
   playSequence();
 });
 
-restart.addEventListener('click', () => {
-  if (!restartDialog.open) restartDialog.showModal();
-});
-
-confirmRestart.addEventListener('click', () => {
-  restartDialog.close();
-  resetRun();
-  next.focus({ preventScroll: true });
-});
-
 game.addEventListener('keydown', (event) => {
-  if (restartDialog.open) return;
+  if (session.modalOpen) return;
   if (phase !== 'input' || event.repeat || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
   const direction = keyDirections[event.code] ?? keyDirections[event.key];
   if (!choices[level].includes(direction)) return;

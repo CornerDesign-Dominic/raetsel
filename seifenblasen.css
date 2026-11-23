@@ -1,33 +1,3 @@
-.play-view[data-view='seifenblasen'] { block-size: 100%; }
-
-#bubble-game {
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr) 1.25rem;
-  gap: .4rem;
-  width: min(100%, 38rem);
-  height: 100%;
-  max-height: 43rem;
-  margin-inline: auto;
-}
-
-.bubble-toolbar { display: flex; gap: .4rem; }
-.bubble-stats {
-  flex: 1;
-  display: flex;
-  justify-content: space-between;
-  gap: .5rem;
-  margin: 0;
-  padding: .35rem .65rem;
-  border: 1px solid #bc9e76;
-  border-radius: .55rem;
-  background: #fbefd9;
-}
-.bubble-stats > div { display: flex; flex-wrap: wrap; align-items: baseline; gap: .05rem .4rem; }
-.bubble-stats > div:last-child { justify-content: end; text-align: end; }
-.bubble-stats dt { font-size: .85rem; }
-.bubble-stats dd { margin: 0; font-weight: 750; color: var(--petrol); font-variant-numeric: tabular-nums; }
-.bubble-restart { flex: none; }
-
 .bubble-field {
   container-type: size;
   display: grid;

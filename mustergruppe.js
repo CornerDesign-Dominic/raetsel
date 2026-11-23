@@ -1,4 +1,5 @@
 import { games, markSolved } from './puzzle-levels.js';
+import { addStageAction, mountTrainingSession } from './training-session.js';
 
 const colors = [
   ['Petrol', '#205a56'], ['Orange', '#c36335'], ['Blau', '#477ab5'],
@@ -27,6 +28,13 @@ const next = view.querySelector('.exercise-next');
 let level;
 let round;
 let solved;
+let mistakes;
+const stage = view.querySelector('.family-stage');
+const task = stage.querySelector('.family-task');
+const go = addStageAction(stage, showRound);
+const session = mountTrainingSession(view, {
+  toolbar: view.querySelector('.training-toolbar'), stage, reset: resetRun,
+});
 
 function shuffle(items) {
   const result = [...items];
@@ -44,6 +52,7 @@ function choose(button, odd) {
   button.setAttribute('aria-disabled', 'true');
   button.tabIndex = -1;
   if (!odd) {
+    mistakes++;
     feedback.textContent = 'Dieses Feld gehört zur Gruppe.';
     return;
   }
@@ -53,13 +62,21 @@ function choose(button, odd) {
     choice.setAttribute('aria-disabled', 'true');
     choice.tabIndex = -1;
   }
-  if (finished) markSolved('mustergruppe', level);
-  feedback.textContent = finished ? 'Alle Außenseiter gefunden!' : 'Richtig! Ein Strich hat hier eine andere Farbe.';
-  next.textContent = finished ? 'Nochmal' : 'Weiter';
+  if (finished) {
+    markSolved('mustergruppe', level);
+    task.hidden = true;
+    session.finish({ metrics: [['Gefunden', sets[level].length + ' / ' + sets[level].length], ['Fehlversuche', mistakes]] });
+    return;
+  }
+  feedback.textContent = 'Richtig! Ein Strich hat hier eine andere Farbe.';
   next.hidden = false;
+  next.focus({ preventScroll: true });
 }
 
 function showRound() {
+  go.hidden = true;
+  task.hidden = false;
+  session.setRunning(true);
   solved = false;
   const [palette, changed, replacement] = sets[level][round];
   const different = [...palette];
@@ -98,20 +115,28 @@ function showRound() {
     button.addEventListener('click', () => choose(button, odd));
     return button;
   }));
+  choices.firstElementChild.focus({ preventScroll: true });
 }
 
 next.addEventListener('click', () => {
-  round = (round + 1) % sets[level].length;
+  round++;
   showRound();
-  progress.focus({ preventScroll: true });
 });
+
+function resetRun() {
+  round = mistakes = 0;
+  session.setRunning(false);
+  progress.textContent = `Aufgabe 1 von ${sets[level].length}`;
+  task.hidden = next.hidden = true;
+  go.hidden = false;
+}
 
 games.set('mustergruppe', {
   title: 'Mustergruppe',
   category: 'training',
   load(activeLevel) {
     level = activeLevel;
-    round = 0;
-    showRound();
+    resetRun();
   },
+  leave: session.leave,
 });

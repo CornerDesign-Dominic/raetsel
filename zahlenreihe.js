@@ -1,4 +1,5 @@
 import { games, markSolved } from './puzzle-levels.js';
+import { addStageAction, mountTrainingSession } from './training-session.js';
 import { mountNumberPad } from './number-pad.js';
 
 const operations = {
@@ -25,7 +26,9 @@ const clueCounts = { leicht: 3, mittel: 4, schwer: 5 };
 const view = document.querySelector('[data-view="zahlenreihe"]');
 const progress = view.querySelector('.exercise-progress');
 const form = view.querySelector('.number-training-form');
-const resetDialog = view.querySelector('#series-reset-dialog');
+const stage = view.querySelector('.series-stage');
+const prompt = stage.querySelector('.series-prompt');
+const controls = form.querySelector('fieldset');
 const row = view.querySelector('.number-series');
 const input = view.querySelector('input');
 const check = form.querySelector('button[type=submit]');
@@ -39,8 +42,16 @@ let round;
 let answer;
 let explanation;
 let solved;
+let mistakes;
+const go = addStageAction(stage, showRound);
+const session = mountTrainingSession(view, {
+  toolbar: view.querySelector('.training-toolbar'), stage, reset: resetRun,
+});
 
 function showRound() {
+  session.setRunning(true);
+  go.hidden = true;
+  row.hidden = prompt.hidden = controls.disabled = false;
   const [seed, ...steps] = sets[level][round];
   const values = [seed];
   for (let index = 0; index < clueCounts[level]; index++) {
@@ -70,11 +81,12 @@ function showRound() {
   for (const key of keys) key.disabled = false;
   next.hidden = true;
   solved = false;
+  input.focus({ preventScroll: true });
 }
 
 form.addEventListener('submit', (event) => {
   event.preventDefault();
-  if (solved) return;
+  if (solved || controls.disabled) return;
   const guess = input.value.trim();
   if (!/^\d+$/.test(guess)) {
     feedback.textContent = 'Gib eine ganze Zahl ein.';
@@ -82,6 +94,7 @@ form.addEventListener('submit', (event) => {
     return;
   }
   if (Number(guess) !== answer) {
+    mistakes++;
     feedback.textContent = 'Passt noch nicht. Versuch es nochmal.';
     input.setAttribute('aria-invalid', 'true');
     form.dataset.answer = 'wrong';
@@ -97,7 +110,13 @@ form.addEventListener('submit', (event) => {
   input.removeAttribute('aria-invalid');
   check.hidden = true;
   for (const key of keys) key.disabled = true;
-  next.textContent = finished ? 'Nochmal' : 'Weiter';
+  if (finished) {
+    row.hidden = prompt.hidden = true;
+    feedback.textContent = '';
+    controls.disabled = true;
+    session.finish({ metrics: [['Gelöst', sets[level].length + ' / ' + sets[level].length], ['Fehlversuche', mistakes]], detail: explanation });
+    return;
+  }
   next.hidden = false;
   next.focus({ preventScroll: true });
 });
@@ -110,22 +129,20 @@ input.addEventListener('input', () => {
 });
 
 next.addEventListener('click', () => {
-  round = (round + 1) % sets[level].length;
+  round++;
   showRound();
-  progress.focus({ preventScroll: true });
 });
 
 function resetRun() {
-  round = 0;
-  showRound();
+  round = mistakes = 0;
+  session.setRunning(false);
+  progress.textContent = `Aufgabe 1 von ${sets[level].length}`;
+  row.hidden = prompt.hidden = controls.disabled = true;
+  check.hidden = false;
+  next.hidden = true;
+  feedback.textContent = '';
+  go.hidden = false;
 }
-
-view.querySelector('#series-reset').addEventListener('click', () => resetDialog.showModal());
-view.querySelector('#series-confirm-reset').addEventListener('click', () => {
-  resetDialog.close();
-  resetRun();
-  progress.focus({ preventScroll: true });
-});
 
 games.set('zahlenreihe', {
   title: 'Zahlenreihe',
@@ -134,7 +151,5 @@ games.set('zahlenreihe', {
     level = activeLevel;
     resetRun();
   },
-  leave() {
-    if (resetDialog.open) resetDialog.close();
-  },
+  leave: session.leave,
 });
