@@ -66,9 +66,7 @@ export function recordScore(gameId, level, result) {
 
 function renderPage() {
   const [level, label] = options[page];
-  const done = solved.has(pendingGame + '/' + level);
-  difficulty.querySelector('#difficulty-level').textContent = label + (done ? ' ✓' : '');
-  difficulty.querySelector('#difficulty-position').textContent = `${page + 1} von ${options.length}`;
+  difficulty.querySelector('#difficulty-level').textContent = label;
   previous.setAttribute('aria-disabled', String(page === 0));
   next.setAttribute('aria-disabled', String(page === options.length - 1));
   start.setAttribute('aria-label', label + ' starten');
