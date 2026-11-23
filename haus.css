@@ -32,6 +32,7 @@
 
 .house-group {
   --figure-width: min(6cqw, 14cqh, 1.25rem);
+  --door-entry-height: min(5cqw, 12cqh, .9rem);
   --figure-gap: min(1.25cqw, .28rem);
   position: absolute;
   bottom: .15rem;
@@ -67,13 +68,13 @@
 }
 
 @keyframes house-group-into {
-  0%, 64% { left: var(--side); transform: translateX(-50%) scale(1); opacity: 1; }
-  100% { left: 50%; transform: translateX(-50%) scale(.2); opacity: 0; }
+  0%, 64% { left: var(--side); bottom: .15rem; transform: translateX(-50%) scale(1); opacity: 1; }
+  100% { left: 50%; bottom: var(--door-entry-height); transform: translateX(-50%) scale(.2); opacity: 0; }
 }
 
 @keyframes house-group-out {
-  0% { left: 50%; transform: translateX(-50%) scale(.2); opacity: 0; }
-  36%, 100% { left: var(--side); transform: translateX(-50%) scale(1); opacity: 1; }
+  0% { left: 50%; bottom: var(--door-entry-height); transform: translateX(-50%) scale(.2); opacity: 0; }
+  36%, 100% { left: var(--side); bottom: .15rem; transform: translateX(-50%) scale(1); opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {

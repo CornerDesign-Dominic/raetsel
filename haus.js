@@ -17,7 +17,7 @@ stage.innerHTML = `
   <form id="house-answer" class="training-board number-training-form">
     <div class="training-stage house-stage">
       <div class="house-scene" id="house-scene" data-motion="parked" aria-hidden="true">
-        <svg class="house-building" viewBox="0 0 80 88" fill="none">
+        <svg class="house-building" viewBox="0 0 80 88" preserveAspectRatio="xMidYMax meet" fill="none">
           <path class="house-outline" d="M9 87V33L40 4l31 29v54Z"/>
           <path class="house-door" d="M31 87V57h18v30Z"/>
         </svg>
