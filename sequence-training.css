@@ -37,7 +37,6 @@
   background: var(--paper);
 }
 .number-series input:focus { outline: 2px solid var(--petrol); outline-offset: -2px; }
-.number-series input::placeholder { color: #50756b; opacity: 1; text-align: center; }
 .family-choices {
   display: grid;
   width: min(100%, 54dvh, 27rem);
