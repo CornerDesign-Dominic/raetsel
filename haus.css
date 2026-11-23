@@ -81,6 +81,19 @@
   }
 }
 
+.house-feedback {
+  align-self: center;
+  display: grid;
+  justify-items: center;
+  gap: .4rem;
+  text-align: center;
+}
+
+.house-feedback > strong { font-size: clamp(1.35rem, 5vw, 2rem); }
+.house-feedback[data-result='correct'] > strong { color: #246348; }
+.house-feedback[data-result='wrong'] > strong { color: #a03629; }
+#house-countdown { font-variant-numeric: tabular-nums; }
+
 .house-cue {
   min-block-size: 1.4rem;
   margin: 0;

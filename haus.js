@@ -5,6 +5,8 @@ import { addStageAction, mountTrainingSession } from './training-session.js';
 const game = 'haus';
 const firstWaveCount = 3;
 const groupDuration = 2400;
+const startingLives = 2;
+const countdownSeconds = 3;
 const settings = {
   leicht: { capacity: 10, entering: [2, 6], maxAlighting: 3 },
   mittel: { capacity: 20, entering: [3, 10], maxAlighting: 5 },
@@ -13,7 +15,12 @@ const settings = {
 
 const stage = document.querySelector('#house-game');
 stage.innerHTML = `
-  <div class="training-toolbar"><p class="training-progress" id="house-wave-display"></p></div>
+  <div class="training-toolbar">
+    <dl class="training-stats training-progress">
+      <div><dt>Gruppen</dt><dd id="house-wave-display"></dd></div>
+      <div><dt>Leben</dt><dd id="house-lives"></dd></div>
+    </dl>
+  </div>
   <form id="house-answer" class="training-board number-training-form">
     <div class="training-stage house-stage">
       <div class="house-scene" id="house-scene" data-motion="parked" aria-hidden="true">
@@ -31,6 +38,11 @@ stage.innerHTML = `
           aria-describedby="house-error">
         <p id="house-error" role="status"></p>
       </div>
+      <div class="house-feedback" hidden>
+        <strong id="house-round-result"></strong>
+        <p id="house-round-detail"></p>
+        <p aria-hidden="true">Nächste Runde in <strong id="house-countdown"></strong></p>
+      </div>
     </div>
     <fieldset class="training-controls" aria-label="Nummernblock" disabled>
       <button class="number-training-submit" type="submit" disabled>Abgeben</button>
@@ -40,6 +52,11 @@ stage.innerHTML = `
 `;
 
 const waveDisplay = stage.querySelector('#house-wave-display');
+const lifeDisplay = stage.querySelector('#house-lives');
+const feedback = stage.querySelector('.house-feedback');
+const roundResult = stage.querySelector('#house-round-result');
+const roundDetail = stage.querySelector('#house-round-detail');
+const countdown = stage.querySelector('#house-countdown');
 const scene = stage.querySelector('#house-scene');
 const people = stage.querySelector('#house-people');
 const cue = stage.querySelector('#house-cue');
@@ -55,12 +72,15 @@ const question = stage.querySelector('.house-question');
 const go = addStageAction(playArea, playRound);
 const session = mountTrainingSession(stage, {
   toolbar: stage.querySelector('.training-toolbar'), stage: playArea,
-  reset: resetRun, restart: ready,
+  reset: resetRun,
 });
 mountNumberPad(form.querySelector('.training-pad'), answer);
 
 let currentLevel;
-let nextWaves = firstWaveCount;
+let nextWaves;
+let lives;
+let roundsAnswered;
+let correctRounds;
 let round;
 let waveIndex = 0;
 let phase = 'ready';
@@ -102,7 +122,8 @@ function showPhase(nextPhase) {
   go.hidden = phase !== 'ready';
   scene.hidden = cue.hidden = phase !== 'play';
   question.hidden = controls.disabled = answer.disabled = phase !== 'answer';
-  session.setRunning(phase === 'play' || phase === 'answer');
+  feedback.hidden = phase !== 'feedback';
+  session.setRunning(phase === 'play' || phase === 'answer' || phase === 'feedback');
 }
 
 const figureMarkup = `<svg viewBox="0 0 24 30" fill="currentColor">
@@ -161,7 +182,7 @@ function advanceWave() {
   const wave = round.waves[waveIndex];
   scene.dataset.motion = 'parked';
   people.replaceChildren();
-  waveDisplay.textContent = 'Gruppe ' + number + ' von ' + round.waves.length;
+  waveDisplay.textContent = number + ' / ' + round.waves.length;
   describe('Die nächste Gruppe kommt …');
   const pauseTime = Math.max(380, 1250 - Math.floor(waveIndex / 2) * 135);
   wait(() => {
@@ -183,7 +204,7 @@ function playRound() {
   error.textContent = '';
   round = createRound(nextWaves, settings[currentLevel]);
   waveIndex = 0;
-  waveDisplay.textContent = round.waves.length + ' Gruppen';
+  waveDisplay.textContent = '0 / ' + round.waves.length;
   scene.dataset.motion = 'parked';
   people.replaceChildren();
   describe('Das Haus ist am Anfang leer.');
@@ -191,19 +212,18 @@ function playRound() {
   wait(advanceWave, 900);
 }
 
-function ready() {
+function resetRun() {
   stopTimer();
+  lives = startingLives;
+  roundsAnswered = correctRounds = 0;
+  nextWaves = firstWaveCount;
   round = null;
   scene.dataset.motion = 'parked';
   people.replaceChildren();
-  waveDisplay.textContent = nextWaves + ' Gruppen';
+  waveDisplay.textContent = '0 / ' + nextWaves;
+  lifeDisplay.textContent = lives;
   describe('');
   showPhase('ready');
-}
-
-function resetRun() {
-  nextWaves = firstWaveCount;
-  ready();
 }
 
 function load(level) {
@@ -224,6 +244,21 @@ answer.addEventListener('input', () => {
   error.textContent = '';
 });
 
+function showRoundFeedback(correct, detail) {
+  const message = correct ? 'Richtig!' : 'Falsch';
+  roundResult.textContent = message;
+  roundDetail.textContent = detail;
+  feedback.dataset.result = correct ? 'correct' : 'wrong';
+  showPhase('feedback');
+  describe('', message + ' ' + detail + ' Nächste Runde in drei Sekunden.');
+
+  function tick(remaining) {
+    countdown.textContent = remaining;
+    wait(remaining === 1 ? playRound : () => tick(remaining - 1), 1000);
+  }
+  tick(countdownSeconds);
+}
+
 form.addEventListener('submit', (event) => {
   event.preventDefault();
   if (phase !== 'answer') return;
@@ -237,12 +272,23 @@ form.addEventListener('submit', (event) => {
 
   const correct = Number(response) === round.inside;
   nextWaves = Math.max(firstWaveCount, round.waves.length + (correct ? 1 : -1));
-  if (correct) markSolved(game, currentLevel);
+  roundsAnswered++;
+  if (correct) correctRounds++;
+  else lives--;
+  lifeDisplay.textContent = lives;
+
+  const detail = round.inside === 1 ? 'Im Haus war 1 Person.' : 'Im Haus waren ' + round.inside + ' Personen.';
+  if (lives > 0) {
+    showRoundFeedback(correct, detail);
+    return;
+  }
+
+  if (correctRounds > 0) markSolved(game, currentLevel);
   showPhase('result');
   describe('');
   session.finish({
-    detail: correct ? 'Richtig gezählt!' : 'Knapp daneben.',
-    metrics: [['Deine Antwort', response], ['Im Haus', round.inside], ['Gruppen als Nächstes', nextWaves]],
+    detail: 'Beide Leben sind aufgebraucht. ' + detail,
+    metrics: [['Richtig', correctRounds + ' / ' + roundsAnswered], ['Fehler', startingLives]],
   });
 });
 
