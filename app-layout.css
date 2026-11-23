@@ -127,7 +127,6 @@ body.is-playing {
     align-items: start;
   }
   .play-view .where-map { width: min(100%, 68dvh); }
-  .play-view .house-platform { min-block-size: 5.6rem; }
 }
 
 .overview-nav {

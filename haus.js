@@ -4,8 +4,8 @@ import { addStageAction, mountTrainingSession } from './training-session.js';
 
 const game = 'haus';
 const firstWaveCount = 3;
-const personInterval = 115;
-const personTravel = 420;
+const personInterval = 340;
+const personTravel = 1050;
 const settings = {
   leicht: { capacity: 10, entering: [2, 6], maxAlighting: 3 },
   mittel: { capacity: 20, entering: [3, 10], maxAlighting: 5 },
@@ -18,17 +18,11 @@ stage.innerHTML = `
   <form id="house-answer" class="training-board number-training-form">
     <div class="training-stage house-stage">
       <div class="house-scene" id="house-scene" data-motion="parked" aria-hidden="true">
-        <div class="house-platform">
-          <div class="house-building">
-            <div class="house-roof"></div>
-            <div class="house-facade">
-              <i class="house-window"></i><span class="house-door"></span><i class="house-window"></i>
-            </div>
-          </div>
-        </div>
-        <div class="house-pavement">
-          <div id="house-people" class="house-people"></div>
-        </div>
+        <svg class="house-building" viewBox="0 0 80 88" fill="none">
+          <path class="house-outline" d="M9 87V33L40 4l31 29v54Z"/>
+          <path class="house-door" d="M31 87V57h18v30Z"/>
+        </svg>
+        <div id="house-people" class="house-people"></div>
       </div>
       <p id="house-cue" class="house-cue" tabindex="-1"></p>
       <p id="house-status" class="house-status" role="status" aria-atomic="true"></p>
@@ -39,7 +33,7 @@ stage.innerHTML = `
         <p id="house-error" role="status"></p>
       </div>
     </div>
-    <fieldset class="training-controls" aria-label="Nummernblock" hidden disabled>
+    <fieldset class="training-controls" aria-label="Nummernblock" disabled>
       <button class="number-training-submit" type="submit" disabled>Abgeben</button>
       <div class="training-pad"></div>
     </fieldset>
@@ -49,7 +43,6 @@ stage.innerHTML = `
 const waveDisplay = stage.querySelector('#house-wave-display');
 const scene = stage.querySelector('#house-scene');
 const people = stage.querySelector('#house-people');
-const door = stage.querySelector('.house-door');
 const cue = stage.querySelector('#house-cue');
 const status = stage.querySelector('#house-status');
 const form = stage.querySelector('#house-answer');
@@ -109,29 +102,25 @@ function showPhase(nextPhase) {
   phase = nextPhase;
   go.hidden = phase !== 'ready';
   scene.hidden = cue.hidden = phase !== 'play';
-  question.hidden = controls.hidden = controls.disabled = phase !== 'answer';
+  question.hidden = controls.disabled = answer.disabled = phase !== 'answer';
   session.setRunning(phase === 'play' || phase === 'answer');
 }
 
-function drawPeople(count, direction, previewTime) {
-  scene.dataset.motion = 'parked';
+const figureMarkup = `<svg viewBox="0 0 20 32" fill="none">
+  <circle cx="10" cy="5" r="3"/>
+  <path d="M10 8v12m-6-3 6-5 6 5m-6 3-5 10m5-10 6 10"/>
+</svg>`;
+
+function drawPeople(count, direction) {
+  scene.dataset.motion = direction;
   const figures = Array.from({ length: count }, (_, index) => {
     const figure = document.createElement('span');
     figure.className = 'house-figure';
-    figure.style.setProperty('--house-delay', previewTime + index * personInterval + 'ms');
+    figure.style.setProperty('--house-delay', index * personInterval + 'ms');
+    figure.innerHTML = figureMarkup;
     return figure;
   });
   people.replaceChildren(...figures);
-
-  const doorway = door.getBoundingClientRect();
-  const scale = doorway.width / door.offsetWidth || 1;
-  const positions = figures.map((figure) => figure.getBoundingClientRect());
-  for (const [index, figure] of figures.entries()) {
-    const position = positions[index];
-    figure.style.setProperty('--house-door-x', (doorway.left + (doorway.width - position.width) / 2 - position.left) / scale + 'px');
-    figure.style.setProperty('--house-door-y', (doorway.bottom - position.bottom) / scale + 'px');
-  }
-  scene.dataset.motion = direction;
 }
 
 function showFlow(count, direction, after) {
@@ -143,14 +132,13 @@ function showFlow(count, direction, after) {
   const entering = direction === 'entering';
   const destination = entering ? 'ins Haus' : 'aus dem Haus';
   describe(
-    entering ? 'Gehen hinein ↑' : 'Kommen hinaus ↓',
+    entering ? 'Von links ins Haus' : 'Aus dem Haus nach rechts',
     'Gruppe ' + (waveIndex + 1) + ': ' + count +
       (count === 1 ? ' Person geht ' : ' Personen gehen ') + destination + '.',
   );
 
-  const countTime = 850 + count * 55;
-  drawPeople(count, direction, entering ? countTime : 0);
-  wait(after, countTime + (count - 1) * personInterval + personTravel + 160);
+  drawPeople(count, direction);
+  wait(after, (count - 1) * personInterval + personTravel + 220);
 }
 
 function askForAnswer() {

@@ -58,8 +58,6 @@
 .family-task [role='status'] { min-height: 1.25rem; font-size: .875rem; }
 .family-choices { width: min(100%, 27rem, max(7rem, calc(100cqh - 5rem))); }
 
-.house-stage { align-content: center; grid-template-rows: auto auto; }
-.house-cue { min-block-size: 1.5rem; margin: .4rem 0 0; text-align: center; }
 .house-question label { font-weight: 700; }
 .house-question input, .time-answer input {
   width: min(100%, 6rem);
@@ -103,8 +101,4 @@
   .family-choices { width: min(100%, 32rem, max(9rem, calc(4 * (100cqh - 5rem)))); }
   .memory-grid { width: min(100%, 22rem); }
   .memory-tile { min-block-size: clamp(1.8rem, 10dvh, 3.5rem); }
-}
-
-@media (orientation: landscape) and (max-height: 520px) {
-  #house-answer:not(:has(fieldset:not([hidden]))) { display: flex; }
 }

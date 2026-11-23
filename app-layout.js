@@ -38,7 +38,7 @@ const ruleContent = {
     'Trage die fehlende Zahl beim Fragezeichen ein und tippe auf „Lösen“. Die Glühbirne gibt einen Tipp.',
   ],
   haus: () => [
-    'Das Haus ist am Anfang leer. Zähle mit, wie viele Personen hineingehen und herauskommen.',
+    'Das Haus ist am Anfang leer. Die Personen kommen von links hinein und gehen nach rechts hinaus. Zähle mit.',
     'Gib am Ende der Runde an, wie viele Personen noch im Haus sind.',
     'Bei einer richtigen Antwort kommt in der nächsten Runde eine Gruppe hinzu. Bei einer falschen Antwort wird es eine Gruppe weniger, bis auf mindestens drei.',
   ],
