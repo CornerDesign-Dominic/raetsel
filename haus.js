@@ -105,9 +105,9 @@ function showPhase(nextPhase) {
   session.setRunning(phase === 'play' || phase === 'answer');
 }
 
-const figureMarkup = `<svg viewBox="0 0 20 32" fill="none">
-  <circle cx="10" cy="5" r="3"/>
-  <path d="M10 8v12m-6-3 6-5 6 5m-6 3-5 10m5-10 6 10"/>
+const figureMarkup = `<svg viewBox="0 0 24 30" fill="currentColor">
+  <circle cx="12" cy="5" r="4.5"/>
+  <path d="M8 11h8a6 6 0 0 1 6 6v4h-4v6a3 3 0 0 1-6 0v-4h-1v4a3 3 0 0 1-6 0v-6H2v-4a6 6 0 0 1 6-6Z"/>
 </svg>`;
 
 function drawPeople(count, direction) {

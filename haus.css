@@ -31,15 +31,15 @@
 .house-people { position: absolute; inset: 0; }
 
 .house-group {
-  --figure-width: min(6cqw, 14cqh, 1.25rem);
+  --figure-width: min(6.4cqw, 16cqh, 1.55rem);
   --door-entry-height: min(5cqw, 12cqh, .9rem);
-  --figure-gap: min(1.25cqw, .28rem);
+  --figure-gap: min(1.55cqw, .4rem);
   position: absolute;
   bottom: .15rem;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: .15rem var(--figure-gap);
+  gap: .25rem var(--figure-gap);
   width: calc(5 * var(--figure-width) + 4 * var(--figure-gap));
   transform-origin: center bottom;
   animation-duration: var(--house-group-duration);
@@ -51,10 +51,6 @@
 .house-figure svg {
   display: block;
   width: 100%;
-  stroke: currentColor;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
 }
 
 .house-scene[data-motion='entering'] .house-group {
