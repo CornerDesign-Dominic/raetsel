@@ -385,27 +385,28 @@
         <p id="training-mode-label"></p>
         <h2 id="training-title" tabindex="-1">1×1-Training</h2>
       </div>
-      <div id="training-game"></div>
+      <div class="number-training" id="training-game"></div>
     </section>
 
     <section data-view="zahlenreihe" aria-labelledby="series-title" hidden>
       <h2 id="series-title" hidden>Zahlenreihe</h2>
-      <div class="sequence-training">
-        <div class="exercise-intro">
-          <p>Welche Zahl kommt als Nächstes?</p>
-          <p class="exercise-progress" tabindex="-1"></p>
-        </div>
-        <form>
-          <div class="number-series" role="group" aria-label="Zahlen von links nach rechts">
-            <input type="text" inputmode="numeric" enterkeyhint="done" autocomplete="off"
-              maxlength="5" placeholder="?" aria-label="Nächste Zahl">
+      <div class="number-training">
+        <p class="training-progress exercise-progress" tabindex="-1"></p>
+        <form class="number-training-form training-board">
+          <div class="training-stage series-stage">
+            <p class="series-prompt">Welche Zahl kommt als Nächstes?</p>
+            <div class="number-series" role="group" aria-label="Zahlen von links nach rechts">
+              <input type="text" inputmode="none" autocomplete="off"
+                maxlength="5" placeholder="?" aria-label="Nächste Zahl">
+            </div>
+            <p class="series-feedback" role="status"></p>
           </div>
-          <button type="submit">Lösen</button>
+          <fieldset class="training-controls" aria-label="Nummernblock">
+            <button class="number-training-submit" type="submit" disabled>Abgeben</button>
+            <button class="number-training-submit exercise-next" type="button" hidden>Weiter</button>
+            <div class="training-pad"></div>
+          </fieldset>
         </form>
-        <div class="exercise-actions">
-          <p role="status"></p>
-          <button type="button" class="exercise-next" hidden>Weiter</button>
-        </div>
       </div>
     </section>
 

@@ -1,4 +1,5 @@
 import { games, markSolved } from './puzzle-levels.js';
+import { mountNumberPad } from './number-pad.js';
 
 const operations = {
   '+': (value, amount) => value + amount,
@@ -26,7 +27,10 @@ const progress = view.querySelector('.exercise-progress');
 const form = view.querySelector('form');
 const row = view.querySelector('.number-series');
 const input = view.querySelector('input');
-const check = form.querySelector('button');
+const check = form.querySelector('button[type=submit]');
+const pad = form.querySelector('.training-pad');
+mountNumberPad(pad, input);
+const keys = pad.querySelectorAll('button');
 const feedback = view.querySelector('[role="status"]');
 const next = view.querySelector('.exercise-next');
 let level;
@@ -61,6 +65,8 @@ function showRound() {
   form.removeAttribute('data-answer');
   feedback.textContent = '';
   check.hidden = false;
+  check.disabled = true;
+  for (const key of keys) key.disabled = false;
   next.hidden = true;
   solved = false;
 }
@@ -89,12 +95,14 @@ form.addEventListener('submit', (event) => {
   input.readOnly = true;
   input.removeAttribute('aria-invalid');
   check.hidden = true;
+  for (const key of keys) key.disabled = true;
   next.textContent = finished ? 'Nochmal' : 'Weiter';
   next.hidden = false;
   next.focus({ preventScroll: true });
 });
 
 input.addEventListener('input', () => {
+  check.disabled = input.value.trim() === '';
   input.removeAttribute('aria-invalid');
   form.removeAttribute('data-answer');
   feedback.textContent = '';

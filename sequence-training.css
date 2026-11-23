@@ -15,7 +15,13 @@
 }
 .exercise-intro p:first-child { font-weight: 700; }
 .exercise-progress { font-size: .85rem; }
-.sequence-training form { display: grid; gap: .65rem; }
+.series-stage {
+  grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: .4rem;
+  text-align: center;
+}
+.series-prompt { align-self: end; font-weight: 650; }
+.series-feedback { align-self: start; font-size: .875rem; }
 .number-series {
   display: grid;
   grid-auto-flow: column;
@@ -37,7 +43,13 @@
   font-variant-numeric: tabular-nums;
   text-align: center;
 }
-.number-series input { border: 2px solid #50756b; }
+.number-series input {
+  display: block;
+  width: 100%;
+  border: 2px solid #50756b;
+  background: var(--paper);
+}
+.number-series input:focus { outline: 2px solid var(--petrol); outline-offset: -2px; }
 .number-series input::placeholder { color: #50756b; opacity: 1; }
 .exercise-actions {
   display: flex;
@@ -90,16 +102,17 @@
 .family-letter { inset-inline-start: .45rem; font-size: .85rem; }
 .family-mark { inset-inline-end: .45rem; font-size: 1.25rem; }
 .family-choice[aria-disabled='true'] { cursor: default; }
-.family-choice[data-answer='wrong'], .sequence-training [data-answer='wrong'] input {
+.family-choice[data-answer='wrong'], .number-training-form[data-answer='wrong'] .number-series input {
   border-color: #943f36;
   background: #f6e1d9;
 }
-.family-choice[data-answer='correct'], .sequence-training [data-answer='correct'] input {
+.family-choice[data-answer='correct'], .number-training-form[data-answer='correct'] .number-series input {
   border-color: #377050;
   background: #dfebd9;
 }
 
 @media (orientation: landscape) and (max-height: 520px) {
+  .number-series > * { font-size: clamp(1rem, 3vw, 1.6rem); }
   .family-choices {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     width: min(100%, 98dvh, 32rem);

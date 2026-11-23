@@ -1,4 +1,5 @@
 import { games, recordScore } from './puzzle-levels.js';
+import { mountNumberPad } from './number-pad.js';
 
 const modes = {
   kurz: { title: 'Kurz', count: 10 },
@@ -8,9 +9,6 @@ const modes = {
 };
 const format = new Intl.NumberFormat('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const root = document.querySelector('#training-game');
-const digits = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0].map((digit) =>
-  `<button type="button" data-digit="${digit}">${digit}</button>`).join('');
-
 root.innerHTML = `
   <section class="training-progress" aria-label="Laufender Durchlauf">
     <dl class="training-stats">
@@ -31,7 +29,7 @@ root.innerHTML = `
     </section>
     <p id="training-feedback" class="training-sr" role="status"></p>
 
-    <form id="training-form">
+    <form class="number-training-form" id="training-form">
       <div class="training-stage">
         <ol id="training-history" class="training-history" aria-label="Letzte Antworten"></ol>
         <div class="training-task" id="training-task" hidden>
@@ -43,14 +41,9 @@ root.innerHTML = `
 
       <fieldset id="training-controls" class="training-controls" aria-label="Nummernblock" disabled>
         <div class="training-actions">
-          <button id="training-submit" type="submit">Abgeben</button>
+          <button class="number-training-submit" id="training-submit" type="submit">Abgeben</button>
         </div>
-        <div id="training-pad" class="training-pad">
-          ${digits}
-          <button id="training-clear" class="icon-button" type="button" aria-label="Eingabe leeren" title="Eingabe leeren">
-            <svg aria-hidden="true"><use href="#icon-undo-circle"></use></svg>
-          </button>
-        </div>
+        <div id="training-pad" class="training-pad"></div>
       </fieldset>
     </form>
   </section>
@@ -190,18 +183,7 @@ input.addEventListener('keydown', (event) => {
   if (!event.repeat && !submit.disabled) form.requestSubmit(submit);
 });
 
-root.querySelectorAll('[data-digit]').forEach((button) => {
-  button.addEventListener('click', () => {
-    if (input.value.length < 3) input.value += button.dataset.digit;
-    submit.disabled = input.value === '';
-    input.focus({ preventScroll: true });
-  });
-});
-root.querySelector('#training-clear').addEventListener('click', () => {
-  input.value = '';
-  submit.disabled = true;
-  input.focus({ preventScroll: true });
-});
+mountNumberPad(root.querySelector('#training-pad'), input);
 go.addEventListener('click', start);
 stop.addEventListener('click', () => finish(elapsedSeconds()));
 
