@@ -9,9 +9,7 @@ const scoresInMemory = new Map();
 const previous = difficulty.querySelector('#difficulty-previous');
 const next = difficulty.querySelector('#difficulty-next');
 const start = difficulty.querySelector('#difficulty-start');
-const scoreSection = difficulty.querySelector('.difficulty-scores');
 const scoreList = difficulty.querySelector('#difficulty-scores-list');
-const scoreEmpty = difficulty.querySelector('#difficulty-scores-empty');
 const reset = document.querySelector('#reset-dialog');
 const resetStatus = document.querySelector('#reset-status');
 let pendingGame = '';
@@ -76,11 +74,8 @@ function renderPage() {
   start.setAttribute('aria-label', label + ' starten');
 
   const rules = games.get(pendingGame).score;
-  scoreSection.hidden = !rules;
-  if (!rules) return;
-
-  const best = readScores(scorePrefix + pendingGame + '/' + level, rules);
-  scoreEmpty.hidden = best.length > 0;
+  const best = rules ? readScores(scorePrefix + pendingGame + '/' + level, rules) : [];
+  scoreList.scrollTop = 0;
   scoreList.replaceChildren(...best.map((result) => {
     const item = document.createElement('li');
     item.textContent = rules.format(result, level);

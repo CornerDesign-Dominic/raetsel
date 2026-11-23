@@ -282,7 +282,6 @@ summary { width: fit-content; }
   margin-block-start: .75rem;
   touch-action: pan-y;
 }
-#difficulty-label { margin: 0; text-align: center; }
 .difficulty-navigation {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
@@ -306,8 +305,14 @@ summary { width: fit-content; }
   font-size: .875rem;
 }
 .difficulty-scores h4 { margin: 0; color: var(--petrol); }
-#difficulty-scores-empty { margin: .35rem 0 0; }
-#difficulty-scores-list { margin: 0; padding-inline-start: 1.4rem; font-variant-numeric: tabular-nums; }
+#difficulty-scores-list {
+  block-size: calc(5 * (1.5em + .28rem));
+  overflow-y: auto;
+  margin: 0;
+  padding-inline-start: 1.4rem;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+}
 #difficulty-scores-list li { margin-block-start: .28rem; }
 #difficulty-start { width: 100%; }
 .secondary-action { background: #fbefd9; }
