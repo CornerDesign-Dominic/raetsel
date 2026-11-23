@@ -56,13 +56,16 @@ export function recordScore(gameId, level, result) {
   if (!rules || !Object.hasOwn(game.options ?? levels, level) || !rules.valid(result)) return;
 
   const key = scorePrefix + gameId + '/' + level;
-  const best = [...readScores(key, rules), result].sort(rules.compare).slice(0, scoreLimit);
+  const previousScores = readScores(key, rules);
+  const best = [...previousScores, result].sort(rules.compare).slice(0, scoreLimit);
   try {
     localStorage.setItem(key, JSON.stringify(best));
     scoresInMemory.delete(key);
   } catch {
     scoresInMemory.set(key, best);
   }
+  if (!previousScores.length) return 'first';
+  if (best[0] === result) return 'record';
 }
 
 function renderPage() {

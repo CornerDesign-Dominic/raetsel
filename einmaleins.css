@@ -9,7 +9,7 @@
   margin-inline: auto;
 }
 
-.training-progress, .training-results {
+.training-progress {
   padding: .4rem .55rem;
   border: 1px solid #bc9e76;
   border-radius: .5rem;
@@ -47,7 +47,31 @@
   min-width: 0;
   border: 0;
 }
-.training-results h3 { color: var(--petrol); font: 700 1.1rem Georgia, serif; margin: 0 0 .2rem; }
+.training-result-dialog h2 { padding-inline-end: 3rem; }
+.training-result-dialog h2:focus { outline: none; }
+.training-result-dialog.is-record { border-color: #638773; }
+.training-result-dialog.is-record p { color: var(--petrol); font-weight: 650; }
+.training-result-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .35rem;
+  margin: .85rem 0;
+  padding: .65rem .25rem;
+  border-radius: .55rem;
+  background: #fbefd9;
+  text-align: center;
+}
+.is-record .training-result-stats { background: #dfebdd; }
+.training-result-stats dt { font-size: .8rem; }
+.training-result-stats dd {
+  margin: 0;
+  color: var(--petrol);
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.training-result-actions { display: flex; gap: .5rem; }
+.training-result-actions button { flex: 1; }
 
 .training-stage {
   position: relative;

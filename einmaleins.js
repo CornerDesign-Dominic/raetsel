@@ -20,13 +20,6 @@ root.innerHTML = `
     <button id="training-stop" class="secondary-action" type="button" hidden>Beenden</button>
   </div>
   <section class="training-board" aria-label="Einmaleins üben">
-    <section id="training-results" class="training-results" aria-labelledby="training-summary" hidden>
-      <h3 id="training-summary" tabindex="-1"></h3>
-      <dl class="training-stats" aria-label="Statistik">
-        <div><dt>Richtig</dt><dd id="training-score">0 / 0</dd></div>
-        <div><dt>Sekunden pro Antwort</dt><dd id="training-speed">–</dd></div>
-      </dl>
-    </section>
     <p id="training-feedback" class="training-sr" role="status"></p>
 
     <form class="number-training-form" id="training-form">
@@ -47,6 +40,24 @@ root.innerHTML = `
       </fieldset>
     </form>
   </section>
+  <dialog class="result-dialog training-result-dialog" id="training-results" aria-labelledby="training-summary" aria-describedby="training-result-message">
+    <form method="dialog">
+      <button class="icon-button dialog-close" type="submit" aria-label="Ergebnis schließen">
+        <span aria-hidden="true">×</span>
+      </button>
+    </form>
+    <h2 id="training-summary" tabindex="-1" autofocus></h2>
+    <p id="training-result-message"></p>
+    <dl class="training-result-stats">
+      <div><dt>Richtig</dt><dd id="training-score"></dd></div>
+      <div><dt>s/Antwort</dt><dd id="training-speed"></dd></div>
+      <div><dt>Gesamt</dt><dd id="training-total"></dd></div>
+    </dl>
+    <div class="training-result-actions">
+      <button id="training-again" type="button">Nochmal</button>
+      <button id="training-leave" class="secondary-action" type="button">Verlassen</button>
+    </div>
+  </dialog>
 `;
 
 const form = root.querySelector('#training-form');
@@ -65,6 +76,8 @@ const feedback = root.querySelector('#training-feedback');
 const time = root.querySelector('#training-time');
 const score = root.querySelector('#training-score');
 const speed = root.querySelector('#training-speed');
+const total = root.querySelector('#training-total');
+const resultMessage = root.querySelector('#training-result-message');
 
 let status = 'ready';
 let mode;
@@ -104,9 +117,8 @@ function setStatus(next) {
   task.hidden = !running;
   go.hidden = running;
   stop.hidden = !running || Number.isFinite(mode.count);
-  results.hidden = status !== 'finished';
   go.classList.toggle('training-repeat', status === 'finished');
-  go.textContent = status === 'finished' ? 'Nochmal' : 'Tippe, um zu beginnen';
+  go.textContent = status === 'finished' ? 'Ergebnis anzeigen' : 'Tippe, um zu beginnen';
 }
 
 function reset() {
@@ -135,12 +147,20 @@ function finish(elapsed) {
   window.clearInterval(timer);
   updateStats(elapsed);
   setStatus('finished');
-  summary.textContent = 'Durchlauf beendet';
   score.textContent = correct + ' / ' + answered;
   const seconds = answered > 0 ? elapsed / answered : 0;
-  speed.textContent = answered > 0 ? format.format(seconds) + ' s' : '–';
-  if (answered > 0) recordScore('einmaleins', activeLevel, { errors: answered - correct, seconds, answered, elapsed });
-  summary.focus({ preventScroll: true });
+  speed.textContent = answered > 0 ? format.format(seconds) : '–';
+  total.textContent = format.format(elapsed) + ' s';
+  const achievement = answered > 0
+    ? recordScore('einmaleins', activeLevel, { errors: answered - correct, seconds, answered, elapsed })
+    : undefined;
+  results.classList.toggle('is-record', Boolean(achievement));
+  summary.textContent = achievement ? 'Glückwunsch!' : 'Durchlauf beendet';
+  resultMessage.textContent = achievement === 'first'
+    ? 'Du hast deinen ersten persönlichen Rekord aufgestellt!'
+    : achievement === 'record' ? 'Du hast deinen persönlichen Rekord geknackt!' : '';
+  resultMessage.hidden = !achievement;
+  results.showModal();
 }
 
 function logAnswer(value, right) {
@@ -188,12 +208,23 @@ input.addEventListener('keydown', (event) => {
 mountNumberPad(root.querySelector('#training-pad'), input);
 go.addEventListener('click', () => {
   if (status === 'finished') {
-    reset();
-    go.focus({ preventScroll: true });
+    results.showModal();
     return;
   }
 
   start();
+});
+results.addEventListener('close', () => {
+  if (status === 'finished' && !root.closest('[hidden]') && !results.open) go.focus({ preventScroll: true });
+});
+root.querySelector('#training-again').addEventListener('click', () => {
+  reset();
+  results.close();
+  go.focus({ preventScroll: true });
+});
+root.querySelector('#training-leave').addEventListener('click', () => {
+  results.close();
+  window.location.hash = 'training';
 });
 stop.addEventListener('click', () => finish(elapsedSeconds()));
 
@@ -225,5 +256,8 @@ games.set('einmaleins', {
     document.querySelector('#training-mode-label').textContent = this.options[level];
     reset();
   },
-  leave: () => window.clearInterval(timer),
+  leave() {
+    window.clearInterval(timer);
+    if (results.open) results.close();
+  },
 });
