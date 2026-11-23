@@ -10,11 +10,15 @@ const modes = {
 const format = new Intl.NumberFormat('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const root = document.querySelector('#training-game');
 root.innerHTML = `
-  <section class="training-progress" aria-label="Laufender Durchlauf">
-    <dl class="training-stats">
+  <section class="training-toolbar" aria-label="Laufender Durchlauf">
+    <dl class="training-stats training-progress">
       <div><dt>Zeit</dt><dd id="training-time">0,00 s</dd></div>
       <div><dt>Antworten</dt><dd id="training-answered">0</dd></div>
     </dl>
+    <button id="training-reset" class="icon-button" type="button" aria-label="Durchlauf zurücksetzen"
+      title="Durchlauf zurücksetzen" aria-haspopup="dialog" aria-controls="training-reset-dialog" disabled>
+      <svg aria-hidden="true"><use href="#icon-undo-circle"></use></svg>
+    </button>
   </section>
   <div class="training-stop-row">
     <button id="training-stop" class="secondary-action" type="button" hidden>Beenden</button>
@@ -58,6 +62,17 @@ root.innerHTML = `
       <button id="training-leave" class="secondary-action" type="button">Verlassen</button>
     </div>
   </dialog>
+  <dialog class="result-dialog" id="training-reset-dialog"
+    aria-labelledby="training-reset-title" aria-describedby="training-reset-message">
+    <h2 id="training-reset-title">Durchlauf abbrechen?</h2>
+    <p id="training-reset-message">Dein Fortschritt in diesem Durchlauf geht verloren.</p>
+    <form method="dialog">
+      <button class="icon-button dialog-close" type="submit" aria-label="Weiterspielen" autofocus>
+        <span aria-hidden="true">×</span>
+      </button>
+      <button id="training-confirm-reset" type="button">Durchlauf abbrechen</button>
+    </form>
+  </dialog>
 `;
 
 const form = root.querySelector('#training-form');
@@ -68,6 +83,8 @@ const question = root.querySelector('#training-question');
 const task = root.querySelector('#training-task');
 const go = root.querySelector('#training-go');
 const stop = root.querySelector('#training-stop');
+const resetButton = root.querySelector('#training-reset');
+const resetDialog = root.querySelector('#training-reset-dialog');
 const summary = root.querySelector('#training-summary');
 const results = root.querySelector('#training-results');
 const answeredCount = root.querySelector('#training-answered');
@@ -113,6 +130,7 @@ function setStatus(next) {
   status = next;
   const running = status === 'running';
   controls.disabled = !running;
+  resetButton.disabled = !running;
   input.disabled = !running;
   task.hidden = !running;
   go.hidden = running;
@@ -227,6 +245,14 @@ root.querySelector('#training-leave').addEventListener('click', () => {
   window.location.hash = 'training';
 });
 stop.addEventListener('click', () => finish(elapsedSeconds()));
+resetButton.addEventListener('click', () => {
+  if (status === 'running' && !resetDialog.open) resetDialog.showModal();
+});
+root.querySelector('#training-confirm-reset').addEventListener('click', () => {
+  resetDialog.close();
+  reset();
+  go.focus({ preventScroll: true });
+});
 
 games.set('einmaleins', {
   title: '1×1-Training',
@@ -259,5 +285,6 @@ games.set('einmaleins', {
   leave() {
     window.clearInterval(timer);
     if (results.open) results.close();
+    if (resetDialog.open) resetDialog.close();
   },
 });

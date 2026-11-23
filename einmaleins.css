@@ -9,7 +9,13 @@
   margin-inline: auto;
 }
 
+.training-toolbar { display: flex; align-items: stretch; gap: .4rem; }
+#training-reset:disabled { opacity: .45; cursor: default; }
+#training-reset-title { padding-inline-end: 3rem; }
+
 .training-progress {
+  flex: 1;
+  min-width: 0;
   padding: .4rem .55rem;
   border: 1px solid #bc9e76;
   border-radius: .5rem;
