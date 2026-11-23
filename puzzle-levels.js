@@ -9,7 +9,8 @@ const scoresInMemory = new Map();
 const previous = difficulty.querySelector('#difficulty-previous');
 const next = difficulty.querySelector('#difficulty-next');
 const start = difficulty.querySelector('#difficulty-start');
-const scoreList = difficulty.querySelector('#difficulty-scores-list');
+const scoreBody = difficulty.querySelector('#difficulty-scores-body');
+const scoreLimit = 5;
 const reset = document.querySelector('#reset-dialog');
 const resetStatus = document.querySelector('#reset-status');
 let pendingGame = '';
@@ -55,7 +56,7 @@ export function recordScore(gameId, level, result) {
   if (!rules || !Object.hasOwn(game.options ?? levels, level) || !rules.valid(result)) return;
 
   const key = scorePrefix + gameId + '/' + level;
-  const best = [...readScores(key, rules), result].sort(rules.compare).slice(0, 5);
+  const best = [...readScores(key, rules), result].sort(rules.compare).slice(0, scoreLimit);
   try {
     localStorage.setItem(key, JSON.stringify(best));
     scoresInMemory.delete(key);
@@ -73,11 +74,17 @@ function renderPage() {
 
   const rules = games.get(pendingGame).score;
   const best = rules ? readScores(scorePrefix + pendingGame + '/' + level, rules) : [];
-  scoreList.scrollTop = 0;
-  scoreList.replaceChildren(...best.map((result) => {
-    const item = document.createElement('li');
-    item.textContent = rules.format(result, level);
-    return item;
+  scoreBody.replaceChildren(...Array.from({ length: scoreLimit }, (_, index) => {
+    const row = document.createElement('tr');
+    const result = best[index];
+    const values = result ? rules.format(result) : ['', '', ''];
+    if (!result) row.setAttribute('aria-hidden', 'true');
+    row.append(...values.map((value) => {
+      const cell = document.createElement('td');
+      cell.textContent = value;
+      return cell;
+    }));
+    return row;
   }));
 }
 

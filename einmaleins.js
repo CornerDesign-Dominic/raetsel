@@ -139,7 +139,7 @@ function finish(elapsed) {
   score.textContent = correct + ' / ' + answered;
   const seconds = answered > 0 ? elapsed / answered : 0;
   speed.textContent = answered > 0 ? format.format(seconds) + ' s' : '–';
-  if (answered > 0) recordScore('einmaleins', activeLevel, { errors: answered - correct, seconds, answered });
+  if (answered > 0) recordScore('einmaleins', activeLevel, { errors: answered - correct, seconds, answered, elapsed });
   summary.focus({ preventScroll: true });
 }
 
@@ -209,9 +209,12 @@ games.set('einmaleins', {
     compare(a, b) {
       return a.errors - b.errors || a.seconds - b.seconds;
     },
-    format(result, level) {
-      const pace = format.format(result.seconds) + ' s/Antwort';
-      return result.errors + ' Fehler · ' + pace + (level === 'unendlich' ? ' · ' + result.answered + (result.answered === 1 ? ' Antwort' : ' Antworten') : '');
+    format({ errors, seconds, answered, elapsed }) {
+      return [
+        (answered - errors) + ' / ' + answered,
+        format.format(seconds),
+        format.format(elapsed ?? seconds * answered) + ' s',
+      ];
     },
   },
   options: Object.fromEntries(Object.entries(modes).map(([key, { title, count }]) =>

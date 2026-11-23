@@ -499,10 +499,14 @@
           </div>
           <button id="difficulty-next" class="icon-button" type="button" aria-label="Nächste Stufe"><span aria-hidden="true">›</span></button>
         </div>
-        <section class="difficulty-scores" aria-labelledby="difficulty-scores-title">
-          <h4 id="difficulty-scores-title">Persönliche Highscores</h4>
-          <ol id="difficulty-scores-list"></ol>
-        </section>
+        <div class="difficulty-scores">
+          <table class="difficulty-score-table" aria-label="Persönliche Highscores">
+            <thead>
+              <tr><th scope="col">Richtig</th><th scope="col">s/Antwort</th><th scope="col">Gesamt</th></tr>
+            </thead>
+            <tbody id="difficulty-scores-body"></tbody>
+          </table>
+        </div>
         <button id="difficulty-start" type="button" autofocus>Starten</button>
       </div>
     </dialog>
