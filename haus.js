@@ -3,7 +3,7 @@ import { mountNumberPad } from './number-pad.js';
 import { addStageAction, mountTrainingSession } from './training-session.js';
 
 const game = 'haus';
-const firstWaveCount = 3;
+const firstGroupCount = 3;
 const initialGroupDuration = 2400;
 const minimumGroupDuration = 1450;
 const durationReduction = 180;
@@ -19,7 +19,7 @@ const stage = document.querySelector('#house-game');
 stage.innerHTML = `
   <div class="training-toolbar">
     <dl class="training-stats training-progress">
-      <div><dt>Gruppen</dt><dd id="house-wave-display"></dd></div>
+      <div><dt>Gruppen</dt><dd id="house-group-display"></dd></div>
       <div><dt>Leben</dt><dd id="house-lives"></dd></div>
     </dl>
   </div>
@@ -52,7 +52,7 @@ stage.innerHTML = `
   </form>
 `;
 
-const waveDisplay = stage.querySelector('#house-wave-display');
+const groupDisplay = stage.querySelector('#house-group-display');
 const lifeDisplay = stage.querySelector('#house-lives');
 const feedback = stage.querySelector('.house-feedback');
 const roundResult = stage.querySelector('#house-round-result');
@@ -77,12 +77,12 @@ const session = mountTrainingSession(stage, {
 mountNumberPad(form.querySelector('.training-pad'), answer);
 
 let currentLevel;
-let nextWaves;
+let nextGroupCount;
 let lives;
 let roundsAnswered;
 let correctRounds;
 let round;
-let waveIndex = 0;
+let groupIndex = 0;
 let phase = 'ready';
 let timer;
 
@@ -90,18 +90,24 @@ function randomInt(min, max) {
   return min + Math.floor(Math.random() * (max - min + 1));
 }
 
-function createRound(waveCount, { capacity, entering, maxAlighting }) {
+function createRound(groupCount, { capacity, entering, maxAlighting }) {
   let inside = 0;
-  const waves = [];
-  for (let index = 0; index < waveCount; index++) {
-    const minAlighting = index === 1 || inside === capacity ? 1 : 0;
-    const off = randomInt(minAlighting, Math.min(inside, maxAlighting));
-    const room = capacity - inside + off;
-    const on = randomInt(off === 0 ? Math.min(room, entering[0]) : 0, Math.min(room, entering[1]));
-    inside += on - off;
-    waves.push({ on, off });
+  const groups = [];
+  for (let index = 0; index < groupCount; index++) {
+    const previous = groups.at(-1)?.direction;
+    const repeated = index >= 2 && previous === groups.at(-2)?.direction;
+    const room = capacity - inside;
+    const canEnter = room > 0 && !(repeated && previous === 'entering');
+    const canLeave = inside > 0 && !(repeated && previous === 'leaving');
+    const goesIn = canEnter && (!canLeave || randomInt(0, 1) === 0);
+    const direction = goesIn ? 'entering' : 'leaving';
+    const count = goesIn
+      ? randomInt(Math.min(room, entering[0]), Math.min(room, entering[1]))
+      : randomInt(1, Math.min(inside, maxAlighting));
+    inside += goesIn ? count : -count;
+    groups.push({ count, direction });
   }
-  return { waves, inside };
+  return { groups, inside };
 }
 
 function stopTimer() {
@@ -146,18 +152,13 @@ function drawPeople(count, direction, duration) {
   people.replaceChildren(group);
 }
 
-function showFlow(count, direction, after) {
-  if (count === 0) {
-    after();
-    return;
-  }
-
+function showFlow({ count, direction }, after) {
   const entering = direction === 'entering';
   const destination = entering ? 'ins Haus' : 'aus dem Haus';
-  status.textContent = 'Gruppe ' + (waveIndex + 1) + ': ' + count +
+  status.textContent = 'Gruppe ' + (groupIndex + 1) + ': ' + count +
     (count === 1 ? ' Person geht ' : ' Personen gehen ') + destination + '.';
 
-  const duration = animationDuration(waveIndex);
+  const duration = animationDuration(groupIndex);
   drawPeople(count, direction, duration);
   wait(after, duration + 150);
 }
@@ -170,25 +171,22 @@ function askForAnswer() {
   answer.focus({ preventScroll: true });
 }
 
-function advanceWave() {
-  if (waveIndex === round.waves.length) {
+function advanceGroup() {
+  if (groupIndex === round.groups.length) {
     askForAnswer();
     return;
   }
 
-  const number = waveIndex + 1;
-  const wave = round.waves[waveIndex];
+  const group = round.groups[groupIndex];
   scene.dataset.motion = 'parked';
   people.replaceChildren();
-  waveDisplay.textContent = number + ' / ' + round.waves.length;
+  groupDisplay.textContent = (groupIndex + 1) + ' / ' + round.groups.length;
   status.textContent = 'Die nächste Gruppe kommt …';
-  const pauseTime = Math.max(380, 1250 - Math.floor(waveIndex / 2) * 135);
+  const pauseTime = Math.max(380, 1250 - Math.floor(groupIndex / 2) * 135);
   wait(() => {
-    showFlow(wave.off, 'leaving', () => {
-      showFlow(wave.on, 'entering', () => {
-        waveIndex++;
-        advanceWave();
-      });
+    showFlow(group, () => {
+      groupIndex++;
+      advanceGroup();
     });
   }, pauseTime);
 }
@@ -200,25 +198,25 @@ function playRound() {
   submit.disabled = true;
   answer.removeAttribute('aria-invalid');
   error.textContent = '';
-  round = createRound(nextWaves, settings[currentLevel]);
-  waveIndex = 0;
-  waveDisplay.textContent = '0 / ' + round.waves.length;
+  round = createRound(nextGroupCount, settings[currentLevel]);
+  groupIndex = 0;
+  groupDisplay.textContent = '0 / ' + round.groups.length;
   scene.dataset.motion = 'parked';
   people.replaceChildren();
   status.textContent = 'Das Haus ist am Anfang leer.';
   playArea.focus({ preventScroll: true });
-  wait(advanceWave, 900);
+  wait(advanceGroup, 900);
 }
 
 function resetRun() {
   stopTimer();
   lives = startingLives;
   roundsAnswered = correctRounds = 0;
-  nextWaves = firstWaveCount;
+  nextGroupCount = firstGroupCount;
   round = null;
   scene.dataset.motion = 'parked';
   people.replaceChildren();
-  waveDisplay.textContent = '0 / ' + nextWaves;
+  groupDisplay.textContent = '0 / ' + nextGroupCount;
   lifeDisplay.textContent = lives;
   status.textContent = '';
   showPhase('ready');
@@ -269,7 +267,7 @@ form.addEventListener('submit', (event) => {
   }
 
   const correct = Number(response) === round.inside;
-  nextWaves = Math.max(firstWaveCount, round.waves.length + (correct ? 1 : -1));
+  nextGroupCount = Math.max(firstGroupCount, round.groups.length + (correct ? 1 : -1));
   roundsAnswered++;
   if (correct) correctRounds++;
   else lives--;

@@ -39,6 +39,7 @@ const ruleContent = {
   ],
   haus: () => [
     'Das Haus ist am Anfang leer. Die Personen kommen von links hinein und gehen nach rechts hinaus. Zähle mit.',
+    'Jede Gruppe geht entweder hinein oder hinaus. Dieselbe Richtung kommt höchstens zweimal hintereinander vor.',
     'Gib am Ende der Runde an, wie viele Personen noch im Haus sind.',
     'Bei einer richtigen Antwort kommt in der nächsten Runde eine Gruppe hinzu. Bei einer falschen Antwort wird es eine Gruppe weniger, bis auf mindestens drei.',
     'Solange du noch ein Leben hast, startet die nächste Runde nach drei Sekunden. Jeder Fehler kostet ein Leben. Nach zwei Fehlern endet der Durchlauf.',
