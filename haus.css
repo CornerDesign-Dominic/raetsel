@@ -1,5 +1,5 @@
 .training-stage.house-stage {
-  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-rows: minmax(0, 1fr);
   container-type: size;
 }
 
@@ -93,13 +93,6 @@
 .house-feedback[data-result='correct'] > strong { color: #246348; }
 .house-feedback[data-result='wrong'] > strong { color: #a03629; }
 #house-countdown { font-variant-numeric: tabular-nums; }
-
-.house-cue {
-  min-block-size: 1.4rem;
-  margin: 0;
-  text-align: center;
-  font-size: .875rem;
-}
 
 .house-status {
   position: absolute;

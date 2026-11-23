@@ -4,13 +4,15 @@ import { addStageAction, mountTrainingSession } from './training-session.js';
 
 const game = 'haus';
 const firstWaveCount = 3;
-const groupDuration = 2400;
+const initialGroupDuration = 2400;
+const minimumGroupDuration = 1450;
+const durationReduction = 180;
 const startingLives = 2;
 const countdownSeconds = 3;
 const settings = {
-  leicht: { capacity: 10, entering: [2, 6], maxAlighting: 3 },
-  mittel: { capacity: 20, entering: [3, 10], maxAlighting: 5 },
-  schwer: { capacity: 30, entering: [5, 15], maxAlighting: 8 },
+  leicht: { capacity: 15, entering: [2, 6], maxAlighting: 3 },
+  mittel: { capacity: 25, entering: [3, 10], maxAlighting: 5 },
+  schwer: { capacity: 35, entering: [5, 15], maxAlighting: 8 },
 };
 
 const stage = document.querySelector('#house-game');
@@ -22,7 +24,7 @@ stage.innerHTML = `
     </dl>
   </div>
   <form id="house-answer" class="training-board number-training-form">
-    <div class="training-stage house-stage">
+    <div class="training-stage house-stage" tabindex="-1">
       <div class="house-scene" id="house-scene" data-motion="parked" aria-hidden="true">
         <svg class="house-building" viewBox="0 0 80 88" preserveAspectRatio="xMidYMax meet" fill="none">
           <path class="house-outline" d="M9 87V33L40 4l31 29v54Z"/>
@@ -30,7 +32,6 @@ stage.innerHTML = `
         </svg>
         <div id="house-people" class="house-people"></div>
       </div>
-      <p id="house-cue" class="house-cue" tabindex="-1"></p>
       <p id="house-status" class="house-status" role="status" aria-atomic="true"></p>
       <div class="house-question" hidden>
         <label for="house-count">Wie viele Personen sind noch im Haus?</label>
@@ -59,7 +60,6 @@ const roundDetail = stage.querySelector('#house-round-detail');
 const countdown = stage.querySelector('#house-countdown');
 const scene = stage.querySelector('#house-scene');
 const people = stage.querySelector('#house-people');
-const cue = stage.querySelector('#house-cue');
 const status = stage.querySelector('#house-status');
 const form = stage.querySelector('#house-answer');
 const answer = stage.querySelector('#house-count');
@@ -112,15 +112,10 @@ function wait(callback, delay) {
   timer = window.setTimeout(callback, delay);
 }
 
-function describe(text, screenReader = text) {
-  cue.textContent = text;
-  status.textContent = screenReader;
-}
-
 function showPhase(nextPhase) {
   phase = nextPhase;
   go.hidden = phase !== 'ready';
-  scene.hidden = cue.hidden = phase !== 'play';
+  scene.hidden = phase !== 'play';
   question.hidden = controls.disabled = answer.disabled = phase !== 'answer';
   feedback.hidden = phase !== 'feedback';
   session.setRunning(phase === 'play' || phase === 'answer' || phase === 'feedback');
@@ -131,11 +126,16 @@ const figureMarkup = `<svg viewBox="0 0 24 30" fill="currentColor">
   <path d="M8 11h8a6 6 0 0 1 6 6v4h-4v6a3 3 0 0 1-6 0v-4h-1v4a3 3 0 0 1-6 0v-6H2v-4a6 6 0 0 1 6-6Z"/>
 </svg>`;
 
-function drawPeople(count, direction) {
+function animationDuration(groupIndex) {
+  const speedSteps = Math.floor(groupIndex / 2);
+  return Math.max(minimumGroupDuration, initialGroupDuration - speedSteps * durationReduction);
+}
+
+function drawPeople(count, direction, duration) {
   scene.dataset.motion = direction;
   const group = document.createElement('div');
   group.className = 'house-group';
-  group.style.setProperty('--house-group-duration', groupDuration + 'ms');
+  group.style.setProperty('--house-group-duration', duration + 'ms');
   const figures = Array.from({ length: count }, () => {
     const figure = document.createElement('span');
     figure.className = 'house-figure';
@@ -154,20 +154,18 @@ function showFlow(count, direction, after) {
 
   const entering = direction === 'entering';
   const destination = entering ? 'ins Haus' : 'aus dem Haus';
-  describe(
-    entering ? 'Von links ins Haus' : 'Aus dem Haus nach rechts',
-    'Gruppe ' + (waveIndex + 1) + ': ' + count +
-      (count === 1 ? ' Person geht ' : ' Personen gehen ') + destination + '.',
-  );
+  status.textContent = 'Gruppe ' + (waveIndex + 1) + ': ' + count +
+    (count === 1 ? ' Person geht ' : ' Personen gehen ') + destination + '.';
 
-  drawPeople(count, direction);
-  wait(after, groupDuration + 150);
+  const duration = animationDuration(waveIndex);
+  drawPeople(count, direction, duration);
+  wait(after, duration + 150);
 }
 
 function askForAnswer() {
   scene.dataset.motion = 'parked';
   people.replaceChildren();
-  describe('Jetzt bist du dran.');
+  status.textContent = 'Jetzt bist du dran.';
   showPhase('answer');
   answer.focus({ preventScroll: true });
 }
@@ -183,7 +181,7 @@ function advanceWave() {
   scene.dataset.motion = 'parked';
   people.replaceChildren();
   waveDisplay.textContent = number + ' / ' + round.waves.length;
-  describe('Die nächste Gruppe kommt …');
+  status.textContent = 'Die nächste Gruppe kommt …';
   const pauseTime = Math.max(380, 1250 - Math.floor(waveIndex / 2) * 135);
   wait(() => {
     showFlow(wave.off, 'leaving', () => {
@@ -207,8 +205,8 @@ function playRound() {
   waveDisplay.textContent = '0 / ' + round.waves.length;
   scene.dataset.motion = 'parked';
   people.replaceChildren();
-  describe('Das Haus ist am Anfang leer.');
-  cue.focus({ preventScroll: true });
+  status.textContent = 'Das Haus ist am Anfang leer.';
+  playArea.focus({ preventScroll: true });
   wait(advanceWave, 900);
 }
 
@@ -222,7 +220,7 @@ function resetRun() {
   people.replaceChildren();
   waveDisplay.textContent = '0 / ' + nextWaves;
   lifeDisplay.textContent = lives;
-  describe('');
+  status.textContent = '';
   showPhase('ready');
 }
 
@@ -250,7 +248,7 @@ function showRoundFeedback(correct, detail) {
   roundDetail.textContent = detail;
   feedback.dataset.result = correct ? 'correct' : 'wrong';
   showPhase('feedback');
-  describe('', message + ' ' + detail + ' Nächste Runde in drei Sekunden.');
+  status.textContent = message + ' ' + detail + ' Nächste Runde in drei Sekunden.';
 
   function tick(remaining) {
     countdown.textContent = remaining;
@@ -285,7 +283,7 @@ form.addEventListener('submit', (event) => {
 
   if (correctRounds > 0) markSolved(game, currentLevel);
   showPhase('result');
-  describe('');
+  status.textContent = '';
   session.finish({
     detail: 'Beide Leben sind aufgebraucht. ' + detail,
     metrics: [['Richtig', correctRounds + ' / ' + roundsAnswered], ['Fehler', startingLives]],

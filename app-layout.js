@@ -42,6 +42,7 @@ const ruleContent = {
     'Gib am Ende der Runde an, wie viele Personen noch im Haus sind.',
     'Bei einer richtigen Antwort kommt in der nächsten Runde eine Gruppe hinzu. Bei einer falschen Antwort wird es eine Gruppe weniger, bis auf mindestens drei.',
     'Solange du noch ein Leben hast, startet die nächste Runde nach drei Sekunden. Jeder Fehler kostet ein Leben. Nach zwei Fehlern endet der Durchlauf.',
+    'Je nach Schwierigkeit sind höchstens 15, 25 oder 35 Personen gleichzeitig im Haus. Die Animation wird nach jeweils zwei Gruppen schneller, bis sie ihr Höchsttempo erreicht.',
   ],
   merken: () => [
     'Tippe auf die Spielfläche und merke dir die Positionen der Zahlen.',
