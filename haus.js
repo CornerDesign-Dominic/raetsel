@@ -4,8 +4,7 @@ import { addStageAction, mountTrainingSession } from './training-session.js';
 
 const game = 'haus';
 const firstWaveCount = 3;
-const personInterval = 340;
-const personTravel = 1050;
+const groupDuration = 2400;
 const settings = {
   leicht: { capacity: 10, entering: [2, 6], maxAlighting: 3 },
   mittel: { capacity: 20, entering: [3, 10], maxAlighting: 5 },
@@ -113,14 +112,17 @@ const figureMarkup = `<svg viewBox="0 0 20 32" fill="none">
 
 function drawPeople(count, direction) {
   scene.dataset.motion = direction;
-  const figures = Array.from({ length: count }, (_, index) => {
+  const group = document.createElement('div');
+  group.className = 'house-group';
+  group.style.setProperty('--house-group-duration', groupDuration + 'ms');
+  const figures = Array.from({ length: count }, () => {
     const figure = document.createElement('span');
     figure.className = 'house-figure';
-    figure.style.setProperty('--house-delay', index * personInterval + 'ms');
     figure.innerHTML = figureMarkup;
     return figure;
   });
-  people.replaceChildren(...figures);
+  group.append(...figures);
+  people.replaceChildren(group);
 }
 
 function showFlow(count, direction, after) {
@@ -138,7 +140,7 @@ function showFlow(count, direction, after) {
   );
 
   drawPeople(count, direction);
-  wait(after, (count - 1) * personInterval + personTravel + 220);
+  wait(after, groupDuration + 150);
 }
 
 function askForAnswer() {
