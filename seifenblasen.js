@@ -48,6 +48,7 @@ stop.addEventListener('click', () => {
 function reset() {
   session.setRunning(false);
   field.hidden = stop.hidden = true;
+  for (const slot of slots) slot.replaceChildren();
   nextLabel.textContent = '1';
   feedback.textContent = '';
   go.hidden = false;
@@ -83,7 +84,6 @@ function start() {
   nextLabel.textContent = nextNumber;
   feedback.textContent = '';
   lastMiss = undefined;
-  for (const slot of slots) slot.replaceChildren();
 
   const free = [...slots];
   let movingLeft = movingCounts[level];

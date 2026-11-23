@@ -80,7 +80,7 @@ function reset() {
   sequence = [];
   position = 0;
   wrongTile = undefined;
-  setPhase('ready', '', 'Tippen, um zu beginnen');
+  setPhase('ready', '', 'Tippe, um zu beginnen');
   showRound();
   render();
 }

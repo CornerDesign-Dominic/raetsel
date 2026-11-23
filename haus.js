@@ -249,6 +249,7 @@ form.addEventListener('submit', (event) => {
   nextWaves = Math.max(firstWaveCount, round.waves.length + (correct ? 1 : -1));
   if (correct) markSolved(game, currentLevel);
   showPhase('result');
+  describe('');
   session.finish({
     detail: correct ? 'Richtig gezählt!' : 'Knapp daneben.',
     metrics: [['Deine Antwort', response], ['Im Haus', round.inside], ['Gruppen als Nächstes', nextWaves]],

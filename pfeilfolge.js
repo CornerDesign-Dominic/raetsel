@@ -117,7 +117,7 @@ function resetRun() {
   retriesLeft = initialRetries;
   longest = 0;
   items.replaceChildren();
-  setPhase('idle', '', 'Tippen, um zu beginnen');
+  setPhase('idle', '', 'Tippe, um zu beginnen');
 }
 
 function showCue(index) {
