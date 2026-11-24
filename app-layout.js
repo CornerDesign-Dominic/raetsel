@@ -23,7 +23,8 @@ const ruleContent = {
   rasterform: () => [
     'Wähle das Raster, das nach einer Drehung genau wie das Vorbild aussieht.',
     'Die richtige Antwort ist um 90°, 180° oder 270° gedreht. Eine Spiegelung zählt als falsch.',
-    'Alle Raster haben gleich viele gefärbte Felder. Du hast pro Aufgabe einen Versuch.',
+    'Alle Raster haben gleich viele gefärbte Felder. Du hast pro Aufgabe einen Versuch. Danach geht es automatisch weiter.',
+    'Die Gesamtzeit umfasst die Zeit zum Lösen der Aufgaben. Die kurze Rückmeldung nach jeder Antwort zählt nicht mit.',
   ],
   mustergruppe: () => [
     'Vergleiche die Farben der Striche in den vier Feldern. Ihre Reihenfolge kann sich ändern.',

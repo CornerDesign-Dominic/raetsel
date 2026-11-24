@@ -9,7 +9,7 @@
 }
 
 .raster-task {
-  --raster-size: min(100%, 7rem, max(2rem, calc((100cqh - 5.5rem) / 2)));
+  --raster-size: min(100%, 7rem, max(2rem, calc((100cqh - 9.75rem) / 3)));
   display: grid;
   gap: .55rem;
 }
@@ -25,9 +25,10 @@
 
 .raster-options {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(.2rem, 2vw, .55rem);
-  width: min(100%, 26rem);
+  width: min(100%, 17rem);
+  margin-block-start: clamp(.6rem, 3cqh, 1.15rem);
   margin-inline: auto;
 }
 
@@ -70,4 +71,16 @@
 .raster-feedback {
   min-height: 1.15rem;
   font-size: .875rem;
+}
+
+
+@media (orientation: landscape) and (max-height: 500px) {
+  .raster-task {
+    --raster-size: min(100%, 5rem, max(2rem, calc((100cqh - 5.25rem) / 2)));
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+    align-items: center;
+  }
+
+  .raster-options { margin-block-start: 0; }
+  .raster-feedback { grid-column: 1 / -1; }
 }

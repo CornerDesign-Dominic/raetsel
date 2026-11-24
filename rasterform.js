@@ -1,8 +1,11 @@
-import { games } from './puzzle-levels.js';
+import { games, recordScore } from './puzzle-levels.js';
 import { addStageAction, mountTrainingSession } from './training-session.js';
 
 const gameId = 'rasterform';
 const totalRounds = 10;
+const feedbackDuration = 1500;
+const seconds = new Intl.NumberFormat('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const formatTime = centiseconds => seconds.format(centiseconds / 100) + ' s';
 const filledCounts = { leicht: 3, mittel: 4, schwer: 5 };
 const cells = Array.from({ length: 9 }, (_, index) => index);
 
@@ -38,7 +41,11 @@ function candidateForms(filledCount) {
     const shifts = filled.flatMap(from => empty
       .filter(to => Math.abs(Math.floor(from / 3) - Math.floor(to / 3)) + Math.abs(from % 3 - to % 3) === 1)
       .map(to => pattern ^ (1 << from) ^ (1 << to))).filter(shift => !excluded.includes(shift));
-    if (shifts.length) forms.push({ pattern, turns, mirror, shifts });
+    const distinctShifts = shifts.filter((shift, index) => {
+      const variants = rotations(shift);
+      return !shifts.slice(0, index).some(other => variants.includes(other));
+    });
+    if (distinctShifts.length >= 2) forms.push({ pattern, turns, mirror, shifts: distinctShifts });
   }
   return forms;
 }
@@ -47,27 +54,39 @@ const pick = values => values[Math.floor(Math.random() * values.length)];
 
 function createPuzzle(forms, previousPattern) {
   const form = pick(forms.filter(candidate => !candidate.turns.includes(previousPattern)));
-  const correctIndex = Math.floor(Math.random() * 3);
-  const decoys = [pick(rotations(form.mirror)), pick(rotations(pick(form.shifts)))];
-  if (Math.random() < 0.5) decoys.reverse();
-  decoys.splice(correctIndex, 0, pick(form.turns.slice(1)));
-  return { pattern: form.pattern, options: decoys, correctIndex };
+  const firstShift = pick(form.shifts);
+  const secondShift = pick(form.shifts.filter(shift => shift !== firstShift));
+  const options = [
+    pick(form.turns.slice(1)),
+    pick(rotations(form.mirror)),
+    pick(rotations(firstShift)),
+    pick(rotations(secondShift)),
+  ];
+  for (let index = options.length - 1; index > 0; index--) {
+    const other = Math.floor(Math.random() * (index + 1));
+    [options[index], options[other]] = [options[other], options[index]];
+  }
+  return { pattern: form.pattern, options, correctIndex: options.findIndex(option => form.turns.includes(option)) };
 }
 
 const root = document.querySelector('#raster-game');
 root.innerHTML = `
-  <div class="training-toolbar"><p class="training-progress" id="raster-progress"></p></div>
+  <div class="training-toolbar">
+    <dl class="training-stats training-progress">
+      <div><dt>Aufgabe</dt><dd id="raster-progress"></dd></div>
+      <div><dt>Zeit</dt><dd id="raster-time">0,00 s</dd></div>
+    </dl>
+  </div>
   <div class="training-stage raster-stage">
     <div class="raster-task" hidden>
       <div class="raster-model">
         <strong>Vorbild</strong>
         <div id="raster-model" role="img"></div>
       </div>
-      <div class="raster-options" role="group" aria-label="Drei Antwortmöglichkeiten"></div>
+      <div class="raster-options" role="group" aria-label="Vier Antwortmöglichkeiten"></div>
       <p class="raster-feedback" role="status"></p>
     </div>
   </div>
-  <button type="button" class="number-training-submit" id="raster-next" hidden>Weiter</button>
 `;
 
 const progress = root.querySelector('#raster-progress');
@@ -76,17 +95,22 @@ const task = root.querySelector('.raster-task');
 const model = root.querySelector('#raster-model');
 const options = root.querySelector('.raster-options');
 const feedback = root.querySelector('.raster-feedback');
-const next = root.querySelector('#raster-next');
+const timeLabel = root.querySelector('#raster-time');
 const go = addStageAction(stage, showRound);
 const session = mountTrainingSession(root, {
   toolbar: root.querySelector('.training-toolbar'), stage, reset,
 });
 
 let forms;
+let level;
 let round;
 let score;
 let previousPattern;
 let answered;
+let elapsed;
+let startedAt;
+let feedbackTimer;
+let clockTimer;
 
 function drawGrid(element, pattern) {
   const grid = document.createElement('span');
@@ -109,16 +133,29 @@ function describeGrid(pattern) {
 }
 
 function showProgress() {
-  progress.textContent = `Aufgabe ${round} von ${totalRounds}`;
+  progress.textContent = round + ' / ' + totalRounds;
+}
+
+function clearTimers() {
+  window.clearTimeout(feedbackTimer);
+  window.clearInterval(clockTimer);
+}
+
+function updateTime() {
+  const current = answered ? elapsed : elapsed + performance.now() - startedAt;
+  timeLabel.textContent = formatTime(Math.round(current / 10));
 }
 
 function reset() {
+  clearTimers();
+  elapsed = 0;
+  timeLabel.textContent = formatTime(0);
   round = 1;
   score = 0;
   previousPattern = undefined;
   showProgress();
   session.setRunning(false);
-  task.hidden = next.hidden = true;
+  task.hidden = true;
   go.hidden = false;
 }
 
@@ -127,7 +164,6 @@ function showRound() {
   session.setRunning(true);
   go.hidden = true;
   task.hidden = false;
-  next.hidden = true;
   feedback.textContent = '';
   answered = false;
   const puzzle = createPuzzle(forms, previousPattern);
@@ -150,38 +186,63 @@ function showRound() {
   }));
   model.tabIndex = -1;
   model.focus({ preventScroll: true });
+  startedAt = performance.now();
+  clockTimer = window.setInterval(updateTime, 100);
 }
 
 function answer(selected, correct) {
   if (answered) return;
+  elapsed += performance.now() - startedAt;
   answered = true;
+  window.clearInterval(clockTimer);
+  updateTime();
   const isCorrect = selected === correct;
   if (isCorrect) score++;
   options.children[selected].dataset.answer = isCorrect ? 'correct' : 'wrong';
   options.children[correct].dataset.answer = 'correct';
   for (const button of options.children) button.disabled = true;
   feedback.textContent = isCorrect ? 'Richtig!' : `Richtig ist ${String.fromCharCode(65 + correct)}.`;
-  next.textContent = round === totalRounds ? 'Ergebnis' : 'Weiter';
-  next.hidden = false;
-  next.focus({ preventScroll: true });
+  feedbackTimer = window.setTimeout(() => {
+    if (round < totalRounds) {
+      round++;
+      showRound();
+      return;
+    }
+    task.hidden = true;
+    const time = Math.round(elapsed / 10);
+    const achievement = recordScore(gameId, level, { score, time });
+    session.finish({
+      title: achievement ? 'Glückwunsch!' : 'Durchlauf beendet',
+      detail: achievement ? 'Neuer persönlicher Rekord!' : '',
+      record: Boolean(achievement),
+      metrics: [['Richtig', score + ' / ' + totalRounds], ['Zeit', formatTime(time)]],
+    });
+  }, feedbackDuration);
 }
-
-next.addEventListener('click', () => {
-  if (round === totalRounds) {
-    task.hidden = next.hidden = true;
-    session.finish({ metrics: [['Richtig', score + ' / ' + totalRounds]] });
-    return;
-  }
-  round++;
-  showRound();
-});
 
 games.set(gameId, {
   title: 'Rasterform',
   category: 'training',
-  load(level) {
+  score: {
+    columns: ['Richtig', 'Zeit'],
+    valid(result) {
+      return Number.isInteger(result?.score) && result.score >= 0 && result.score <= totalRounds
+        && Number.isSafeInteger(result.time) && result.time >= 0;
+    },
+    compare(a, b) {
+      return b.score - a.score || a.time - b.time;
+    },
+    format(result) {
+      return [result.score + ' / ' + totalRounds, formatTime(result.time)];
+    },
+  },
+  load(selectedLevel) {
+    level = selectedLevel;
     forms = candidateForms(filledCounts[level]);
     reset();
   },
-  leave: session.leave,
+  leave() {
+    clearTimers();
+    session.leave();
+  },
 });
