@@ -10,13 +10,11 @@ const root = document.querySelector('#bubble-game');
 root.innerHTML = `
   <div class="training-toolbar">
     <p class="training-progress">Nächste Zahl <strong id="bubble-next">1</strong></p>
+    <button type="button" class="secondary-action" id="bubble-stop" hidden>Beenden</button>
   </div>
   <div class="training-stage bubble-stage">
     <div class="bubble-field" id="bubble-field" role="group" aria-label="Seifenblasen" hidden></div>
     <p class="bubble-feedback" id="bubble-feedback" role="status"></p>
-  </div>
-  <div class="training-stop-row">
-    <button type="button" class="secondary-action" id="bubble-stop" hidden>Beenden</button>
   </div>
 `;
 
