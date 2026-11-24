@@ -59,11 +59,11 @@ const ruleContent = {
     'Tippe auf Stunden oder Minuten, um das Feld zu wählen. Ein freies Feld zählt als 0.',
   ],
   seifenblasen: () => [
-    'Beginne bei 1 und tippe immer die nächsthöhere Zahl an.',
-    'Eine richtige Blase platzt. An einer freien Stelle erscheint eine neue Blase mit einer Zahl, die um eins höher ist als die bisher größte.',
+    'Tippe die Blasen von 1 bis 25 in der richtigen Reihenfolge an. Die Zeit läuft ab dem Erscheinen der ersten Blasen bis zum Treffer auf die 25.',
+    'Es sind bis zu sechs Blasen gleichzeitig auf dem Feld. Nach einem Treffer erscheint die nächste neue Zahl, bis die 25 auf dem Feld ist.',
     'Auf Leicht bleiben alle Blasen stehen. Auf Mittel bewegen sich zwei, auf Schwer fünf über die ganze Spielfläche.',
     'Überlappen sich Blasen, zählt dein Tipp für die gesuchte Zahl, wenn du ihre Blase an der Tippstelle triffst.',
-    'Mit „Beenden“ siehst du dein Ergebnis.',
+    'Ein Tipp auf eine falsche Blase zählt als Fehler. Ein Tipp ins Leere bleibt ohne Wertung.',
   ],
   pfeilfolge: () => [
     'Tippe auf die große Fläche, merke dir die Pfeile und gib sie danach in derselben Reihenfolge ein.',

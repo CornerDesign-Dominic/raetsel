@@ -10,6 +10,8 @@ const previous = difficulty.querySelector('#difficulty-previous');
 const next = difficulty.querySelector('#difficulty-next');
 const start = difficulty.querySelector('#difficulty-start');
 const scoreBody = difficulty.querySelector('#difficulty-scores-body');
+const scoreHeading = scoreBody.parentElement.tHead.rows[0];
+const defaultScoreColumns = Array.from(scoreHeading.cells, (cell) => cell.textContent);
 const scoreLimit = 5;
 const reset = document.querySelector('#reset-dialog');
 const resetStatus = document.querySelector('#reset-status');
@@ -76,11 +78,19 @@ function renderPage() {
   start.setAttribute('aria-label', label + ' starten');
 
   const rules = games.get(pendingGame).score;
+  const columns = rules?.columns ?? defaultScoreColumns;
+  scoreHeading.replaceChildren(...columns.map((label) => {
+    const heading = document.createElement('th');
+    heading.scope = 'col';
+    heading.textContent = label;
+    return heading;
+  }));
+
   const best = rules ? readScores(scorePrefix + pendingGame + '/' + level, rules) : [];
   scoreBody.replaceChildren(...Array.from({ length: scoreLimit }, (_, index) => {
     const row = document.createElement('tr');
     const result = best[index];
-    const values = result ? rules.format(result) : ['', '', ''];
+    const values = result ? rules.format(result) : columns.map(() => '');
     if (!result) row.setAttribute('aria-hidden', 'true');
     row.append(...values.map((value) => {
       const cell = document.createElement('td');

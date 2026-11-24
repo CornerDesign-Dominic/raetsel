@@ -1,7 +1,10 @@
-import { games } from './puzzle-levels.js';
+import { games, recordScore } from './puzzle-levels.js';
 import { addStageAction, mountTrainingSession } from './training-session.js';
 
 const bubbleCount = 6;
+const lastNumber = 25;
+const seconds = new Intl.NumberFormat('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const formatTime = (centiseconds) => seconds.format(centiseconds / 100) + ' s';
 const movingCounts = { leicht: 0, mittel: 2, schwer: 5 };
 const edgeInset = 4;
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -9,8 +12,10 @@ const root = document.querySelector('#bubble-game');
 
 root.innerHTML = `
   <div class="training-toolbar">
-    <p class="training-progress">Nächste Zahl <strong id="bubble-next">1</strong></p>
-    <button type="button" class="secondary-action" id="bubble-stop" hidden>Beenden</button>
+    <dl class="training-stats training-progress">
+      <div><dt>Nächste Zahl</dt><dd><span id="bubble-next">1</span> / ${lastNumber}</dd></div>
+      <div><dt>Zeit</dt><dd id="bubble-time">0,00 s</dd></div>
+    </dl>
   </div>
   <div class="training-stage bubble-stage">
     <div class="bubble-field" id="bubble-field" role="group" aria-label="Seifenblasen" hidden></div>
@@ -21,6 +26,7 @@ root.innerHTML = `
 const field = root.querySelector('#bubble-field');
 const feedback = root.querySelector('#bubble-feedback');
 const nextLabel = root.querySelector('#bubble-next');
+const timeLabel = root.querySelector('#bubble-time');
 const bubbles = new Map();
 const bounds = { x: 0, y: 0 };
 let frame;
@@ -32,20 +38,34 @@ let nextNumber;
 let highestNumber;
 let lastMiss;
 let misses;
+let startedAt;
+let timer;
 const stage = root.querySelector('.bubble-stage');
-const stop = root.querySelector('#bubble-stop');
 const go = addStageAction(stage, start);
 const session = mountTrainingSession(root, {
   toolbar: root.querySelector('.training-toolbar'), stage, reset,
 });
-stop.addEventListener('click', () => {
+
+function elapsedTime() {
+  return Math.round((performance.now() - startedAt) / 10);
+}
+
+function finish() {
+  const time = elapsedTime();
+  timeLabel.textContent = formatTime(time);
   clearField();
-  stop.hidden = true;
   feedback.textContent = '';
-  session.finish({ metrics: [['Geplatzt', nextNumber - 1], ['Fehlversuche', misses]] });
-});
+  const achievement = recordScore('seifenblasen', level, { misses, time });
+  session.finish({
+    title: achievement ? 'Glückwunsch!' : 'Durchlauf beendet',
+    detail: achievement ? 'Neuer persönlicher Rekord!' : '',
+    record: Boolean(achievement),
+    metrics: [['Zeit', formatTime(time)], ['Fehler', misses]],
+  });
+}
 
 function clearField() {
+  window.clearInterval(timer);
   stopMotion();
   resizeObserver.disconnect();
   field.hidden = true;
@@ -57,8 +77,8 @@ function clearField() {
 function reset() {
   session.setRunning(false);
   clearField();
-  stop.hidden = true;
   nextLabel.textContent = '1';
+  timeLabel.textContent = formatTime(0);
   feedback.textContent = '';
   go.hidden = false;
 }
@@ -106,9 +126,7 @@ function placeBubble(number, moving, previous) {
   button.type = 'button';
   button.className = 'bubble';
   button.dataset.number = number;
-  const label = String(number);
-  button.textContent = label;
-  if (label.length >= 4) button.style.setProperty('--bubble-label-size', `${45 / label.length}px`);
+  button.textContent = number;
   orbit.append(button);
   field.append(orbit);
 
@@ -158,7 +176,7 @@ reducedMotion.addEventListener('change', syncMotion);
 function start() {
   session.setRunning(true);
   go.hidden = true;
-  field.hidden = stop.hidden = false;
+  field.hidden = false;
   misses = 0;
   nextNumber = 1;
   highestNumber = bubbleCount;
@@ -171,6 +189,8 @@ function start() {
     placeBubble(number, moving);
     if (moving) movingLeft--;
   }
+  startedAt = performance.now();
+  timer = window.setInterval(() => { timeLabel.textContent = formatTime(elapsedTime()); }, 100);
   resizeObserver.observe(field);
   syncMotion();
 }
@@ -195,12 +215,17 @@ function tapBubble(button, keyboard = false) {
   }
 
   const bubble = bubbles.get(button);
+  if (nextNumber === lastNumber) {
+    finish();
+    return;
+  }
+
   bubbles.delete(button);
   burst(button, bubble.orbit);
-  const replacement = placeBubble(++highestNumber, bubble.moving, bubble);
+  if (highestNumber < lastNumber) placeBubble(++highestNumber, bubble.moving, bubble);
   nextLabel.textContent = ++nextNumber;
   feedback.textContent = '';
-  if (keyboard) replacement.focus({ preventScroll: true });
+  if (keyboard) [...bubbles.keys()].at(-1).focus({ preventScroll: true });
 }
 
 field.addEventListener('pointerdown', (event) => {
@@ -227,6 +252,19 @@ field.addEventListener('click', (event) => {
 games.set('seifenblasen', {
   title: 'Seifenblasen',
   category: 'training',
+  score: {
+    columns: ['Fehler', 'Zeit'],
+    valid(result) {
+      return Number.isSafeInteger(result?.misses) && result.misses >= 0
+        && Number.isSafeInteger(result.time) && result.time >= 0;
+    },
+    compare(a, b) {
+      return a.misses - b.misses || a.time - b.time;
+    },
+    format(result) {
+      return [result.misses, formatTime(result.time)];
+    },
+  },
   load(selectedLevel) {
     level = selectedLevel;
     reset();

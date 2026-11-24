@@ -49,7 +49,7 @@
   background: radial-gradient(ellipse at 28% 22%, #f4fff5 5%, #c5e7d6 27%, #a8d5cf 63%, #98bade 100%);
   box-shadow: inset 0 0 0 .15rem #f9fcf355, inset 0 -.2rem .5rem #615ca542;
   color: #173a3b;
-  font-size: var(--bubble-label-size, .875rem);
+  font-size: .875rem;
   font-weight: 750;
   font-variant-numeric: tabular-nums;
   line-height: 1;
