@@ -10,6 +10,7 @@ import './sudoku.js';
 import './schatten.js';
 import './zahlenreihe.js';
 import './mustergruppe.js';
+import './rasterform.js';
 import './pfeilfolge.js';
 import './wo-wohne-ich.js';
 import { updateLayout, focusPageTitle } from './app-layout.js';

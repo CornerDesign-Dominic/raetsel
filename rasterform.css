@@ -1,0 +1,73 @@
+.play-view[data-view='rasterform'] { block-size: 100%; }
+
+.training-stage.raster-stage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  container-type: size;
+  text-align: center;
+}
+
+.raster-task {
+  --raster-size: min(100%, 7rem, max(2rem, calc((100cqh - 5.5rem) / 2)));
+  display: grid;
+  gap: .55rem;
+}
+
+.raster-model {
+  display: grid;
+  justify-items: center;
+  gap: .25rem;
+}
+
+#raster-model { width: var(--raster-size); }
+#raster-model:focus { outline: none; }
+
+.raster-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(.2rem, 2vw, .55rem);
+  width: min(100%, 26rem);
+  margin-inline: auto;
+}
+
+.raster-choice {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: .2rem;
+  padding: .25rem;
+  border-color: #b89973;
+  border-radius: .5rem;
+  background: var(--paper);
+}
+
+.raster-choice[data-answer='correct'] { border-color: #246348; background: #dce9d9; }
+.raster-choice[data-answer='wrong'] { border-color: #a03629; background: #f6e1d9; }
+
+.raster-grid {
+  display: grid;
+  grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+  gap: clamp(1px, .6vw, 3px);
+  width: var(--raster-size);
+  aspect-ratio: 1;
+  margin-inline: auto;
+}
+
+#raster-model .raster-grid { width: 100%; }
+
+.raster-grid > span {
+  border-radius: 2px;
+  border: 1px solid #b89973;
+  background: #f4e8d1;
+}
+
+.raster-grid > [data-filled] {
+  border-color: var(--petrol);
+  background: var(--petrol);
+}
+
+.raster-feedback {
+  min-height: 1.15rem;
+  font-size: .875rem;
+}

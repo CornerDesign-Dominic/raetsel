@@ -21,6 +21,7 @@
   <link rel="stylesheet" href="./sequence-training.css">
   <link rel="stylesheet" href="./chalk-finish.css">
   <link rel="stylesheet" href="./training-session.css">
+  <link rel="stylesheet" href="./rasterform.css">
   <script type="module" src="./app.js"></script>
   <title>Inveni</title>
 </head>
@@ -87,6 +88,10 @@
       <rect x="2" y="8" width="5" height="8" rx="1"/>
       <rect x="9.5" y="8" width="5" height="8" rx="1"/>
       <path d="M17 10a2 2 0 1 1 2.6 1.9c-.7.3-1 1-1 1.6m0 2.4v.1"/>
+    </symbol>
+    <symbol id="game-icon-rasterform" viewBox="0 0 24 24">
+      <path d="M3 3h18v18H3zM9 3v18m6-18v18M3 9h18M3 15h18" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M3 3h6v6H3zm6 6h6v6H9zm0 6h6v6H9z" fill="currentColor"/>
     </symbol>
     <symbol id="game-icon-mustergruppe" viewBox="0 0 24 24">
       <path d="M3 3h6v6H3zm12 0h6v6h-6zM3 15h6v6H3zm12 3 3-4 3 4-3 4z"/>
@@ -194,6 +199,11 @@
           <a class="game-card" href="#mustergruppe">
             <span class="game-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#game-icon-mustergruppe"></use></svg></span>
             <span><strong>Mustergruppe</strong></span>
+            <span aria-hidden="true">›</span>
+          </a>
+          <a class="game-card" href="#rasterform">
+            <span class="game-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#game-icon-rasterform"></use></svg></span>
+            <span><strong>Rasterform</strong></span>
             <span aria-hidden="true">›</span>
           </a>
         </div>
@@ -442,6 +452,11 @@
         </div>
         <button type="button" class="number-training-submit exercise-next" hidden>Weiter</button>
       </div>
+    </section>
+
+    <section data-view="rasterform" aria-labelledby="rasterform-title" hidden>
+      <h2 id="rasterform-title" hidden>Rasterform</h2>
+      <div id="raster-game" class="number-training"></div>
     </section>
 
     <section data-view="schatten" aria-labelledby="shadow-title" hidden>

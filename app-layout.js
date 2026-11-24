@@ -20,6 +20,11 @@ const ruleContent = {
     'Lies die Reihe von links nach rechts und finde den Rechenschritt von einer Zahl zur nächsten.',
     'Auf Leicht und Mittel bleibt der Schritt gleich. Auf Schwer wechseln sich zwei Schritte ab. Gib die nächste Zahl ein.',
   ],
+  rasterform: () => [
+    'Wähle das Raster, das nach einer Drehung genau wie das Vorbild aussieht.',
+    'Die richtige Antwort ist um 90°, 180° oder 270° gedreht. Eine Spiegelung zählt als falsch.',
+    'Alle Raster haben gleich viele gefärbte Felder. Du hast pro Aufgabe einen Versuch.',
+  ],
   mustergruppe: () => [
     'Vergleiche die Farben der Striche in den vier Feldern. Ihre Reihenfolge kann sich ändern.',
     'Drei Felder haben von jeder Farbe gleich viele Striche. Tippe das Feld an, in dem ein Strich eine andere Farbe hat.',
