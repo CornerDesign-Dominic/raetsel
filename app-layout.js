@@ -49,7 +49,8 @@ const ruleContent = {
     'Tippe auf die Spielfläche und merke dir die Positionen der Zahlen.',
     'Nach dem Countdown sehen alle Rückseiten gleich aus. Tippe die Felder in der Reihenfolge 1, 2, 3 und so weiter an.',
     'Die Aufdeckzeit beginnt beim Umdrehen der Karten und endet mit der letzten richtigen Zahl oder beim ersten falschen Tipp.',
-    'Ein Durchlauf hat fünf Runden. Die Anzahl der Zahlen steigt nach jeder zweiten Runde.',
+    'Ein Durchlauf dauert bis zu fünf Runden. Die Anzahl der Zahlen steigt nach jeder zweiten Runde.',
+    'Ein falsches Feld beendet die aktuelle Runde und kostet einen Fehlversuch. Bei 0× beendet der nächste Fehler den Durchlauf.',
   ],
   zeit: () => [
     'Lies die beiden Uhren ab und berechne die Zeit vom Start bis zum Ende.',

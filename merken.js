@@ -1,5 +1,5 @@
 import { games, markSolved } from './puzzle-levels.js';
-import { mountTrainingSession } from './training-session.js';
+import { mountLives, mountTrainingSession } from './training-session.js';
 
 const settings = {
   leicht: { count: 3, preview: 3000 },
@@ -7,12 +7,17 @@ const settings = {
   schwer: { count: 5, preview: 1800 },
 };
 const rounds = 5;
+const startingLives = 2;
 const seconds = new Intl.NumberFormat('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const formatTime = (ms) => seconds.format(ms / 1000) + ' s';
 
 const root = document.querySelector('#merken-game');
 root.innerHTML = `
-  <div class="training-toolbar"><p class="training-progress" id="merken-round"></p></div>
+  <div class="training-toolbar">
+    <dl class="training-stats training-progress">
+      <div><dt>Runde</dt><dd id="merken-round"></dd></div>
+    </dl>
+  </div>
   <div class="memory-stage">
     <div class="memory-status" id="merken-prompt" tabindex="-1">
       <span id="merken-clock-label"></span>
@@ -26,6 +31,7 @@ root.innerHTML = `
   </div>
 `;
 const roundLabel = root.querySelector('#merken-round');
+const renderLives = mountLives(root.querySelector('.training-stats'));
 const prompt = root.querySelector('#merken-prompt');
 const clockLabel = root.querySelector('#merken-clock-label');
 const clock = root.querySelector('#merken-clock');
@@ -49,6 +55,7 @@ const session = mountTrainingSession(root, {
 });
 
 let level, round, score, phase, frame, phaseStartedAt, roundTimes, sequence, position, wrongTile;
+let lives;
 
 function stopClock() {
   window.cancelAnimationFrame(frame);
@@ -69,13 +76,15 @@ function setPhase(value, message, action = '') {
 }
 
 function showRound() {
-  roundLabel.textContent = `Runde ${round} von ${rounds}`;
+  roundLabel.textContent = round + ' / ' + rounds;
 }
 
 function reset() {
   stopClock();
   round = 1;
   score = 0;
+  lives = startingLives;
+  renderLives(lives);
   roundTimes = [];
   sequence = [];
   position = 0;
@@ -138,6 +147,7 @@ function reveal() {
 function choose(index, keyboard) {
   if (phase !== 'recall' || tiles[index].disabled) return;
   const correct = sequence[position] === index;
+  const outOfLives = !correct && lives === 0;
   if (correct) {
     position++;
     if (position < sequence.length) {
@@ -150,19 +160,21 @@ function choose(index, keyboard) {
     score++;
   } else {
     wrongTile = index;
+    if (!outOfLives) lives--;
+    renderLives(lives);
   }
 
   roundTimes.push(performance.now() - phaseStartedAt);
   stopClock();
-  if (round === rounds) {
+  if (round === rounds || outOfLives) {
     if (score === rounds) markSolved('merken', level);
     setPhase('finished', '');
     const total = roundTimes.reduce((sum, duration) => sum + duration, 0);
     session.finish({
       stacked: true,
-      detail: 'Aufdeckzeiten pro Runde',
+      detail: outOfLives ? 'Kein Fehlversuch übrig. Hier sind deine Aufdeckzeiten.' : 'Aufdeckzeiten pro Runde',
       metrics: [
-        ['Richtig', score + ' / ' + rounds],
+        ['Richtig', score + ' / ' + roundTimes.length],
         ...roundTimes.map((duration, index) => ['Runde ' + (index + 1), formatTime(duration)]),
         ['Gesamt', formatTime(total)],
       ],
