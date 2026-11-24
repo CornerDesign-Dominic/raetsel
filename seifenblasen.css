@@ -1,34 +1,47 @@
+.play-view[data-view='seifenblasen'] { block-size: 100%; }
+
+#bubble-game {
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+  block-size: 100%;
+  min-block-size: 0;
+}
+
+.bubble-stage {
+  grid-template-rows: minmax(0, 1fr) auto;
+  min-block-size: 0;
+  gap: .25rem;
+  padding: .2rem;
+}
+.bubble-stage:has(.bubble-field[hidden]) { grid-template-rows: minmax(0, 1fr); }
+.bubble-stage:has(.bubble-field[hidden]) .bubble-feedback { display: none; }
+
 .bubble-field {
-  container-type: size;
-  display: grid;
-  grid-template: repeat(3, minmax(0, 1fr)) / repeat(3, minmax(0, 1fr));
+  --bubble-size: 34px;
+  position: relative;
+  min-block-size: 0;
   overflow: hidden;
   border: 1px solid #668982;
-  border-radius: .65rem;
+  border-radius: .5rem;
   background: radial-gradient(ellipse at 25% 12%, #285957, #173a3b 75%);
+  touch-action: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.bubble-slot { display: grid; place-items: center; }
 .bubble-orbit {
-  position: relative;
-  display: grid;
-  place-items: center;
-  inline-size: min(23cqw, 23cqh, 6.25rem);
-  aspect-ratio: 1;
-  --drift-x: min(4.3cqw, 1.25rem);
-  --drift-y: min(4.3cqh, 1.25rem);
-  --bubble-period: 4.3s;
+  position: absolute;
+  inset: 0 auto auto 0;
+  inline-size: var(--bubble-size);
+  block-size: var(--bubble-size);
 }
-.bubble-slot:nth-child(even) .bubble-orbit { --bubble-period: 3.5s; }
-.bubble-orbit[data-moving] {
-  animation: bubble-drift var(--bubble-period) ease-in-out var(--bubble-delay) infinite;
-}
-.bubble-slot:nth-child(even) .bubble-orbit[data-moving] { animation-direction: reverse; }
-.bubble-orbit:has(:focus-visible) { animation-play-state: paused; }
 
 .bubble {
-  width: 100%;
-  height: 100%;
+  display: grid;
+  place-items: center;
+  inline-size: 100%;
+  block-size: 100%;
   min-block-size: 0;
   padding: 0;
   border: 1px solid #bdede7;
@@ -36,13 +49,12 @@
   background: radial-gradient(ellipse at 28% 22%, #f4fff5 5%, #c5e7d6 27%, #a8d5cf 63%, #98bade 100%);
   box-shadow: inset 0 0 0 .15rem #f9fcf355, inset 0 -.2rem .5rem #615ca542;
   color: #173a3b;
-  font-size: clamp(.9rem, min(8cqw, 8cqh), 2.25rem);
+  font-size: var(--bubble-label-size, .875rem);
   font-weight: 750;
   font-variant-numeric: tabular-nums;
   line-height: 1;
-  touch-action: manipulation;
 }
-.bubble:active { background: #e8efbc; }
+.bubble-orbit:has(.bubble:focus-visible) { z-index: 1; }
 .bubble:focus-visible { outline: 2px solid #fff5cd; outline-offset: 2px; }
 .bubble.is-missed { background: #f4c6b8; border-color: #fff0e9; }
 
@@ -55,24 +67,17 @@
   animation: bubble-burst .24s ease-out both;
 }
 .bubble-feedback {
+  min-block-size: 1.25rem;
   text-align: center;
   font-size: .9rem;
   line-height: 1.25rem;
 }
 
-@keyframes bubble-drift {
-  0%, 100% { transform: translate(calc(-1 * var(--drift-x)), 0); }
-  25% { transform: translate(0, calc(-1 * var(--drift-y))); }
-  50% { transform: translate(var(--drift-x), 0); }
-  75% { transform: translate(0, var(--drift-y)); }
-}
 @keyframes bubble-burst {
   from { transform: scale(.75); opacity: 1; }
   to { transform: scale(1.2); opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .bubble-orbit { --drift-x: .3rem; --drift-y: .3rem; }
-  .bubble-orbit[data-moving] { animation-duration: 8s; }
   .bubble-burst { animation-duration: .01s; }
 }

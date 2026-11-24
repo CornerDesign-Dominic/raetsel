@@ -18,7 +18,7 @@
   font-weight: 700;
 }
 
-#merken-game, #bubble-game {
+#merken-game {
   display: flex;
   flex-direction: column;
   gap: .3rem;
@@ -36,14 +36,6 @@
   width: min(100%, 25rem);
   margin-inline: auto;
 }
-
-.bubble-stage {
-  grid-template-rows: minmax(0, 1fr) 1.4rem;
-  gap: .25rem;
-  padding: .3rem;
-}
-.bubble-stage:has(.bubble-field[hidden]) { grid-template-rows: minmax(0, 1fr); }
-.bubble-stage:has(.bubble-field[hidden]) .bubble-feedback { display: none; }
 
 .family-stage, .house-stage, .time-stage { grid-template: minmax(0, 1fr) / minmax(0, 1fr); }
 .family-stage { container-type: size; }

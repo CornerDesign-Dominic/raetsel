@@ -61,7 +61,8 @@ const ruleContent = {
   seifenblasen: () => [
     'Beginne bei 1 und tippe immer die nächsthöhere Zahl an.',
     'Eine richtige Blase platzt. An einer freien Stelle erscheint eine neue Blase mit einer Zahl, die um eins höher ist als die bisher größte.',
-    'Auf Leicht bleiben alle Blasen stehen. Auf Mittel bewegen sich zwei, auf Schwer fünf.',
+    'Auf Leicht bleiben alle Blasen stehen. Auf Mittel bewegen sich zwei, auf Schwer fünf über die ganze Spielfläche.',
+    'Überlappen sich Blasen, zählt dein Tipp für die gesuchte Zahl, wenn du ihre Blase an der Tippstelle triffst.',
     'Mit „Beenden“ siehst du dein Ergebnis.',
   ],
   pfeilfolge: () => [
