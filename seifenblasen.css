@@ -18,7 +18,7 @@
 .bubble-stage:has(.bubble-field[hidden]) .bubble-feedback { display: none; }
 
 .bubble-field {
-  --bubble-size: 34px;
+  --bubble-size: 44px;
   position: relative;
   min-block-size: 0;
   overflow: hidden;
