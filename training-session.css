@@ -27,6 +27,7 @@
   margin-inline: auto;
 }
 .memory-stage {
+  container-type: size;
   flex: 1;
   min-block-size: 0;
   grid-template-rows: minmax(2.5rem, 1fr) auto minmax(0, 1fr);
@@ -35,7 +36,6 @@
   width: min(100%, 25rem);
   margin-inline: auto;
 }
-.memory-tile { min-block-size: clamp(2rem, 10dvh, 5.5rem); }
 
 .bubble-stage {
   grid-template-rows: minmax(0, 1fr) 1.4rem;
@@ -100,7 +100,7 @@
 @media (orientation: landscape) and (max-height: 560px) {
   .family-choices { width: min(100%, 32rem, max(9rem, calc(4 * (100cqh - 5rem)))); }
   .memory-grid { width: min(100%, 22rem); }
-  .memory-tile { min-block-size: clamp(1.8rem, 10dvh, 3.5rem); }
+  .memory-tile { font-size: clamp(1rem, 3.7dvh, 1.5rem); }
 }
 
 .training-lives dd { display: inline-flex; align-items: center; }

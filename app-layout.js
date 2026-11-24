@@ -49,7 +49,8 @@ const ruleContent = {
     'Tippe auf die Spielfläche und merke dir die Positionen der Zahlen.',
     'Nach dem Countdown sehen alle Rückseiten gleich aus. Tippe die Felder in der Reihenfolge 1, 2, 3 und so weiter an.',
     'Die Aufdeckzeit beginnt beim Umdrehen der Karten und endet mit der letzten richtigen Zahl oder beim ersten falschen Tipp.',
-    'Ein Durchlauf dauert bis zu fünf Runden. Die Anzahl der Zahlen steigt nach jeder zweiten Runde.',
+    'Alle Stufen starten mit drei Zahlen und drei Sekunden Merkzeit. Auf Leicht gibt es 9 Karten, auf Mittel 12 und auf Schwer 20.',
+    'Je zwei richtige Runden senken die Merkzeit um 0,10 Sekunden bis auf 2,00 Sekunden. Je vier richtige Runden kommt eine Zahl dazu, solange mindestens zwei Karten frei bleiben.',
     'Ein falsches Feld beendet die aktuelle Runde und kostet einen Fehlversuch. Bei 0× beendet der nächste Fehler den Durchlauf.',
   ],
   zeit: () => [

@@ -2,11 +2,14 @@ import { games, markSolved } from './puzzle-levels.js';
 import { mountLives, mountTrainingSession } from './training-session.js';
 
 const settings = {
-  leicht: { count: 3, preview: 3000 },
-  mittel: { count: 4, preview: 2400 },
-  schwer: { count: 5, preview: 1800 },
+  leicht: { columns: 3, rows: 3 },
+  mittel: { columns: 3, rows: 4 },
+  schwer: { columns: 4, rows: 5 },
 };
-const rounds = 5;
+const startingCount = 3;
+const startingPreview = 3000;
+const minimumPreview = 2000;
+const previewStep = 100;
 const startingLives = 2;
 const seconds = new Intl.NumberFormat('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const formatTime = (ms) => seconds.format(ms / 1000) + ' s';
@@ -39,14 +42,18 @@ const grid = root.querySelector('#merken-grid');
 const next = root.querySelector('#merken-next');
 const resultLabel = next.querySelector('[data-memory-result]');
 const actionLabel = next.querySelector('[data-memory-action]');
-const tiles = Array.from({ length: 16 }, (_, index) => {
-  const tile = document.createElement('button');
-  tile.type = 'button';
-  tile.className = 'memory-tile';
-  tile.addEventListener('click', (event) => choose(index, event.detail === 0));
-  return tile;
-});
-grid.append(...tiles);
+function createTiles({ columns, rows }) {
+  grid.style.setProperty('--memory-columns', columns);
+  grid.style.setProperty('--memory-rows', rows);
+  tiles = Array.from({ length: columns * rows }, (_, index) => {
+    const tile = document.createElement('button');
+    tile.type = 'button';
+    tile.className = 'memory-tile';
+    tile.addEventListener('click', (event) => choose(index, event.detail === 0));
+    return tile;
+  });
+  grid.replaceChildren(...tiles);
+}
 
 const session = mountTrainingSession(root, {
   toolbar: root.querySelector('.training-toolbar'),
@@ -55,6 +62,9 @@ const session = mountTrainingSession(root, {
 });
 
 let level, round, score, phase, frame, phaseStartedAt, roundTimes, sequence, position, wrongTile;
+let tiles;
+let preview;
+let longest;
 let lives;
 
 function stopClock() {
@@ -76,13 +86,14 @@ function setPhase(value, message, action = '') {
 }
 
 function showRound() {
-  roundLabel.textContent = round + ' / ' + rounds;
+  roundLabel.textContent = round;
 }
 
 function reset() {
   stopClock();
   round = 1;
   score = 0;
+  longest = 0;
   lives = startingLives;
   renderLives(lives);
   roundTimes = [];
@@ -113,7 +124,7 @@ function render() {
 function tick() {
   const elapsed = performance.now() - phaseStartedAt;
   if (phase === 'reveal') {
-    const remaining = settings[level].preview - elapsed;
+    const remaining = preview - elapsed;
     if (remaining <= 0) {
       setPhase('recall', 'Aufdecken');
       render();
@@ -129,10 +140,18 @@ function tick() {
   frame = window.requestAnimationFrame(tick);
 }
 
+function roundSettings(correctRounds, tileCount) {
+  return {
+    count: Math.min(tileCount - 2, startingCount + Math.floor(correctRounds / 4)),
+    preview: Math.max(minimumPreview, startingPreview - Math.floor(correctRounds / 2) * previewStep),
+  };
+}
+
 function reveal() {
-  const { count, preview } = settings[level];
+  const task = roundSettings(score, tiles.length);
+  preview = task.preview;
   const free = tiles.map((_, index) => index);
-  sequence = Array.from({ length: count + Math.floor((round - 1) / 2) }, () =>
+  sequence = Array.from({ length: task.count }, () =>
     free.splice(Math.floor(Math.random() * free.length), 1)[0]);
   position = 0;
   wrongTile = undefined;
@@ -158,6 +177,7 @@ function choose(index, keyboard) {
       return;
     }
     score++;
+    longest = Math.max(longest, sequence.length);
   } else {
     wrongTile = index;
     if (!outOfLives) lives--;
@@ -166,15 +186,16 @@ function choose(index, keyboard) {
 
   roundTimes.push(performance.now() - phaseStartedAt);
   stopClock();
-  if (round === rounds || outOfLives) {
-    if (score === rounds) markSolved('merken', level);
+  if (outOfLives) {
+    if (score >= 5) markSolved('merken', level);
     setPhase('finished', '');
     const total = roundTimes.reduce((sum, duration) => sum + duration, 0);
     session.finish({
       stacked: true,
-      detail: outOfLives ? 'Kein Fehlversuch übrig. Hier sind deine Aufdeckzeiten.' : 'Aufdeckzeiten pro Runde',
+      detail: 'Kein Fehlversuch übrig.',
       metrics: [
-        ['Richtig', score + ' / ' + roundTimes.length],
+        ['Richtige Runden', score],
+        ['Längste richtige Folge', longest + (longest === 1 ? ' Zahl' : ' Zahlen')],
         ...roundTimes.map((duration, index) => ['Runde ' + (index + 1), formatTime(duration)]),
         ['Gesamt', formatTime(total)],
       ],
@@ -197,6 +218,7 @@ games.set('merken', {
   category: 'training',
   load(selectedLevel) {
     level = selectedLevel;
+    createTiles(settings[level]);
     reset();
   },
   leave() {
