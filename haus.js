@@ -4,9 +4,13 @@ import { addStageAction, mountLives, mountTrainingSession } from './training-ses
 
 const game = 'haus';
 const firstGroupCount = 3;
-const initialGroupDuration = 2400;
+const roundTempo = [
+  { animation: 2400, pause: 1250 },
+  { animation: 2000, pause: 850 },
+  { animation: 1700, pause: 625 },
+  { animation: 1450, pause: 425 },
+];
 const minimumGroupDuration = 1450;
-const durationReduction = 180;
 const startingLives = 2;
 const countdownSeconds = 3;
 const settings = {
@@ -131,9 +135,13 @@ const figureMarkup = `<svg viewBox="0 0 24 30" fill="currentColor">
   <path d="M8 11h8a6 6 0 0 1 6 6v4h-4v6a3 3 0 0 1-6 0v-4h-1v4a3 3 0 0 1-6 0v-6H2v-4a6 6 0 0 1 6-6Z"/>
 </svg>`;
 
-function animationDuration(groupIndex) {
+function groupTiming(correctRounds, groupIndex) {
+  const tempo = roundTempo[Math.min(correctRounds, roundTempo.length - 1)];
   const speedSteps = Math.floor(groupIndex / 2);
-  return Math.max(minimumGroupDuration, initialGroupDuration - speedSteps * durationReduction);
+  return {
+    duration: Math.max(minimumGroupDuration, tempo.animation - speedSteps * 180),
+    pause: Math.max(380, tempo.pause - speedSteps * 135),
+  };
 }
 
 function drawPeople(count, direction, duration) {
@@ -151,13 +159,12 @@ function drawPeople(count, direction, duration) {
   people.replaceChildren(group);
 }
 
-function showFlow({ count, direction }, after) {
+function showFlow({ count, direction }, duration, after) {
   const entering = direction === 'entering';
   const destination = entering ? 'ins Haus' : 'aus dem Haus';
   status.textContent = 'Gruppe ' + (groupIndex + 1) + ': ' + count +
     (count === 1 ? ' Person geht ' : ' Personen gehen ') + destination + '.';
 
-  const duration = animationDuration(groupIndex);
   drawPeople(count, direction, duration);
   wait(after, duration + 150);
 }
@@ -181,13 +188,13 @@ function advanceGroup() {
   people.replaceChildren();
   groupDisplay.textContent = (groupIndex + 1) + ' / ' + round.groups.length;
   status.textContent = 'Die nächste Gruppe kommt …';
-  const pauseTime = Math.max(380, 1250 - Math.floor(groupIndex / 2) * 135);
+  const { duration, pause } = groupTiming(correctRounds, groupIndex);
   wait(() => {
-    showFlow(group, () => {
+    showFlow(group, duration, () => {
       groupIndex++;
       advanceGroup();
     });
-  }, pauseTime);
+  }, pause);
 }
 
 function playRound() {

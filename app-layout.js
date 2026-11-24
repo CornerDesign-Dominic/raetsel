@@ -43,7 +43,7 @@ const ruleContent = {
     'Gib am Ende der Runde an, wie viele Personen noch im Haus sind.',
     'Bei einer richtigen Antwort kommt in der nächsten Runde eine Gruppe hinzu. Bei einer falschen Antwort wird es eine Gruppe weniger, bis auf mindestens drei.',
     'Die nächste Runde startet nach drei Sekunden. Das Herz zeigt, wie viele Fehler du dir noch erlauben kannst. Bei 0× beendet der nächste Fehler den Durchlauf.',
-    'Je nach Schwierigkeit sind höchstens 15, 25 oder 35 Personen gleichzeitig im Haus. Die Animation wird nach jeweils zwei Gruppen schneller, bis sie ihr Höchsttempo erreicht.',
+    'Je nach Schwierigkeit sind höchstens 15, 25 oder 35 Personen gleichzeitig im Haus. Nach richtigen Antworten werden die Animationen und Gruppenpausen kürzer. Innerhalb einer Runde steigt das Tempo zusätzlich nach jeweils zwei Gruppen bis zum Höchsttempo.',
   ],
   merken: () => [
     'Tippe auf die Spielfläche und merke dir die Positionen der Zahlen.',
