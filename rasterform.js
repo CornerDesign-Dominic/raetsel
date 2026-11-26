@@ -3,7 +3,7 @@ import { addStageAction, mountTrainingSession } from './training-session.js';
 
 const gameId = 'rasterform';
 const totalRounds = 10;
-const feedbackDuration = 1500;
+const feedbackDuration = 2000;
 const seconds = new Intl.NumberFormat('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const formatTime = centiseconds => seconds.format(centiseconds / 100) + ' s';
 const filledCounts = { leicht: 3, mittel: 4, schwer: 5 };
@@ -84,7 +84,11 @@ root.innerHTML = `
         <div id="raster-model" role="img"></div>
       </div>
       <div class="raster-options" role="group" aria-label="Vier Antwortmöglichkeiten"></div>
-      <p class="raster-feedback" role="status"></p>
+      <div class="raster-transition">
+        <p class="raster-feedback" role="status"></p>
+        <p class="raster-countdown" aria-hidden="true"></p>
+        <div class="raster-countdown-track" aria-hidden="true"></div>
+      </div>
     </div>
   </div>
 `;
@@ -95,6 +99,8 @@ const task = root.querySelector('.raster-task');
 const model = root.querySelector('#raster-model');
 const options = root.querySelector('.raster-options');
 const feedback = root.querySelector('.raster-feedback');
+const countdown = root.querySelector('.raster-countdown');
+task.style.setProperty('--raster-feedback-duration', feedbackDuration + 'ms');
 const timeLabel = root.querySelector('#raster-time');
 const go = addStageAction(stage, showRound);
 const session = mountTrainingSession(root, {
@@ -110,6 +116,7 @@ let answered;
 let elapsed;
 let startedAt;
 let feedbackTimer;
+let countdownTimer;
 let clockTimer;
 
 function drawGrid(element, pattern) {
@@ -138,6 +145,7 @@ function showProgress() {
 
 function clearTimers() {
   window.clearTimeout(feedbackTimer);
+  window.clearTimeout(countdownTimer);
   window.clearInterval(clockTimer);
 }
 
@@ -165,6 +173,7 @@ function showRound() {
   go.hidden = true;
   task.hidden = false;
   feedback.textContent = '';
+  task.removeAttribute('data-answered');
   answered = false;
   const puzzle = createPuzzle(forms, previousPattern);
   previousPattern = puzzle.pattern;
@@ -202,6 +211,12 @@ function answer(selected, correct) {
   options.children[correct].dataset.answer = 'correct';
   for (const button of options.children) button.disabled = true;
   feedback.textContent = isCorrect ? 'Richtig!' : `Richtig ist ${String.fromCharCode(65 + correct)}.`;
+  const destination = round < totalRounds ? 'Nächste Aufgabe' : 'Ergebnis';
+  countdown.textContent = destination + ' in 2 s';
+  task.setAttribute('data-answered', '');
+  countdownTimer = window.setTimeout(() => {
+    countdown.textContent = destination + ' in 1 s';
+  }, feedbackDuration - 1000);
   feedbackTimer = window.setTimeout(() => {
     if (round < totalRounds) {
       round++;

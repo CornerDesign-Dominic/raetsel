@@ -9,7 +9,7 @@
 }
 
 .raster-task {
-  --raster-size: min(100%, 7rem, max(2rem, calc((100cqh - 9.75rem) / 3)));
+  --raster-size: clamp(2rem, calc((100cqh - 12.5rem) / 3), 7rem);
   display: grid;
   gap: .55rem;
 }
@@ -17,10 +17,17 @@
 .raster-model {
   display: grid;
   justify-items: center;
-  gap: .25rem;
+  justify-self: center;
+  gap: .35rem;
+  width: min(100%, calc(var(--raster-size) + 1.65rem));
+  padding: .45rem .65rem .65rem;
+  border: 1px solid #668982;
+  border-radius: .55rem;
+  background: #dce8df;
+  color: var(--petrol);
 }
 
-#raster-model { width: var(--raster-size); }
+#raster-model { width: min(100%, var(--raster-size)); }
 #raster-model:focus { outline: none; }
 
 .raster-options {
@@ -50,7 +57,7 @@
   display: grid;
   grid-template: repeat(3, 1fr) / repeat(3, 1fr);
   gap: clamp(1px, .6vw, 3px);
-  width: var(--raster-size);
+  width: min(100%, var(--raster-size));
   aspect-ratio: 1;
   margin-inline: auto;
 }
@@ -68,19 +75,49 @@
   background: var(--petrol);
 }
 
-.raster-feedback {
-  min-height: 1.15rem;
+.raster-transition {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: .15rem;
+  min-block-size: 3rem;
   font-size: .875rem;
+  line-height: 1.2;
+  visibility: hidden;
 }
 
+.raster-task[data-answered] .raster-transition { visibility: visible; }
+.raster-feedback { font-weight: 700; }
+.raster-countdown { font-size: .8rem; font-variant-numeric: tabular-nums; }
+
+.raster-countdown-track {
+  width: min(100%, 8rem);
+  height: .2rem;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: #dbc9ab;
+}
+.raster-task[data-answered] .raster-countdown-track::after {
+  display: block;
+  height: 100%;
+  background: #668982;
+  content: '';
+  transform-origin: left;
+  animation: raster-countdown var(--raster-feedback-duration) linear both;
+}
+@keyframes raster-countdown { to { transform: scaleX(0); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .raster-task[data-answered] .raster-countdown-track::after { animation: none; }
+}
 
 @media (orientation: landscape) and (max-height: 500px) {
   .raster-task {
-    --raster-size: min(100%, 5rem, max(2rem, calc((100cqh - 5.25rem) / 2)));
+    --raster-size: clamp(2rem, calc((100cqh - 7rem) / 2), 5rem);
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
     align-items: center;
   }
 
   .raster-options { margin-block-start: 0; }
-  .raster-feedback { grid-column: 1 / -1; }
+  .raster-transition { grid-column: 1 / -1; }
 }
